@@ -1,124 +1,159 @@
 import {
-  Container,
-  Typography,
-  Box,
-  Paper,
-  Avatar,
-  Divider,
+    Alert,
+    Avatar,
+    Box,
+    Chip,
+    CircularProgress,
+    Container,
+    Divider,
+    IconButton,
+    Tooltip,
+    Typography,
 } from "@mui/material";
+import PersonIcon from '@mui/icons-material/Person';
+import EmailIcon from '@mui/icons-material/Email';
+import BadgeIcon from '@mui/icons-material/Badge';
+import RefreshIcon from '@mui/icons-material/Refresh';
+import {useUserProfile} from "../../common/hooks/useUserProfile";
+import {StyledInfoCard, StyledInfoGrid, StyledProfileHeader, StyledProfilePaper} from "./styles";
 
 const Profile = () => {
-  return (
-    <Container maxWidth="lg" sx={{ my: 12 }}>
-      <Paper elevation={3} sx={{ p: 4 }}>
-        <Box sx={{ display: "flex", alignItems: "center", gap: 3, mb: 4 }}>
-          <Avatar sx={{ width: 100, height: 100, bgcolor: "primary.main" }}>
-            JD
-          </Avatar>
-          <Box>
-            <Typography variant="h4" component="h1" gutterBottom>
-              John Doe
-            </Typography>
-            <Typography variant="body1" color="text.secondary">
-              john.doe@example.com
-            </Typography>
-          </Box>
-        </Box>
+    const {profile, loading, error, refetch} = useUserProfile();
 
-        <Divider sx={{ my: 3 }} />
+    const getInitials = (firstName?: string, lastName?: string) => {
+        if (!firstName && !lastName) return 'U';
+        return `${firstName?.charAt(0) || ''}${lastName?.charAt(0) || ''}`.toUpperCase();
+    };
 
-        <Typography variant="h5" gutterBottom sx={{ mt: 4 }}>
-          About Me
-        </Typography>
-        <Typography variant="body1" paragraph>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua.
-        </Typography>
+    if (loading) {
+        return (
+            <Container maxWidth="lg" sx={{my: 12, display: 'flex', justifyContent: 'center'}}>
+                <CircularProgress/>
+            </Container>
+        );
+    }
 
-        <Typography variant="h5" gutterBottom sx={{ mt: 4 }}>
-          Experience
-        </Typography>
-        <Typography variant="body1" paragraph>
-          Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
-          nisi ut aliquip ex ea commodo consequat.
-        </Typography>
-        <Typography variant="body1" paragraph>
-          Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
-          dolore eu fugiat nulla pariatur.
-        </Typography>
+    if (error) {
+        return (
+            <Container maxWidth="lg" sx={{my: 12}}>
+                <Alert severity="error" sx={{mb: 2}}>
+                    {error}
+                </Alert>
+            </Container>
+        );
+    }
 
-        <Typography variant="h5" gutterBottom sx={{ mt: 4 }}>
-          Education
-        </Typography>
-        <Typography variant="body1" paragraph>
-          Excepteur sint occaecat cupidatat non proident, sunt in culpa qui
-          officia deserunt mollit anim id est laborum.
-        </Typography>
+    if (!profile) {
+        return (
+            <Container maxWidth="lg" sx={{my: 12}}>
+                <Alert severity="info">No profile data available</Alert>
+            </Container>
+        );
+    }
 
-        <Typography variant="h5" gutterBottom sx={{ mt: 4 }}>
-          Skills
-        </Typography>
-        <Typography variant="body1" paragraph>
-          JavaScript, TypeScript, React, Node.js, Python, Java, SQL, MongoDB,
-          Git, Docker, AWS, CI/CD, Agile Development
-        </Typography>
+    return (
+        <Container maxWidth="lg" sx={{my: 12}}>
+            <StyledProfilePaper elevation={3}>
+                <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2}}>
+                    <Typography variant="h4" component="h1" fontWeight="bold">
+                        My Profile
+                    </Typography>
+                    <Tooltip title="Refresh Profile">
+                        <IconButton onClick={refetch} color="primary">
+                            <RefreshIcon/>
+                        </IconButton>
+                    </Tooltip>
+                </Box>
 
-        <Typography variant="h5" gutterBottom sx={{ mt: 4 }}>
-          Projects
-        </Typography>
-        <Typography variant="body1" paragraph>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-          aliquip ex ea commodo consequat.
-        </Typography>
-        <Typography variant="body1" paragraph>
-          Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
-          dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-          proident, sunt in culpa qui officia deserunt mollit anim id est
-          laborum.
-        </Typography>
+                <StyledProfileHeader>
+                    <Avatar
+                        sx={{
+                            width: 120,
+                            height: 120,
+                            backgroundColor: "primary.main",
+                            fontSize: '2.5rem',
+                            fontWeight: 'bold',
+                        }}
+                    >
+                        {getInitials(profile.firstName, profile.lastName)}
+                    </Avatar>
+                    <Box sx={{flex: 1}}>
+                        <Typography variant="h3" component="h2" gutterBottom fontWeight="bold">
+                            {profile.firstName} {profile.lastName}
+                        </Typography>
+                        <Typography variant="h6" color="text.secondary" gutterBottom>
+                            @{profile.username}
+                        </Typography>
+                        <Chip
+                            label={`User ID: ${profile.id}`}
+                            color="primary"
+                            variant="outlined"
+                            size="small"
+                            sx={{mt: 1}}
+                        />
+                    </Box>
+                </StyledProfileHeader>
 
-        <Typography variant="h5" gutterBottom sx={{ mt: 4 }}>
-          Certifications
-        </Typography>
-        <Typography variant="body1" paragraph>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua.
-        </Typography>
-        <Typography variant="body1" paragraph>
-          Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
-          nisi ut aliquip ex ea commodo consequat.
-        </Typography>
+                <Divider sx={{my: 4}}/>
 
-        <Typography variant="h5" gutterBottom sx={{ mt: 4 }}>
-          Additional Information
-        </Typography>
-        <Typography variant="body1" paragraph>
-          Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
-          dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-          proident, sunt in culpa qui officia deserunt mollit anim id est
-          laborum.
-        </Typography>
-        <Typography variant="body1" paragraph>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-          aliquip ex ea commodo consequat.
-        </Typography>
-        <Typography variant="body1" paragraph>
-          Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
-          dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-          proident, sunt in culpa qui officia deserunt mollit anim id est
-          laborum.
-        </Typography>
-        <Typography variant="body1" paragraph>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua.
-        </Typography>
-      </Paper>
-    </Container>
-  );
+                <Typography variant="h5" gutterBottom fontWeight="bold" sx={{mb: 3}}>
+                    Account Information
+                </Typography>
+
+                <StyledInfoGrid>
+                    <StyledInfoCard>
+                        <Box sx={{display: 'flex', alignItems: 'center', gap: 1, mb: 1}}>
+                            <EmailIcon color="primary"/>
+                            <Typography variant="subtitle2" color="text.secondary">
+                                Email Address
+                            </Typography>
+                        </Box>
+                        <Typography variant="body1" fontWeight="medium">
+                            {profile.email}
+                        </Typography>
+                    </StyledInfoCard>
+
+                    <StyledInfoCard>
+                        <Box sx={{display: 'flex', alignItems: 'center', gap: 1, mb: 1}}>
+                            <BadgeIcon color="primary"/>
+                            <Typography variant="subtitle2" color="text.secondary">
+                                Username
+                            </Typography>
+                        </Box>
+                        <Typography variant="body1" fontWeight="medium">
+                            {profile.username}
+                        </Typography>
+                    </StyledInfoCard>
+
+                    <StyledInfoCard>
+                        <Box sx={{display: 'flex', alignItems: 'center', gap: 1, mb: 1}}>
+                            <PersonIcon color="primary"/>
+                            <Typography variant="subtitle2" color="text.secondary">
+                                Full Name
+                            </Typography>
+                        </Box>
+                        <Typography variant="body1" fontWeight="medium">
+                            {profile.firstName} {profile.lastName}
+                        </Typography>
+                    </StyledInfoCard>
+                </StyledInfoGrid>
+
+                {profile.cvId && (
+                    <>
+                        <Divider sx={{my: 4}}/>
+                        <Typography variant="h5" gutterBottom fontWeight="bold" sx={{mb: 2}}>
+                            CV Information
+                        </Typography>
+                        <StyledInfoCard>
+                            <Typography variant="body1">
+                                CV ID: <Chip label={profile.cvId} size="small" color="secondary"/>
+                            </Typography>
+                        </StyledInfoCard>
+                    </>
+                )}
+            </StyledProfilePaper>
+        </Container>
+    );
 };
 
 export default Profile;
