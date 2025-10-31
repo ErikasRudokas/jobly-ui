@@ -16,6 +16,7 @@ import BadgeIcon from '@mui/icons-material/Badge';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import {useUserProfile} from "../../common/hooks/useUserProfile";
 import {StyledInfoCard, StyledInfoGrid, StyledProfileHeader, StyledProfilePaper} from "./styles";
+import {CVSection} from "../../components/CVSection/CVSection";
 
 const Profile = () => {
     const {profile, loading, error, refetch} = useUserProfile();
@@ -137,20 +138,10 @@ const Profile = () => {
                         </Typography>
                     </StyledInfoCard>
                 </StyledInfoGrid>
-
-                {profile.cvId && (
-                    <>
-                        <Divider sx={{my: 4}}/>
-                        <Typography variant="h5" gutterBottom fontWeight="bold" sx={{mb: 2}}>
-                            CV Information
-                        </Typography>
-                        <StyledInfoCard>
-                            <Typography variant="body1">
-                                CV ID: <Chip label={profile.cvId} size="small" color="secondary"/>
-                            </Typography>
-                        </StyledInfoCard>
-                    </>
-                )}
+                <CVSection
+                    cvId={profile.cvId}
+                    onUploadSuccess={refetch}
+                />
             </StyledProfilePaper>
         </Container>
     );

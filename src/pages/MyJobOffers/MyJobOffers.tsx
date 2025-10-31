@@ -1,7 +1,12 @@
 import {useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
-import {Alert, Box, Chip, CircularProgress, Paper, Typography,} from '@mui/material';
-import {Category as CategoryIcon, LocationOn as LocationIcon, Work as WorkIcon,} from '@mui/icons-material';
+import {Alert, Box, Button, Chip, CircularProgress, Paper, Typography,} from '@mui/material';
+import {
+    Add as AddIcon,
+    Category as CategoryIcon,
+    LocationOn as LocationIcon,
+    Work as WorkIcon,
+} from '@mui/icons-material';
 import {useJobOffers} from '../../common/hooks/useJobOffers';
 import type {JobOfferListObject, WorkType} from '../../common/types/jobOffer.types';
 import {ROUTES} from '../../common/constants/routes';
@@ -10,6 +15,7 @@ import {
     categoryChipStyle,
     companyNameStyle,
     containerStyle,
+    createButtonStyle,
     emptyStateStyle,
     errorAlertStyle,
     headerSectionStyle,
@@ -20,18 +26,17 @@ import {
     jobTitleStyle,
     loadingBoxStyle,
     salaryChipStyle,
-    subtitleStyle,
     titleStyle,
 } from './styles';
 
-const Jobs = () => {
+const MyJobOffers = () => {
     const navigate = useNavigate();
-    const { getAllJobOffers, loading, error } = useJobOffers();
+    const {getMineJobOffers, loading, error} = useJobOffers();
     const [jobOffers, setJobOffers] = useState<JobOfferListObject[]>([]);
 
     useEffect(() => {
         const loadJobOffers = async () => {
-            const response = await getAllJobOffers();
+            const response = await getMineJobOffers();
             if (response) {
                 setJobOffers(response.jobOffers);
             }
@@ -41,7 +46,11 @@ const Jobs = () => {
     }, []);
 
     const handleViewJob = (id: number) => {
-        navigate(ROUTES.JOB_DETAILS(id));
+        navigate(ROUTES.MY_JOB_OFFER_DETAILS(id));
+    };
+
+    const handleCreateJobOffer = () => {
+        navigate(ROUTES.JOB_OFFER_CREATE);
     };
 
 
@@ -67,18 +76,23 @@ const Jobs = () => {
 
             <Box sx={headerSectionStyle}>
                 <Typography variant="h4" sx={titleStyle}>
-                    Available Jobs
+                    My Job Offers
                 </Typography>
-                <Typography variant="body1" sx={subtitleStyle}>
-                    Browse through our current job openings and find your next opportunity
-                </Typography>
+                <Button
+                    variant="contained"
+                    startIcon={<AddIcon />}
+                    onClick={handleCreateJobOffer}
+                    sx={createButtonStyle}
+                >
+                    Create Job Offer
+                </Button>
             </Box>
 
             {jobOffers.length === 0 ? (
                 <Box sx={emptyStateStyle}>
-                    <Typography variant="h6">No job offers available</Typography>
-                    <Typography variant="body2" sx={{ mt: 1 }}>
-                        Check back later for new opportunities
+                    <Typography variant="h6">No job offers yet</Typography>
+                    <Typography variant="body2" sx={{mt: 1}}>
+                        Create your first job offer to start receiving applications
                     </Typography>
                 </Box>
             ) : (
@@ -136,4 +150,5 @@ const Jobs = () => {
     );
 };
 
-export default Jobs;
+export default MyJobOffers;
+

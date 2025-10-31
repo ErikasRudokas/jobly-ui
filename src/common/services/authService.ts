@@ -1,13 +1,9 @@
 import {jwtDecode} from 'jwt-decode';
 import axios from 'axios';
-import {buildApiUrl, AUTH_ENDPOINTS} from '../constants/apiConstants.ts';
-import type {
-    DecodedToken,
-    LoginRequest,
-    RegisterRequest,
-    AuthResponse
-} from '../types/auth.types.ts';
+import {AUTH_ENDPOINTS, buildApiUrl} from '../constants/apiConstants.ts';
+import type {AuthResponse, DecodedToken, LoginRequest, RegisterRequest} from '../types/auth.types.ts';
 import {LOCAL_STORAGE_KEYS} from "../constants/localConstants.ts";
+import axiosInstance from './axiosInstance.ts';
 
 export const authService = {
     login: async (credentials: LoginRequest): Promise<void> => {
@@ -33,11 +29,17 @@ export const authService = {
         );
     },
 
-    logout: (): void => {
-        localStorage.removeItem(LOCAL_STORAGE_KEYS.ACCESS_TOKEN);
-        localStorage.removeItem(LOCAL_STORAGE_KEYS.REFRESH_TOKEN);
-        localStorage.removeItem(LOCAL_STORAGE_KEYS.USER_ID);
-        localStorage.removeItem(LOCAL_STORAGE_KEYS.ROLES);
+    logout: async (): Promise<void> => {
+        try {
+            await axiosInstance.post(buildApiUrl(AUTH_ENDPOINTS.LOGOUT));
+        } catch (error) {
+            console.error('Logout API call failed:', error);
+        } finally {
+            localStorage.removeItem(LOCAL_STORAGE_KEYS.ACCESS_TOKEN);
+            localStorage.removeItem(LOCAL_STORAGE_KEYS.REFRESH_TOKEN);
+            localStorage.removeItem(LOCAL_STORAGE_KEYS.USER_ID);
+            localStorage.removeItem(LOCAL_STORAGE_KEYS.ROLES);
+        }
     },
 
     isAuthenticated: (): boolean => {

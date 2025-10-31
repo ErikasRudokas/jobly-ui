@@ -1,27 +1,26 @@
-import {Box, Typography, Button} from "@mui/material";
+import {Box, Button, Typography} from "@mui/material";
 import {Link as RouterLink, useLocation, useNavigate} from "react-router-dom";
 import LoginIcon from "@mui/icons-material/Login";
 import LogoutIcon from "@mui/icons-material/Logout";
-import {
-    HeaderContainerStyle,
-    HeaderNavLinksStyle,
-    HeaderNavButtonStyle,
-    SignInButtonStyle,
-} from "./styles";
-import {ROUTES} from "../../common/constants/routes.ts";
+import {HeaderContainerStyle, HeaderNavButtonStyle, HeaderNavLinksStyle, SignInButtonStyle,} from "./styles";
+import {ROUTES} from "../../common/constants/routes";
 import {authService} from "../../common/services/authService";
+import {ROLES} from "../../common/constants/roleConstants";
 
 const Header = () => {
     const location = useLocation();
     const navigate = useNavigate();
+    const isAdmin = authService.hasRole(ROLES.ADMINISTRATOR);
+    const isEmployer = authService.hasRole(ROLES.EMPLOYER);
+    const isUser = authService.hasRole(ROLES.USER);
     const isAuthenticated = authService.isAuthenticated();
 
     const isActive = (path: string) => {
         return location.pathname === path;
     };
 
-    const handleLogout = () => {
-        authService.logout();
+    const handleLogout = async () => {
+        await authService.logout();
         navigate(ROUTES.LOGIN);
     };
 
@@ -57,6 +56,39 @@ const Header = () => {
                 >
                     Jobs
                 </Button>
+                {isEmployer && (
+                    <Button
+                        component={RouterLink}
+                        to={ROUTES.MY_JOB_OFFERS}
+                        className={isActive(ROUTES.MY_JOB_OFFERS) ? "active" : ""}
+                        sx={HeaderNavButtonStyle}
+                        disableRipple
+                    >
+                        My Job Offers
+                    </Button>
+                )}
+                {isUser && (
+                    <Button
+                        component={RouterLink}
+                        to={ROUTES.MY_APPLICATIONS}
+                        className={isActive(ROUTES.MY_APPLICATIONS) ? "active" : ""}
+                        sx={HeaderNavButtonStyle}
+                        disableRipple
+                    >
+                        My Applications
+                    </Button>
+                )}
+                {isAdmin && (
+                    <Button
+                        component={RouterLink}
+                        to={ROUTES.CATEGORIES}
+                        className={isActive(ROUTES.CATEGORIES) ? "active" : ""}
+                        sx={HeaderNavButtonStyle}
+                        disableRipple
+                    >
+                        Categories
+                    </Button>
+                )}
                 {isAuthenticated && (
                     <Button
                         component={RouterLink}
