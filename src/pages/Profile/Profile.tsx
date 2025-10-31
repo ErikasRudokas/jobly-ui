@@ -17,9 +17,12 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 import {useUserProfile} from "../../common/hooks/useUserProfile";
 import {StyledInfoCard, StyledInfoGrid, StyledProfileHeader, StyledProfilePaper} from "./styles";
 import {CVSection} from "../../components/CVSection/CVSection";
+import {authService} from "../../common/services/authService";
+import {ROLES} from "../../common/constants/roleConstants";
 
 const Profile = () => {
     const {profile, loading, error, refetch} = useUserProfile();
+    const isUser = authService.hasRole(ROLES.USER);
 
     const getInitials = (firstName?: string, lastName?: string) => {
         if (!firstName && !lastName) return 'U';
@@ -138,10 +141,12 @@ const Profile = () => {
                         </Typography>
                     </StyledInfoCard>
                 </StyledInfoGrid>
-                <CVSection
-                    cvId={profile.cvId}
-                    onUploadSuccess={refetch}
-                />
+                {isUser && (
+                    <CVSection
+                        cvId={profile.cvId}
+                        onUploadSuccess={refetch}
+                    />
+                )}
             </StyledProfilePaper>
         </Container>
     );
