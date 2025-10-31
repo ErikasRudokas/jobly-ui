@@ -16,9 +16,13 @@ import BadgeIcon from '@mui/icons-material/Badge';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import {useUserProfile} from "../../common/hooks/useUserProfile";
 import {StyledInfoCard, StyledInfoGrid, StyledProfileHeader, StyledProfilePaper} from "./styles";
+import {CVSection} from "../../components/CVSection/CVSection";
+import {authService} from "../../common/services/authService";
+import {ROLES} from "../../common/constants/roleConstants";
 
 const Profile = () => {
     const {profile, loading, error, refetch} = useUserProfile();
+    const isUser = authService.hasRole(ROLES.USER);
 
     const getInitials = (firstName?: string, lastName?: string) => {
         if (!firstName && !lastName) return 'U';
@@ -137,19 +141,11 @@ const Profile = () => {
                         </Typography>
                     </StyledInfoCard>
                 </StyledInfoGrid>
-
-                {profile.cvId && (
-                    <>
-                        <Divider sx={{my: 4}}/>
-                        <Typography variant="h5" gutterBottom fontWeight="bold" sx={{mb: 2}}>
-                            CV Information
-                        </Typography>
-                        <StyledInfoCard>
-                            <Typography variant="body1">
-                                CV ID: <Chip label={profile.cvId} size="small" color="secondary"/>
-                            </Typography>
-                        </StyledInfoCard>
-                    </>
+                {isUser && (
+                    <CVSection
+                        cvId={profile.cvId}
+                        onUploadSuccess={refetch}
+                    />
                 )}
             </StyledProfilePaper>
         </Container>

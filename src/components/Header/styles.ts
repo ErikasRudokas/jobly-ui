@@ -15,7 +15,7 @@ export const HeaderContainerStyle: SxProps = {
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
-    padding: "0 32px",
+    padding: { xs: "0 16px", md: "0 32px" },
 };
 
 export const HeaderNavLinksStyle: SxProps = {
