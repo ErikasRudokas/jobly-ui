@@ -3,8 +3,8 @@ import type {SxProps, Theme} from '@mui/material';
 export const containerStyle: SxProps<Theme> = {
     maxWidth: '1200px',
     margin: '0 auto',
-    padding: '2rem',
-    marginTop: '6rem',
+    padding: { xs: '1rem', md: '2rem' },
+    marginTop: { xs: '5rem', md: '6rem' },
 };
 
 export const backButtonStyle: SxProps<Theme> = {
@@ -36,7 +36,7 @@ export const loadingBoxStyle: SxProps<Theme> = {
 };
 
 export const applicationCardStyle: SxProps<Theme> = {
-    padding: '1.5rem',
+    padding: { xs: '1rem', md: '1.5rem' },
     marginBottom: '1.5rem',
     boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
     borderRadius: '8px',

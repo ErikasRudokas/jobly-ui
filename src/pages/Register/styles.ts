@@ -15,4 +15,7 @@ export const StyledFormBox = styled(Box)(({theme}) => ({
     padding: theme.spacing(4),
     borderRadius: theme.shape.borderRadius,
     boxShadow: theme.shadows[3],
+    [theme.breakpoints.down('md')]: {
+        padding: theme.spacing(2),
+    },
 }));

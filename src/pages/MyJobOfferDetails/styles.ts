@@ -3,8 +3,8 @@ import type {SxProps, Theme} from '@mui/material';
 export const containerStyle: SxProps<Theme> = {
     maxWidth: '1200px',
     margin: '0 auto',
-    padding: '2rem',
-    marginTop: '6rem',
+    padding: { xs: '1rem', md: '2rem' },
+    marginTop: { xs: '5rem', md: '6rem' },
 };
 
 export const backButtonStyle: SxProps<Theme> = {
@@ -12,7 +12,7 @@ export const backButtonStyle: SxProps<Theme> = {
 };
 
 export const paperStyle: SxProps<Theme> = {
-    padding: '2.5rem',
+    padding: { xs: '1.5rem', md: '2.5rem' },
     boxShadow: '0 2px 12px rgba(0,0,0,0.1)',
     borderRadius: '8px',
     marginBottom: '2rem',
@@ -21,7 +21,9 @@ export const paperStyle: SxProps<Theme> = {
 export const headerSectionStyle: SxProps<Theme> = {
     display: 'flex',
     justifyContent: 'space-between',
-    alignItems: 'flex-end',
+    alignItems: { xs: 'flex-start', md: 'flex-end' },
+    flexDirection: { xs: 'column', md: 'row' },
+    gap: { xs: '1rem', md: 0 },
     marginBottom: '2rem',
     borderBottom: '1px solid',
     borderColor: 'divider',

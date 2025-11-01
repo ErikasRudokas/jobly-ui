@@ -9,6 +9,7 @@ import {HeaderContainerStyle, HeaderNavButtonStyle, HeaderNavLinksStyle, SignInB
 import {ROUTES} from "../../common/constants/routes";
 import {authService} from "../../common/services/authService";
 import {ROLES} from "../../common/constants/roleConstants";
+import JobIcon from "../../assets/job-svgrepo-com.svg";
 
 const Header = () => {
     const location = useLocation();
@@ -43,17 +44,32 @@ const Header = () => {
 
     return (
         <Box component="header" sx={HeaderContainerStyle}>
-            <Typography
-                variant="h6"
-                component="div"
-                sx={{
-                    fontWeight: 700,
-                    color: "primary.main",
-                    fontSize: "1.5rem",
-                }}
-            >
-                Jobly
-            </Typography>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                <Box
+                    component="img"
+                    src={JobIcon}
+                    alt="Jobly"
+                    sx={{
+                        height: '32px',
+                        width: '32px',
+                        display: 'block',
+                    }}
+                />
+                <Typography
+                    variant="h6"
+                    component="div"
+                    sx={{
+                        fontWeight: 700,
+                        color: "primary.main",
+                        fontSize: "1.5rem",
+                        lineHeight: 1,
+                        display: 'flex',
+                        alignItems: 'center',
+                    }}
+                >
+                    Jobly
+                </Typography>
+            </Box>
 
             <IconButton
                 sx={{
@@ -168,9 +184,21 @@ const Header = () => {
                 }}
             >
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', p: 2, borderBottom: '1px solid', borderColor: 'divider' }}>
-                    <Typography variant="h6" sx={{ fontWeight: 700, color: 'primary.main', fontSize: '1.5rem' }}>
-                        Jobly
-                    </Typography>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                        <Box
+                            component="img"
+                            src={JobIcon}
+                            alt="Jobly"
+                            sx={{
+                                height: '32px',
+                                width: '32px',
+                                display: 'block',
+                            }}
+                        />
+                        <Typography variant="h6" sx={{ fontWeight: 700, color: 'primary.main', fontSize: '1.5rem', lineHeight: 1, display: 'flex', alignItems: 'center' }}>
+                            Jobly
+                        </Typography>
+                    </Box>
                     <IconButton onClick={handleMobileMenuClose}>
                         <CloseIcon />
                     </IconButton>
