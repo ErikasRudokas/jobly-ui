@@ -4,6 +4,9 @@ import {Box, Paper} from '@mui/material';
 export const StyledProfilePaper = styled(Paper)(({theme}) => ({
     padding: theme.spacing(4),
     borderRadius: theme.spacing(2),
+    [theme.breakpoints.down('md')]: {
+        padding: theme.spacing(2),
+    },
 }));
 
 export const StyledProfileHeader = styled(Box)(({theme}) => ({
@@ -11,7 +14,7 @@ export const StyledProfileHeader = styled(Box)(({theme}) => ({
     alignItems: 'center',
     gap: theme.spacing(3),
     marginBottom: theme.spacing(4),
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
         flexDirection: 'column',
         textAlign: 'center',
     },

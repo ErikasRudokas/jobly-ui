@@ -3,14 +3,16 @@ import type {SxProps, Theme} from '@mui/material';
 export const containerStyle: SxProps<Theme> = {
     maxWidth: '1200px',
     margin: '0 auto',
-    padding: '2rem',
-    marginTop: '6rem',
+    padding: { xs: '1rem', md: '2rem' },
+    marginTop: { xs: '5rem', md: '6rem' },
 };
 
 export const headerSectionStyle: SxProps<Theme> = {
     display: 'flex',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: { xs: 'flex-start', md: 'center' },
+    flexDirection: { xs: 'column', md: 'row' },
+    gap: { xs: '1rem', md: 0 },
     marginBottom: '2rem',
 };
 
