@@ -71,7 +71,7 @@ export const lightTheme = createTheme({
         },
     },
     typography: {
-        fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
+        fontFamily: '"Oswald", "Roboto", "Helvetica", "Arial", sans-serif',
         h1: {
             fontSize: "3rem",
             fontWeight: 700,
