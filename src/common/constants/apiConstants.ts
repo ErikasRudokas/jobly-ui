@@ -47,3 +47,7 @@ export const APPLICATION_ENDPOINTS = {
     MANAGE: (id: number) => `/applications/${id}/manage`,
 } as const;
 
+export const SKILL_ENDPOINTS = {
+    GET_ALL: '/skills',
+} as const;
+

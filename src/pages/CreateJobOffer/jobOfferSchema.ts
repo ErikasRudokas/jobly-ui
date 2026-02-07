@@ -37,6 +37,10 @@ export const jobOfferSchema = z.object({
     categoryId: z
         .number()
         .min(1, 'Category is required'),
+    skills: z.array(z.object({
+        skillId: z.number(),
+        proficiency: z.enum(['BEGINNER', 'INTERMEDIATE', 'ADVANCED', 'EXPERT']),
+    })),
 });
 
 export type JobOfferFormData = z.infer<typeof jobOfferSchema>;

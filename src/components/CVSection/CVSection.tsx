@@ -22,14 +22,12 @@ export const CVSection = ({ cvId, onUploadSuccess }: CVSectionProps) => {
     const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
         if (file) {
-            // Validate file type
             const validTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
             if (!validTypes.includes(file.type)) {
                 alert('Please select a valid CV file (PDF or Word document)');
                 return;
             }
 
-            // Validate file size (max 5MB)
             const maxSize = 5 * 1024 * 1024;
             if (file.size > maxSize) {
                 alert('File size must be less than 5MB');

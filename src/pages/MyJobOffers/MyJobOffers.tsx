@@ -10,7 +10,6 @@ import {
 import {useJobOffers} from '../../common/hooks/useJobOffers';
 import type {JobOfferListObject, WorkType} from '../../common/types/jobOffer.types';
 import {ROUTES} from '../../common/constants/routes';
-import {formatSalary} from '../../common/utils/salaryUtils';
 import {
     categoryChipStyle,
     companyNameStyle,
@@ -28,6 +27,7 @@ import {
     salaryChipStyle,
     titleStyle,
 } from './styles';
+import {formatSalary} from "../../common/utils/genericUtils.ts";
 
 const MyJobOffers = () => {
     const navigate = useNavigate();

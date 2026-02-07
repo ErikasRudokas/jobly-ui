@@ -1,3 +1,6 @@
+import type {SkillProficiency, SkillType} from "./skill.types.ts";
+import type {ApplicationStatus} from "./application.types.ts";
+
 export type WorkType = 'ON_SITE' | 'REMOTE' | 'HYBRID';
 
 export type JobOfferStatus = 'OPEN' | 'CLOSED';
@@ -10,6 +13,13 @@ export interface JobOfferCategory {
 export interface Creator {
     firstName: string;
     lastName: string;
+}
+
+export interface JobOfferSkill {
+    skillId: number;
+    name: string;
+    type: SkillType;
+    proficiency: SkillProficiency;
 }
 
 export interface JobOfferListObject {
@@ -38,6 +48,7 @@ export interface JobOffer {
     updatedAt: string;
     category: JobOfferCategory;
     creator: Creator;
+    skills: JobOfferSkill[];
 }
 
 export interface GetAllJobOffersResponse {
@@ -60,6 +71,17 @@ export interface CreateJobOfferRequest {
     contactEmail: string;
     contactPhone?: string;
     categoryId: number;
+    skills?: Array<{
+        skillId: number;
+        proficiency: SkillProficiency;
+    }>;
+}
+
+export interface UpdateJobOfferSkill {
+    skillId: number;
+    proficiency: SkillProficiency;
+    delete?: boolean;
+    isNew?: boolean;
 }
 
 export interface UpdateJobOfferRequest {
@@ -73,6 +95,7 @@ export interface UpdateJobOfferRequest {
     contactEmail: string;
     contactPhone?: string;
     categoryId: number;
+    skills?: UpdateJobOfferSkill[];
 }
 
 export interface GetMineJobOffersResponse {
@@ -102,9 +125,6 @@ export interface Applicant {
     email: string;
 }
 
-export type ApplicationStatus = 'PENDING' | 'ACCEPTED' | 'REJECTED' | 'WITHDRAWN';
-
 export interface CanApplyResponse {
     canApply: boolean;
 }
-
