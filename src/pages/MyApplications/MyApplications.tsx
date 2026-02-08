@@ -8,9 +8,8 @@ import {
     Work as WorkIcon,
 } from '@mui/icons-material';
 import {useApplications} from '../../common/hooks/useApplications';
-import type {MyApplicationListObject, WorkType} from '../../common/types/application.types';
+import type {MyApplicationListObject} from '../../common/types/application.types';
 import {ROUTES} from '../../common/constants/routes';
-import {formatSalary} from '../../common/utils/salaryUtils';
 import {
     applicationCardStyle,
     backButtonStyle,
@@ -28,6 +27,7 @@ import {
     titleStyle,
     updatedDateStyle,
 } from './styles';
+import {formatDate, formatSalary, formatWorkType} from "../../common/utils/genericUtils.ts";
 
 function MyApplications() {
     const navigate = useNavigate();
@@ -51,19 +51,6 @@ function MyApplications() {
 
     const handleBack = () => {
         navigate(ROUTES.HOME);
-    };
-
-
-    const formatWorkType = (workType: WorkType) => {
-        return workType.replace('_', ' ');
-    };
-
-    const formatDate = (dateString: string) => {
-        return new Date(dateString).toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-        });
     };
 
     if (loading) {

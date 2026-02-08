@@ -1,37 +1,29 @@
 import {useEffect, useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
-import {Controller, useForm} from 'react-hook-form';
+import {useForm} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
-import {
-    Alert,
-    Box,
-    Button,
-    CircularProgress,
-    FormControl,
-    FormHelperText,
-    InputLabel,
-    MenuItem,
-    Paper,
-    Select,
-    TextField,
-    Typography,
-} from '@mui/material';
+import {Alert, Box, Button, CircularProgress, Paper, Typography,} from '@mui/material';
 import {ArrowBack as ArrowBackIcon} from '@mui/icons-material';
 import {useJobOffers} from '../../common/hooks/useJobOffers';
 import {useCategories} from '../../common/hooks/useCategories';
 import {ROUTES} from '../../common/constants/routes';
 import {type JobOfferFormData, jobOfferSchema} from '../CreateJobOffer/jobOfferSchema';
 import type {Category} from '../../common/types/category.types';
+import type {UpdateJobOfferSkill} from '../../common/types/jobOffer.types';
+import JobOfferFormHeader from '../../components/JobOfferForm/JobOfferFormHeader';
+import JobOfferFormDescription from '../../components/JobOfferForm/JobOfferFormDescription';
+import JobOfferFormDetails from '../../components/JobOfferForm/JobOfferFormDetails';
+import JobOfferFormContact from '../../components/JobOfferForm/JobOfferFormContact';
 import {
     backButtonStyle,
     containerStyle,
     errorAlertStyle,
-    formStyle,
     loadingBoxStyle,
     paperStyle,
     submitButtonStyle,
     titleStyle,
 } from '../CreateJobOffer/styles';
+import EditJobOfferSkillSection from "../../components/SaveJobOfferSkillSection/EditJobOfferSkillSection.tsx";
 
 const EditJobOffer = () => {
     const navigate = useNavigate();
@@ -39,6 +31,7 @@ const EditJobOffer = () => {
     const {getMineJobOfferDetails, updateJobOffer, loading: submitting, error} = useJobOffers();
     const {getAllCategories, loading: categoriesLoading} = useCategories();
     const [categories, setCategories] = useState<Category[]>([]);
+    const [selectedSkills, setSelectedSkills] = useState<UpdateJobOfferSkill[]>([]);
     const [loading, setLoading] = useState(true);
     const [apiError, setApiError] = useState<string | null>(null);
 
@@ -47,6 +40,7 @@ const EditJobOffer = () => {
         control,
         handleSubmit,
         reset,
+        setValue,
         formState: {errors},
     } = useForm<JobOfferFormData>({
         resolver: zodResolver(jobOfferSchema),
@@ -79,6 +73,23 @@ const EditJobOffer = () => {
                     contactPhone: jobOffer.contactPhone || '',
                     categoryId: jobOffer.category.id,
                 });
+
+                if (jobOffer.skills && jobOffer.skills.length > 0) {
+                    const initialSkills: UpdateJobOfferSkill[] = jobOffer.skills.map(skill => ({
+                        skillId: skill.skillId,
+                        proficiency: skill.proficiency,
+                        delete: false,
+                        isNew: false,
+                    }));
+                    setSelectedSkills(initialSkills);
+
+                    setValue('skills', initialSkills.map(s => ({
+                        skillId: s.skillId,
+                        proficiency: s.proficiency,
+                    })));
+                } else {
+                    setValue('skills', []);
+                }
             }
 
             setLoading(false);
@@ -87,11 +98,32 @@ const EditJobOffer = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id]);
 
+    const handleSkillsChange = (skills: UpdateJobOfferSkill[]) => {
+        setSelectedSkills(skills);
+
+        setValue('skills', skills.map(s => ({
+            skillId: s.skillId,
+            proficiency: s.proficiency,
+        })), { shouldValidate: true });
+    };
+
     const onSubmit = async (data: JobOfferFormData) => {
         if (!id) return;
         setApiError(null);
 
-        const result = await updateJobOffer(parseInt(id), data);
+        const skillsToSend = selectedSkills.map(skill => ({
+            skillId: skill.skillId,
+            proficiency: skill.proficiency,
+            ...(skill.delete && { delete: skill.delete })
+        }));
+
+        const updateData = {
+            ...data,
+            skills: skillsToSend,
+        };
+
+        const result = await updateJobOffer(parseInt(id), updateData);
+
         if (result) {
             navigate(ROUTES.MY_JOB_OFFER_DETAILS(parseInt(id)));
         } else if (error) {
@@ -125,147 +157,73 @@ const EditJobOffer = () => {
                 Back to Job Offer
             </Button>
 
+            <Typography variant="h4" sx={titleStyle}>
+                Edit Job Offer
+            </Typography>
+
+            {(error || apiError) && (
+                <Alert severity="error" sx={errorAlertStyle}>
+                    {error || apiError}
+                </Alert>
+            )}
+
             <Paper sx={paperStyle}>
-                <Typography variant="h4" sx={titleStyle}>
-                    Edit Job Offer
-                </Typography>
-
-                {(error || apiError) && (
-                    <Alert severity="error" sx={errorAlertStyle}>
-                        {error || apiError}
-                    </Alert>
-                )}
-
-                <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={formStyle}>
-                    <TextField
-                        {...register('title')}
-                        label="Job Title"
-                        error={!!errors.title}
-                        helperText={errors.title?.message}
-                        fullWidth
-                        disabled={submitting}
-                    />
-
-                    <TextField
-                        {...register('companyName')}
-                        label="Company Name"
-                        error={!!errors.companyName}
-                        helperText={errors.companyName?.message}
-                        fullWidth
-                        disabled={submitting}
-                    />
-
-                    <TextField
-                        {...register('description')}
-                        label="Job Description"
-                        multiline
-                        rows={6}
-                        error={!!errors.description}
-                        helperText={errors.description?.message}
-                        fullWidth
-                        disabled={submitting}
-                    />
-
-                    <Controller
-                        name="categoryId"
+                <Box component="form" onSubmit={handleSubmit(onSubmit)}>
+                    <JobOfferFormHeader
+                        register={register}
                         control={control}
-                        render={({field}) => (
-                            <FormControl fullWidth error={!!errors.categoryId} disabled={submitting}>
-                                <InputLabel>Category</InputLabel>
-                                <Select
-                                    {...field}
-                                    label="Category"
-                                >
-                                    {categories.map((category) => (
-                                        <MenuItem key={category.id} value={category.id}>
-                                            {category.name}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                                {errors.categoryId && (
-                                    <FormHelperText>{errors.categoryId.message}</FormHelperText>
-                                )}
-                            </FormControl>
-                        )}
-                    />
-
-                    <TextField
-                        {...register('salary', {valueAsNumber: true})}
-                        label="Salary (EUR)"
-                        type="number"
-                        error={!!errors.salary}
-                        helperText={errors.salary?.message}
-                        fullWidth
+                        errors={errors}
+                        categories={categories}
                         disabled={submitting}
                     />
 
-                    <TextField
-                        {...register('yearsOfExperience', {valueAsNumber: true})}
-                        label="Years of Experience"
-                        type="number"
-                        error={!!errors.yearsOfExperience}
-                        helperText={errors.yearsOfExperience?.message}
-                        fullWidth
+                    <JobOfferFormDescription
+                        register={register}
+                        errors={errors}
                         disabled={submitting}
                     />
 
-                    <Controller
-                        name="workType"
+                    <JobOfferFormDetails
+                        register={register}
                         control={control}
-                        render={({field}) => (
-                            <FormControl fullWidth error={!!errors.workType} disabled={submitting}>
-                                <InputLabel>Work Type</InputLabel>
-                                <Select
-                                    {...field}
-                                    label="Work Type"
-                                >
-                                    <MenuItem value="ON_SITE">On Site</MenuItem>
-                                    <MenuItem value="REMOTE">Remote</MenuItem>
-                                    <MenuItem value="HYBRID">Hybrid</MenuItem>
-                                </Select>
-                                {errors.workType && (
-                                    <FormHelperText>{errors.workType.message}</FormHelperText>
-                                )}
-                            </FormControl>
-                        )}
-                    />
-
-                    <TextField
-                        {...register('location')}
-                        label="Location"
-                        error={!!errors.location}
-                        helperText={errors.location?.message}
-                        fullWidth
+                        errors={errors}
                         disabled={submitting}
                     />
 
-                    <TextField
-                        {...register('contactEmail')}
-                        label="Contact Email"
-                        type="email"
-                        error={!!errors.contactEmail}
-                        helperText={errors.contactEmail?.message}
-                        fullWidth
+                    <JobOfferFormContact
+                        register={register}
+                        errors={errors}
                         disabled={submitting}
                     />
 
-                    <TextField
-                        {...register('contactPhone')}
-                        label="Contact Phone (Optional)"
-                        error={!!errors.contactPhone}
-                        helperText={errors.contactPhone?.message}
-                        fullWidth
-                        disabled={submitting}
+                    <EditJobOfferSkillSection
+                        selectedSkills={selectedSkills}
+                        onSkillsChange={handleSkillsChange}
                     />
 
-                    <Button
-                        type="submit"
-                        variant="contained"
-                        disabled={submitting}
-                        sx={submitButtonStyle}
-                    >
-                        {submitting ? <CircularProgress size={24} /> : 'Update Job Offer'}
-                    </Button>
+                    <Box sx={{marginTop: '2.5rem', display: 'flex', justifyContent: 'flex-end', gap: '1rem'}}>
+                        <Button
+                            variant="outlined"
+                            onClick={handleBack}
+                            disabled={submitting}
+                            sx={{
+                                textTransform: 'none',
+                                fontWeight: 600,
+                                padding: '0.75rem 2rem',
+                                borderRadius: '8px',
+                            }}
+                        >
+                            Cancel
+                        </Button>
+                        <Button
+                            type="submit"
+                            variant="contained"
+                            disabled={submitting}
+                            sx={submitButtonStyle}
+                        >
+                            {submitting ? <CircularProgress size={24} /> : 'Update Job Offer'}
+                        </Button>
+                    </Box>
                 </Box>
             </Paper>
         </Box>
@@ -273,4 +231,3 @@ const EditJobOffer = () => {
 };
 
 export default EditJobOffer;
-

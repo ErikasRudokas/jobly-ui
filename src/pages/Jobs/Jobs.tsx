@@ -5,7 +5,6 @@ import {Category as CategoryIcon, LocationOn as LocationIcon, Work as WorkIcon,}
 import {useJobOffers} from '../../common/hooks/useJobOffers';
 import type {JobOfferListObject, WorkType} from '../../common/types/jobOffer.types';
 import {ROUTES} from '../../common/constants/routes';
-import {formatSalary} from '../../common/utils/salaryUtils';
 import {
     categoryChipStyle,
     companyNameStyle,
@@ -23,6 +22,7 @@ import {
     subtitleStyle,
     titleStyle,
 } from './styles';
+import {formatSalary} from "../../common/utils/genericUtils.ts";
 
 const Jobs = () => {
     const navigate = useNavigate();

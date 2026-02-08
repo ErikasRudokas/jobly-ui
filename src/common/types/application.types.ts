@@ -1,3 +1,5 @@
+import type {WorkType} from "./jobOffer.types.ts";
+
 export interface MyApplicationListObject {
     id: number;
     updatedAt: string;
@@ -55,5 +57,4 @@ export interface ManageApplicationRequest {
 }
 
 export type ApplicationStatus = 'PENDING' | 'ACCEPTED' | 'REJECTED' | 'WITHDRAWN';
-export type WorkType = 'ON_SITE' | 'REMOTE' | 'HYBRID';
 

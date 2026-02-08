@@ -4,7 +4,6 @@ import {
     Alert,
     Box,
     Button,
-    Chip,
     CircularProgress,
     Dialog,
     DialogActions,
@@ -29,24 +28,22 @@ import {
 import {useJobOffers} from '../../common/hooks/useJobOffers';
 import {useApplications} from '../../common/hooks/useApplications';
 import {useCVDownload} from '../../common/hooks/useCVDownload';
-import type {Application, JobOffer, WorkType} from '../../common/types/jobOffer.types';
+import type {Application, JobOffer} from '../../common/types/jobOffer.types';
 import {ROUTES} from '../../common/constants/routes';
-import {formatSalary} from '../../common/utils/salaryUtils';
+import SkillsSection from '../../components/SkillsSection/SkillsSection';
+import JobDetailsHeader from '../../components/JobDetailsHeader/JobDetailsHeader';
+import JobOfferDetailsCard from '../../components/JobOfferDetailsCard/JobOfferDetailsCard';
 import {
     applicantNameStyle,
     applicationCardStyle,
     applicationDateStyle,
+    applicationStatusBadgeStyle,
     backButtonStyle,
-    companyNameStyle,
     contactBoxStyle,
     contactItemStyle,
     containerStyle,
     deleteButtonStyle,
     descriptionTextStyle,
-    detailItemStyle,
-    detailLabelStyle,
-    detailsGridStyle,
-    detailValueStyle,
     dialogActionsStyle,
     downloadCvButtonStyle,
     editButtonStyle,
@@ -54,13 +51,11 @@ import {
     errorAlertStyle,
     loadingBoxStyle,
     paperStyle,
-    salaryBoxStyle,
     sectionStyle,
     sectionTitleStyle,
-    statusChipStyle,
-    titleRowStyle,
-    titleStyle,
+    topActionsRowStyle,
 } from './styles';
+import {formatDate} from "../../common/utils/genericUtils.ts";
 
 const MyJobOfferDetails = () => {
     const navigate = useNavigate();
@@ -87,19 +82,6 @@ const MyJobOfferDetails = () => {
         loadJobOffer();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id]);
-
-
-    const formatWorkType = (workType: WorkType) => {
-        return workType.replace('_', ' ');
-    };
-
-    const formatDate = (dateString: string) => {
-        return new Date(dateString).toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-        });
-    };
 
     const handleBack = () => {
         navigate(ROUTES.MY_JOB_OFFERS);
@@ -139,7 +121,6 @@ const MyJobOfferDetails = () => {
             setSnackbarMessage('Application approved successfully');
             setSuccessSnackbar(true);
 
-            // Refresh the job offer details to get updated application statuses
             if (id) {
                 const response = await getMineJobOfferDetails(parseInt(id));
                 if (response) {
@@ -159,7 +140,6 @@ const MyJobOfferDetails = () => {
             setSnackbarMessage('Application rejected');
             setSuccessSnackbar(true);
 
-            // Refresh the job offer details to get updated application statuses
             if (id) {
                 const response = await getMineJobOfferDetails(parseInt(id));
                 if (response) {
@@ -204,7 +184,7 @@ const MyJobOfferDetails = () => {
 
     return (
         <Box sx={containerStyle}>
-            <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem'}}>
+            <Box sx={topActionsRowStyle}>
                 <Button
                     startIcon={<ArrowBackIcon />}
                     onClick={handleBack}
@@ -234,34 +214,7 @@ const MyJobOfferDetails = () => {
             </Box>
 
             <Paper sx={paperStyle}>
-                <Box sx={titleRowStyle}>
-                    <Box>
-                        <Typography variant="h4" sx={titleStyle}>
-                            {jobOffer.title}
-                        </Typography>
-                        <Typography variant="h6" sx={companyNameStyle}>
-                            {jobOffer.companyName}
-                        </Typography>
-                    </Box>
-                    <Box sx={salaryBoxStyle}>
-                        <Typography variant="body1" sx={{fontWeight: 600, fontSize: '1.1rem', color: 'white'}}>
-                            {formatSalary(jobOffer.salary)}
-                        </Typography>
-                    </Box>
-                </Box>
-
-                <Box sx={{display: 'flex', gap: '1rem', marginTop: '1rem', marginBottom: '1.5rem', paddingBottom: '1.5rem', borderBottom: '1px solid', borderColor: 'divider'}}>
-                    <Chip
-                        label={jobOffer.offerStatus}
-                        color={jobOffer.offerStatus === 'OPEN' ? 'success' : 'default'}
-                        sx={statusChipStyle}
-                    />
-                    <Chip
-                        label={jobOffer.category.name}
-                        variant="outlined"
-                        color="primary"
-                    />
-                </Box>
+                <JobDetailsHeader jobOffer={jobOffer} />
 
                 <Box sx={sectionStyle}>
                     <Typography variant="h6" sx={sectionTitleStyle}>
@@ -272,43 +225,16 @@ const MyJobOfferDetails = () => {
                     </Typography>
                 </Box>
 
-                <Box sx={sectionStyle}>
-                    <Typography variant="h6" sx={sectionTitleStyle}>
-                        Job Details
-                    </Typography>
-                    <Box sx={detailsGridStyle}>
-                        <Box sx={detailItemStyle}>
-                            <Typography sx={detailLabelStyle}>Work Type</Typography>
-                            <Typography sx={detailValueStyle}>
-                                {formatWorkType(jobOffer.workType)}
-                            </Typography>
-                        </Box>
-                        <Box sx={detailItemStyle}>
-                            <Typography sx={detailLabelStyle}>Location</Typography>
-                            <Typography sx={detailValueStyle}>
-                                {jobOffer.location}
-                            </Typography>
-                        </Box>
-                        <Box sx={detailItemStyle}>
-                            <Typography sx={detailLabelStyle}>Experience Required</Typography>
-                            <Typography sx={detailValueStyle}>
-                                {jobOffer.yearsOfExperience} {jobOffer.yearsOfExperience === 1 ? 'year' : 'years'}
-                            </Typography>
-                        </Box>
-                        <Box sx={detailItemStyle}>
-                            <Typography sx={detailLabelStyle}>Posted On</Typography>
-                            <Typography sx={detailValueStyle}>
-                                {formatDate(jobOffer.createdAt)}
-                            </Typography>
-                        </Box>
-                        <Box sx={detailItemStyle}>
-                            <Typography sx={detailLabelStyle}>Last Updated</Typography>
-                            <Typography sx={detailValueStyle}>
-                                {formatDate(jobOffer.updatedAt)}
-                            </Typography>
-                        </Box>
+                <JobOfferDetailsCard jobOffer={jobOffer} />
+
+                {jobOffer.skills && jobOffer.skills.length > 0 && (
+                    <Box sx={sectionStyle}>
+                        <Typography variant="h6" sx={sectionTitleStyle}>
+                            Required Skills
+                        </Typography>
+                        <SkillsSection skills={jobOffer.skills} />
                     </Box>
-                </Box>
+                )}
 
                 <Box sx={sectionStyle}>
                     <Typography variant="h6" sx={sectionTitleStyle}>
@@ -354,10 +280,11 @@ const MyJobOfferDetails = () => {
                                             {application.applicant.email}
                                         </Typography>
                                     </Box>
-                                    <Chip
-                                        label={application.applicationStatus}
-                                        size="small"
-                                    />
+                                    <Box sx={applicationStatusBadgeStyle(application.applicationStatus)}>
+                                        <Typography sx={{ fontSize: '0.75rem', fontWeight: 600 }}>
+                                            {application.applicationStatus}
+                                        </Typography>
+                                    </Box>
                                 </Box>
 
                                 {application.comment && (

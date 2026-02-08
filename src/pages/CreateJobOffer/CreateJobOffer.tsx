@@ -1,32 +1,24 @@
 import {useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
-import {Controller, useForm} from 'react-hook-form';
+import {useForm} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
-import {
-    Alert,
-    Box,
-    Button,
-    CircularProgress,
-    FormControl,
-    FormHelperText,
-    InputLabel,
-    MenuItem,
-    Paper,
-    Select,
-    TextField,
-    Typography,
-} from '@mui/material';
+import {Alert, Box, Button, CircularProgress, Paper, Typography,} from '@mui/material';
 import {ArrowBack as ArrowBackIcon} from '@mui/icons-material';
 import {useJobOffers} from '../../common/hooks/useJobOffers';
 import {useCategories} from '../../common/hooks/useCategories';
 import {ROUTES} from '../../common/constants/routes';
 import {type JobOfferFormData, jobOfferSchema} from './jobOfferSchema';
 import type {Category} from '../../common/types/category.types';
+import type {SkillWithProficiency} from '../../common/types/skill.types';
+import JobOfferFormHeader from '../../components/JobOfferForm/JobOfferFormHeader';
+import JobOfferFormDescription from '../../components/JobOfferForm/JobOfferFormDescription';
+import JobOfferFormDetails from '../../components/JobOfferForm/JobOfferFormDetails';
+import JobOfferFormContact from '../../components/JobOfferForm/JobOfferFormContact';
+import CreateJobOfferSkillSection from '../../components/SaveJobOfferSkillSection/CreateJobOfferSkillSection';
 import {
     backButtonStyle,
     containerStyle,
     errorAlertStyle,
-    formStyle,
     loadingBoxStyle,
     paperStyle,
     submitButtonStyle,
@@ -37,11 +29,13 @@ const CreateJobOffer = () => {
     const navigate = useNavigate();
     const {createJobOffer, loading: submitting, error} = useJobOffers();
     const {getAllCategories, loading: categoriesLoading} = useCategories();
+    const [selectedSkills, setSelectedSkills] = useState<SkillWithProficiency[]>([]);
     const [categories, setCategories] = useState<Category[]>([]);
     const [apiError, setApiError] = useState<string | null>(null);
 
     const {
         register,
+        setValue,
         control,
         handleSubmit,
         formState: {errors},
@@ -56,6 +50,7 @@ const CreateJobOffer = () => {
             workType: 'ON_SITE',
             location: '',
             contactEmail: '',
+            skills: [],
             contactPhone: '',
             categoryId: 0,
         },
@@ -71,6 +66,15 @@ const CreateJobOffer = () => {
         loadCategories();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    const handleSkillsChange = (skills: SkillWithProficiency[]) => {
+        setSelectedSkills(skills);
+        setValue('skills', skills.map(s => ({
+            skillId: s.skillId,
+            proficiency: s.proficiency,
+        })));
+    };
+
 
     const onSubmit = async (data: JobOfferFormData) => {
         setApiError(null);
@@ -105,150 +109,74 @@ const CreateJobOffer = () => {
                 Back to My Job Offers
             </Button>
 
+            <Typography variant="h4" sx={titleStyle}>
+                Create Job Offer
+            </Typography>
+
+            {(error || apiError) && (
+                <Alert severity="error" sx={errorAlertStyle}>
+                    {error || apiError}
+                </Alert>
+            )}
+
             <Paper sx={paperStyle}>
-                <Typography variant="h4" sx={titleStyle}>
-                    Create Job Offer
-                </Typography>
-
-                {(error || apiError) && (
-                    <Alert severity="error" sx={errorAlertStyle}>
-                        {error || apiError}
-                    </Alert>
-                )}
-
-                <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={formStyle}>
-                    <TextField
-                        {...register('title')}
-                        label="Job Title"
-                        error={!!errors.title}
-                        helperText={errors.title?.message}
-                        fullWidth
-                        disabled={submitting}
-                    />
-
-                    <TextField
-                        {...register('companyName')}
-                        label="Company Name"
-                        error={!!errors.companyName}
-                        helperText={errors.companyName?.message}
-                        fullWidth
-                        disabled={submitting}
-                    />
-
-                    <TextField
-                        {...register('description')}
-                        label="Job Description"
-                        multiline
-                        rows={6}
-                        error={!!errors.description}
-                        helperText={errors.description?.message}
-                        fullWidth
-                        disabled={submitting}
-                    />
-
-                    <Controller
-                        name="categoryId"
+                <Box component="form" onSubmit={handleSubmit(onSubmit)}>
+                    <JobOfferFormHeader
+                        register={register}
                         control={control}
-                        render={({field}) => (
-                            <FormControl fullWidth error={!!errors.categoryId} disabled={submitting}>
-                                <InputLabel>Category</InputLabel>
-                                <Select
-                                    {...field}
-                                    label="Category"
-                                >
-                                    <MenuItem value={0} disabled>
-                                        Select a category
-                                    </MenuItem>
-                                    {categories.map((category) => (
-                                        <MenuItem key={category.id} value={category.id}>
-                                            {category.name}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                                {errors.categoryId && (
-                                    <FormHelperText>{errors.categoryId.message}</FormHelperText>
-                                )}
-                            </FormControl>
-                        )}
-                    />
-
-                    <TextField
-                        {...register('salary', {valueAsNumber: true})}
-                        label="Salary (EUR)"
-                        type="number"
-                        error={!!errors.salary}
-                        helperText={errors.salary?.message}
-                        fullWidth
+                        errors={errors}
+                        categories={categories}
                         disabled={submitting}
                     />
 
-                    <TextField
-                        {...register('yearsOfExperience', {valueAsNumber: true})}
-                        label="Years of Experience"
-                        type="number"
-                        error={!!errors.yearsOfExperience}
-                        helperText={errors.yearsOfExperience?.message}
-                        fullWidth
+                    <JobOfferFormDescription
+                        register={register}
+                        errors={errors}
                         disabled={submitting}
                     />
 
-                    <Controller
-                        name="workType"
+                    <JobOfferFormDetails
+                        register={register}
                         control={control}
-                        render={({field}) => (
-                            <FormControl fullWidth error={!!errors.workType} disabled={submitting}>
-                                <InputLabel>Work Type</InputLabel>
-                                <Select
-                                    {...field}
-                                    label="Work Type"
-                                >
-                                    <MenuItem value="ON_SITE">On Site</MenuItem>
-                                    <MenuItem value="REMOTE">Remote</MenuItem>
-                                    <MenuItem value="HYBRID">Hybrid</MenuItem>
-                                </Select>
-                                {errors.workType && (
-                                    <FormHelperText>{errors.workType.message}</FormHelperText>
-                                )}
-                            </FormControl>
-                        )}
-                    />
-
-                    <TextField
-                        {...register('location')}
-                        label="Location"
-                        error={!!errors.location}
-                        helperText={errors.location?.message}
-                        fullWidth
+                        errors={errors}
                         disabled={submitting}
                     />
 
-                    <TextField
-                        {...register('contactEmail')}
-                        label="Contact Email"
-                        type="email"
-                        error={!!errors.contactEmail}
-                        helperText={errors.contactEmail?.message}
-                        fullWidth
+                    <JobOfferFormContact
+                        register={register}
+                        errors={errors}
                         disabled={submitting}
                     />
 
-                    <TextField
-                        {...register('contactPhone')}
-                        label="Contact Phone (Optional)"
-                        error={!!errors.contactPhone}
-                        helperText={errors.contactPhone?.message}
-                        fullWidth
+                    <CreateJobOfferSkillSection
+                        selectedSkills={selectedSkills}
+                        onSkillsChange={handleSkillsChange}
                         disabled={submitting}
                     />
 
-                    <Button
-                        type="submit"
-                        variant="contained"
-                        disabled={submitting}
-                        sx={submitButtonStyle}
-                    >
-                        {submitting ? <CircularProgress size={24} /> : 'Create Job Offer'}
-                    </Button>
+                    <Box sx={{marginTop: '2.5rem', display: 'flex', justifyContent: 'flex-end', gap: '1rem'}}>
+                        <Button
+                            variant="outlined"
+                            onClick={handleBack}
+                            disabled={submitting}
+                            sx={{
+                                textTransform: 'none',
+                                fontWeight: 600,
+                                padding: '0.75rem 2rem',
+                                borderRadius: '8px',
+                            }}
+                        >
+                            Cancel
+                        </Button>
+                        <Button
+                            type="submit"
+                            variant="contained"
+                            disabled={submitting}
+                            sx={submitButtonStyle}
+                        >
+                            {submitting ? <CircularProgress size={24} /> : 'Create Job Offer'}
+                        </Button>
+                    </Box>
                 </Box>
             </Paper>
         </Box>

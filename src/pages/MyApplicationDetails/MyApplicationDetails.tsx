@@ -22,9 +22,8 @@ import {
 } from '@mui/icons-material';
 import {useApplications} from '../../common/hooks/useApplications';
 import {useCVDownload} from '../../common/hooks/useCVDownload';
-import type {MyApplication, WorkType} from '../../common/types/application.types';
+import type {MyApplication} from '../../common/types/application.types';
 import {ROUTES} from '../../common/constants/routes';
-import {formatSalary} from '../../common/utils/salaryUtils';
 import {
     actionButtonsStyle,
     backButtonStyle,
@@ -49,6 +48,7 @@ import {
     sectionTitleStyle,
     statusChipStyle,
 } from './styles';
+import {formatDate, formatSalary, formatWorkType} from "../../common/utils/genericUtils.ts";
 
 function MyApplicationDetails() {
     const navigate = useNavigate();
@@ -101,19 +101,6 @@ function MyApplicationDetails() {
         if (application?.cvId) {
             await downloadCV(application.cvId);
         }
-    };
-
-
-    const formatWorkType = (workType: WorkType) => {
-        return workType.replace('_', ' ');
-    };
-
-    const formatDate = (dateString: string) => {
-        return new Date(dateString).toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-        });
     };
 
     if (loading && !application) {

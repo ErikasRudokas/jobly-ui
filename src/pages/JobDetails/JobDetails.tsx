@@ -4,7 +4,6 @@ import {
     Alert,
     Box,
     Button,
-    Chip,
     CircularProgress,
     Dialog,
     DialogActions,
@@ -21,38 +20,30 @@ import {
     ArrowBack as ArrowBackIcon,
     Email as EmailIcon,
     Phone as PhoneIcon,
-    Work as WorkIcon
+    Work as WorkIcon,
 } from '@mui/icons-material';
 import {useJobOffers} from '../../common/hooks/useJobOffers';
 import {useApplications} from '../../common/hooks/useApplications';
-import type {JobOffer, WorkType} from '../../common/types/jobOffer.types';
+import type {JobOffer} from '../../common/types/jobOffer.types';
 import {ROUTES} from '../../common/constants/routes';
 import {authService} from '../../common/services/authService';
 import {ROLES} from '../../common/constants/roleConstants';
-import {formatSalary} from '../../common/utils/salaryUtils';
+import SkillsSection from '../../components/SkillsSection/SkillsSection';
+import JobDetailsHeader from '../../components/JobDetailsHeader/JobDetailsHeader';
 import {
+    applyButtonStyle,
     backButtonStyle,
-    companyNameStyle,
     contactBoxStyle,
     contactItemStyle,
     containerStyle,
-    creatorStyle,
     descriptionTextStyle,
-    detailItemStyle,
-    detailLabelStyle,
-    detailsGridStyle,
-    detailValueStyle,
     errorAlertStyle,
-    headerDetailsStyle,
-    headerSectionStyle,
     loadingBoxStyle,
     paperStyle,
-    salaryBoxStyle,
     sectionStyle,
     sectionTitleStyle,
-    statusChipStyle,
-    titleStyle,
 } from './styles';
+import JobOfferDetailsCard from "../../components/JobOfferDetailsCard/JobOfferDetailsCard.tsx";
 
 const JobDetails = () => {
     const navigate = useNavigate();
@@ -77,7 +68,6 @@ const JobDetails = () => {
             if (response) {
                 setJobOffer(response.jobOffer);
 
-                // Check if user can apply (only for users with USER role)
                 if (isUser) {
                     setCheckingCanApply(true);
                     const canApplyResult = await checkCanApply(parseInt(id));
@@ -92,19 +82,6 @@ const JobDetails = () => {
         loadJobOffer();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id]);
-
-
-    const formatWorkType = (workType: WorkType) => {
-        return workType.replace('_', ' ');
-    };
-
-    const formatDate = (dateString: string) => {
-        return new Date(dateString).toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-        });
-    };
 
     const handleBack = () => {
         navigate(ROUTES.JOBS);
@@ -183,56 +160,35 @@ const JobDetails = () => {
             </Button>
 
             <Paper sx={paperStyle}>
-                <Box sx={headerSectionStyle}>
-                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-                        <Typography variant="h4" sx={titleStyle}>
-                            {jobOffer.title}
-                        </Typography>
-                        <Box sx={salaryBoxStyle}>
-                            <Typography variant="body1" sx={{ fontWeight: 600, fontSize: '1.1rem', color: 'white' }}>
-                                {formatSalary(jobOffer.salary)}
-                            </Typography>
-                        </Box>
-                    </Box>
-                    <Typography variant="h6" sx={companyNameStyle}>
-                        {jobOffer.companyName}
-                    </Typography>
-                    <Typography sx={creatorStyle}>
-                        Posted by {jobOffer.creator.firstName} {jobOffer.creator.lastName}
-                    </Typography>
+                <Box sx={{ position: 'relative' }}>
+                    <JobDetailsHeader jobOffer={jobOffer} />
 
-                    <Box sx={headerDetailsStyle}>
-                        <Chip
-                            label={jobOffer.offerStatus}
-                            color={jobOffer.offerStatus === 'OPEN' ? 'success' : 'default'}
-                            sx={statusChipStyle}
-                        />
-                        <Chip
-                            label={jobOffer.category.name}
-                            variant="outlined"
-                            color="primary"
-                        />
-                        {isUser && jobOffer.offerStatus === 'OPEN' && (
+                    {isUser && jobOffer.offerStatus === 'OPEN' && (
+                        <Box sx={{
+                            position: 'absolute',
+                            top: 0,
+                            right: 0,
+                        }}>
                             <Tooltip
                                 title={!canApply && !checkingCanApply ? 'You have already applied to this job' : ''}
                                 arrow
                                 placement="top"
                             >
-                                <span style={{ marginLeft: 'auto' }}>
+                                <span>
                                     <Button
                                         variant="contained"
                                         color="primary"
                                         startIcon={<WorkIcon />}
                                         onClick={handleOpenApplyDialog}
                                         disabled={checkingCanApply || !canApply}
-                                        sx={{ textTransform: 'none', fontWeight: 600 }}
+                                        sx={applyButtonStyle}
                                     >
-                                        {checkingCanApply ? 'Checking...' : 'Apply for this Job'}
+                                        {checkingCanApply ? 'Checking...' : 'Apply Now'}
                                     </Button>
                                 </span>
                             </Tooltip>
-                        )}
-                    </Box>
+                        </Box>
+                    )}
                 </Box>
 
                 <Box sx={sectionStyle}>
@@ -244,43 +200,16 @@ const JobDetails = () => {
                     </Typography>
                 </Box>
 
-                <Box sx={sectionStyle}>
-                    <Typography variant="h6" sx={sectionTitleStyle}>
-                        Job Details
-                    </Typography>
-                    <Box sx={detailsGridStyle}>
-                        <Box sx={detailItemStyle}>
-                            <Typography sx={detailLabelStyle}>Work Type</Typography>
-                            <Typography sx={detailValueStyle}>
-                                {formatWorkType(jobOffer.workType)}
-                            </Typography>
-                        </Box>
-                        <Box sx={detailItemStyle}>
-                            <Typography sx={detailLabelStyle}>Location</Typography>
-                            <Typography sx={detailValueStyle}>
-                                {jobOffer.location}
-                            </Typography>
-                        </Box>
-                        <Box sx={detailItemStyle}>
-                            <Typography sx={detailLabelStyle}>Experience Required</Typography>
-                            <Typography sx={detailValueStyle}>
-                                {jobOffer.yearsOfExperience} {jobOffer.yearsOfExperience === 1 ? 'year' : 'years'}
-                            </Typography>
-                        </Box>
-                        <Box sx={detailItemStyle}>
-                            <Typography sx={detailLabelStyle}>Posted On</Typography>
-                            <Typography sx={detailValueStyle}>
-                                {formatDate(jobOffer.createdAt)}
-                            </Typography>
-                        </Box>
-                        <Box sx={detailItemStyle}>
-                            <Typography sx={detailLabelStyle}>Last Updated</Typography>
-                            <Typography sx={detailValueStyle}>
-                                {formatDate(jobOffer.updatedAt)}
-                            </Typography>
-                        </Box>
+                <JobOfferDetailsCard jobOffer={jobOffer} />
+
+                {jobOffer.skills && jobOffer.skills.length > 0 && (
+                    <Box sx={sectionStyle}>
+                        <Typography variant="h6" sx={sectionTitleStyle}>
+                            Required Skills
+                        </Typography>
+                        <SkillsSection skills={jobOffer.skills} />
                     </Box>
-                </Box>
+                )}
 
                 <Box sx={sectionStyle}>
                     <Typography variant="h6" sx={sectionTitleStyle}>
