@@ -1,4 +1,5 @@
 import type {WorkType} from "../types/jobOffer.types.ts";
+import dayjs from "dayjs";
 
 export const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -6,6 +7,11 @@ export const formatDate = (dateString: string) => {
         month: 'long',
         day: 'numeric',
     });
+};
+
+export const formatDateYearMonth = (dateString: string | null | undefined) => {
+    if (!dateString) return 'Present';
+    return dayjs(dateString).format('MMM YYYY');
 };
 
 export const formatSalary = (salary: number): string => {

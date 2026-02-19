@@ -1,8 +1,8 @@
+import {useEffect, useMemo, useState} from 'react';
 import {
     Alert,
-    Avatar,
     Box,
-    Chip,
+    Button,
     CircularProgress,
     Container,
     Divider,
@@ -10,24 +10,169 @@ import {
     Tooltip,
     Typography,
 } from "@mui/material";
-import PersonIcon from '@mui/icons-material/Person';
-import EmailIcon from '@mui/icons-material/Email';
-import BadgeIcon from '@mui/icons-material/Badge';
 import RefreshIcon from '@mui/icons-material/Refresh';
+import EditIcon from '@mui/icons-material/Edit';
+import SaveIcon from '@mui/icons-material/Save';
+import CancelIcon from '@mui/icons-material/Cancel';
+import ErrorIcon from '@mui/icons-material/Error';
 import {useUserProfile} from "../../common/hooks/useUserProfile";
-import {StyledInfoCard, StyledInfoGrid, StyledProfileHeader, StyledProfilePaper} from "./styles";
+import {StyledProfilePaper, StyledTab, StyledTabs, tabPanelStyle,} from "./styles";
 import {CVSection} from "../../components/CVSection/CVSection";
 import {authService} from "../../common/services/authService";
 import {ROLES} from "../../common/constants/roleConstants";
+import {userService} from "../../common/services/userService";
+import type {
+    SaveUserProfileRequest,
+    UpdateUserEducation,
+    UpdateUserSkill,
+    UpdateUserWorkExperience,
+} from "../../common/types/profile.types";
+import WorkExperienceForm from "../../components/ProfileForms/WorkExperienceForm";
+import WorkExperienceView from "../../components/ProfileViews/WorkExperienceView";
+import EducationForm from "../../components/ProfileForms/EducationForm";
+import EducationView from "../../components/ProfileViews/EducationView";
+import EditProfileSkillSection from "../../components/ProfileSkillSection/EditProfileSkillSection";
+import ProfileSkillSection from "../../components/ProfileSkillSection/ProfileSkillSection";
+import ProfileHeader from '../../components/Profile/ProfileHeader';
+import AccountInformation from '../../components/Profile/AccountInformation';
+import {createEmptyValidationErrors, validateProfileData, type ValidationErrors,} from './profileValidation';
+import {loadProfileData, transformProfileResponse} from './profileDataUtils';
 
 const Profile = () => {
     const {profile, loading, error, refetch} = useUserProfile();
     const isUser = authService.hasRole(ROLES.USER);
 
-    const getInitials = (firstName?: string, lastName?: string) => {
-        if (!firstName && !lastName) return 'U';
-        return `${firstName?.charAt(0) || ''}${lastName?.charAt(0) || ''}`.toUpperCase();
+    const [activeTab, setActiveTab] = useState(0);
+    const [isEditMode, setIsEditMode] = useState(false);
+    const [isSaving, setIsSaving] = useState(false);
+    const [saveError, setSaveError] = useState<string | null>(null);
+
+    const [workExperience, setWorkExperience] = useState<UpdateUserWorkExperience[]>([]);
+    const [education, setEducation] = useState<UpdateUserEducation[]>([]);
+    const [skills, setSkills] = useState<UpdateUserSkill[]>([]);
+
+    const [originalWorkExperience, setOriginalWorkExperience] = useState<UpdateUserWorkExperience[]>([]);
+    const [originalEducation, setOriginalEducation] = useState<UpdateUserEducation[]>([]);
+    const [originalSkills, setOriginalSkills] = useState<UpdateUserSkill[]>([]);
+
+    const [validationErrors, setValidationErrors] = useState<ValidationErrors>(createEmptyValidationErrors());
+
+    useEffect(() => {
+        const loadProfile = async () => {
+            try {
+                const data = await loadProfileData();
+
+                setWorkExperience(data.workExperience);
+                setEducation(data.education);
+                setSkills(data.skills);
+
+                setOriginalWorkExperience(JSON.parse(JSON.stringify(data.workExperience)));
+                setOriginalEducation(JSON.parse(JSON.stringify(data.education)));
+                setOriginalSkills(JSON.parse(JSON.stringify(data.skills)));
+            } catch (err) {
+                console.error('Failed to load profile data:', err);
+            }
+        };
+
+        if (isUser) {
+            loadProfile();
+        }
+    }, [isUser]);
+
+
+    const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
+        setActiveTab(newValue);
     };
+
+    const handleEdit = () => {
+        setIsEditMode(true);
+        setSaveError(null);
+    };
+
+    const handleCancel = () => {
+        loadProfileData().then(data => {
+            setWorkExperience(data.workExperience);
+            setEducation(data.education);
+            setSkills(data.skills);
+
+            setOriginalWorkExperience(JSON.parse(JSON.stringify(data.workExperience)));
+            setOriginalEducation(JSON.parse(JSON.stringify(data.education)));
+            setOriginalSkills(JSON.parse(JSON.stringify(data.skills)));
+
+            setIsEditMode(false);
+            setValidationErrors(createEmptyValidationErrors());
+            setSaveError(null);
+        });
+    };
+
+    const handleSave = async () => {
+        setSaveError(null);
+
+        const validation = validateProfileData({workExperience, education, skills});
+        setValidationErrors(validation.errors);
+
+        if (!validation.isValid) {
+            setSaveError('Please fix validation errors before saving');
+            return;
+        }
+
+        try {
+            setIsSaving(true);
+
+            const requestData: SaveUserProfileRequest = {
+                workExperience: workExperience.map(we => ({
+                    id: we.isNew ? undefined : we.id,
+                    delete: we.delete,
+                    companyName: we.companyName,
+                    designation: we.designation,
+                    startDate: we.startDate,
+                    endDate: we.endDate,
+                })),
+                education: education.map(e => ({
+                    id: e.isNew ? undefined : e.id,
+                    delete: e.delete,
+                    institutionName: e.institutionName,
+                    degree: e.degree,
+                    startDate: e.startDate,
+                    endDate: e.endDate,
+                })),
+                skills: skills.map(s => ({
+                    id: s.isNew ? undefined : s.id,
+                    delete: s.delete,
+                    proficiencyLevel: s.proficiencyLevel,
+                    skillId: s.skill.id,
+                })),
+            };
+
+            const updatedProfile = await userService.saveUserProfile(requestData);
+            const transformed = transformProfileResponse(updatedProfile);
+
+            setWorkExperience(transformed.workExperience);
+            setEducation(transformed.education);
+            setSkills(transformed.skills);
+
+            setIsEditMode(false);
+            setValidationErrors(createEmptyValidationErrors());
+        } catch (err) {
+            const error = err as {response?: {data?: {message?: string}}};
+            setSaveError(error?.response?.data?.message || 'Failed to save profile');
+        } finally {
+            setIsSaving(false);
+        }
+    };
+
+    const hasWorkExperienceErrors = useMemo(
+        () => Object.keys(validationErrors.workExperience).length > 0,
+        [validationErrors.workExperience]
+    );
+    const hasEducationErrors = useMemo(
+        () => Object.keys(validationErrors.education).length > 0,
+        [validationErrors.education]
+    );
+    const hasSkillsErrors = useMemo(
+        () => Object.keys(validationErrors.skills).length > 0,
+        [validationErrors.skills]
+    );
 
     if (loading) {
         return (
@@ -69,83 +214,139 @@ const Profile = () => {
                     </Tooltip>
                 </Box>
 
-                <StyledProfileHeader>
-                    <Avatar
-                        sx={{
-                            width: 120,
-                            height: 120,
-                            backgroundColor: "primary.main",
-                            fontSize: '2.5rem',
-                            fontWeight: 'bold',
-                        }}
-                    >
-                        {getInitials(profile.firstName, profile.lastName)}
-                    </Avatar>
-                    <Box sx={{flex: 1}}>
-                        <Typography variant="h3" component="h2" gutterBottom fontWeight="bold">
-                            {profile.firstName} {profile.lastName}
-                        </Typography>
-                        <Typography variant="h6" color="text.secondary" gutterBottom>
-                            @{profile.username}
-                        </Typography>
-                        <Chip
-                            label={`User ID: ${profile.id}`}
-                            color="primary"
-                            variant="outlined"
-                            size="small"
-                            sx={{mt: 1}}
-                        />
-                    </Box>
-                </StyledProfileHeader>
+                <ProfileHeader
+                    firstName={profile.firstName}
+                    lastName={profile.lastName}
+                    username={profile.username}
+                    userId={profile.id}
+                />
 
                 <Divider sx={{my: 4}}/>
 
-                <Typography variant="h5" gutterBottom fontWeight="bold" sx={{mb: 3}}>
-                    Account Information
-                </Typography>
+                <AccountInformation
+                    email={profile.email}
+                    username={profile.username}
+                    firstName={profile.firstName}
+                    lastName={profile.lastName}
+                />
 
-                <StyledInfoGrid>
-                    <StyledInfoCard>
-                        <Box sx={{display: 'flex', alignItems: 'center', gap: 1, mb: 1}}>
-                            <EmailIcon color="primary"/>
-                            <Typography variant="subtitle2" color="text.secondary">
-                                Email Address
-                            </Typography>
-                        </Box>
-                        <Typography variant="body1" fontWeight="medium">
-                            {profile.email}
-                        </Typography>
-                    </StyledInfoCard>
-
-                    <StyledInfoCard>
-                        <Box sx={{display: 'flex', alignItems: 'center', gap: 1, mb: 1}}>
-                            <BadgeIcon color="primary"/>
-                            <Typography variant="subtitle2" color="text.secondary">
-                                Username
-                            </Typography>
-                        </Box>
-                        <Typography variant="body1" fontWeight="medium">
-                            {profile.username}
-                        </Typography>
-                    </StyledInfoCard>
-
-                    <StyledInfoCard>
-                        <Box sx={{display: 'flex', alignItems: 'center', gap: 1, mb: 1}}>
-                            <PersonIcon color="primary"/>
-                            <Typography variant="subtitle2" color="text.secondary">
-                                Full Name
-                            </Typography>
-                        </Box>
-                        <Typography variant="body1" fontWeight="medium">
-                            {profile.firstName} {profile.lastName}
-                        </Typography>
-                    </StyledInfoCard>
-                </StyledInfoGrid>
                 {isUser && (
-                    <CVSection
-                        cvId={profile.cvId}
-                        onUploadSuccess={refetch}
-                    />
+                    <>
+                        <CVSection
+                            cvId={profile.cvId}
+                            onUploadSuccess={refetch}
+                        />
+
+                        <Divider sx={{my: 4}}/>
+
+                        <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2}}>
+                            <Typography variant="h5" fontWeight="bold">
+                                Professional Profile
+                            </Typography>
+                            {!isEditMode ? (
+                                <Button
+                                    variant="contained"
+                                    startIcon={<EditIcon />}
+                                    onClick={handleEdit}
+                                >
+                                    Edit Profile
+                                </Button>
+                            ) : (
+                                <Box sx={{display: 'flex', gap: 2}}>
+                                    <Button
+                                        variant="outlined"
+                                        startIcon={<CancelIcon />}
+                                        onClick={handleCancel}
+                                        disabled={isSaving}
+                                    >
+                                        Cancel
+                                    </Button>
+                                    <Button
+                                        variant="contained"
+                                        startIcon={<SaveIcon />}
+                                        onClick={handleSave}
+                                        disabled={isSaving}
+                                    >
+                                        {isSaving ? 'Saving...' : 'Save Changes'}
+                                    </Button>
+                                </Box>
+                            )}
+                        </Box>
+
+                        {saveError && (
+                            <Alert severity="error" sx={{mb: 2}} onClose={() => setSaveError(null)}>
+                                {saveError}
+                            </Alert>
+                        )}
+
+                        <StyledTabs value={activeTab} onChange={handleTabChange}>
+                            <StyledTab
+                                label={
+                                    <Box sx={{display: 'flex', alignItems: 'center', gap: 1}}>
+                                        Skills
+                                        {isEditMode && hasSkillsErrors && <ErrorIcon color="error" fontSize="small" />}
+                                    </Box>
+                                }
+                            />
+                            <StyledTab
+                                label={
+                                    <Box sx={{display: 'flex', alignItems: 'center', gap: 1}}>
+                                        Education
+                                        {isEditMode && hasEducationErrors && <ErrorIcon color="error" fontSize="small" />}
+                                    </Box>
+                                }
+                            />
+                            <StyledTab
+                                label={
+                                    <Box sx={{display: 'flex', alignItems: 'center', gap: 1}}>
+                                        Work Experience
+                                        {isEditMode && hasWorkExperienceErrors && <ErrorIcon color="error" fontSize="small" />}
+                                    </Box>
+                                }
+                            />
+                        </StyledTabs>
+
+                        <Box sx={tabPanelStyle}>
+                            {activeTab === 0 && (
+                                isEditMode ? (
+                                    <EditProfileSkillSection
+                                        skills={skills}
+                                        onSkillsChange={setSkills}
+                                        disabled={isSaving}
+                                        originalSkills={originalSkills}
+                                    />
+                                ) : (
+                                    <ProfileSkillSection skills={skills} />
+                                )
+                            )}
+                            {activeTab === 1 && (
+                                isEditMode ? (
+                                    <EducationForm
+                                        education={education}
+                                        onEducationChange={setEducation}
+                                        disabled={isSaving}
+                                        errors={validationErrors.education}
+                                        originalEducation={originalEducation}
+                                    />
+                                ) : (
+                                    <EducationView education={education} />
+                                )
+                            )}
+                            {activeTab === 2 && (
+                                isEditMode ? (
+                                    <WorkExperienceForm
+                                        workExperience={workExperience}
+                                        onWorkExperienceChange={setWorkExperience}
+                                        disabled={isSaving}
+                                        errors={validationErrors.workExperience}
+                                        originalWorkExperience={originalWorkExperience}
+                                    />
+                                ) : (
+                                    <WorkExperienceView workExperience={workExperience} />
+                                )
+                            )}
+                        </Box>
+                    </>
                 )}
             </StyledProfilePaper>
         </Container>

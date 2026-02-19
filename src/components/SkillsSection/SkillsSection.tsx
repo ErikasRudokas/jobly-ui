@@ -1,35 +1,21 @@
 import {Box, LinearProgress, Typography} from '@mui/material';
 import type {JobOfferSkill} from '../../common/types/jobOffer.types';
 import {
-    progressBarStyle,
     skillHeaderStyle,
     skillItemStyle,
     skillNameStyle,
     skillProficiencyStyle,
-    skillsContainerStyle,
     skillTypeGroupStyle,
-    skillTypeHeaderStyle,
-} from './styles';
+    skillTypeHeaderStyle
+} from '../../common/styles/styles.skills';
+import {getProficiencyValue} from "../../common/utils/skillProficiencyUtils.ts";
+import {progressBarStyle, skillsContainerStyle} from "./styles.ts";
 
 interface SkillsSectionProps {
     skills: JobOfferSkill[];
 }
 
 const SkillsSection = ({skills}: SkillsSectionProps) => {
-    const getProficiencyValue = (proficiency: string): number => {
-        switch (proficiency) {
-            case 'BEGINNER':
-                return 25;
-            case 'INTERMEDIATE':
-                return 50;
-            case 'ADVANCED':
-                return 75;
-            case 'EXPERT':
-                return 100;
-            default:
-                return 0;
-        }
-    };
 
     const formatProficiency = (proficiency: string) => {
         return proficiency.charAt(0) + proficiency.slice(1).toLowerCase();
