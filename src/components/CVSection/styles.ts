@@ -15,10 +15,3 @@ export const StyledFilePreview = styled(Box)(({ theme }) => ({
     borderRadius: theme.spacing(1),
     border: `1px solid ${theme.palette.divider}`,
 }));
-
-export const StyledButtonContainer = styled(Box)({
-    display: 'flex',
-    gap: 2,
-    flexWrap: 'wrap',
-});
-

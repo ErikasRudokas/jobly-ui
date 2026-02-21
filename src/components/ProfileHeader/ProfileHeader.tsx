@@ -1,14 +1,13 @@
-import {Avatar, Box, Chip, Typography} from '@mui/material';
-import {StyledProfileHeader} from '../../pages/Profile/styles';
+import {Avatar, Box, Typography} from '@mui/material';
+import {StyledProfileHeader} from './styles';
 
 interface ProfileHeaderProps {
     firstName?: string;
     lastName?: string;
-    username: string;
-    userId: number;
+    username?: string;
 }
 
-const ProfileHeader = ({firstName, lastName, username, userId}: ProfileHeaderProps) => {
+const ProfileHeader = ({firstName, lastName, username}: ProfileHeaderProps) => {
     const getInitials = (firstName?: string, lastName?: string) => {
         if (!firstName && !lastName) return 'U';
         return `${firstName?.charAt(0) || ''}${lastName?.charAt(0) || ''}`.toUpperCase();
@@ -20,7 +19,7 @@ const ProfileHeader = ({firstName, lastName, username, userId}: ProfileHeaderPro
                 sx={{
                     width: 120,
                     height: 120,
-                    backgroundColor: "primary.main",
+                    backgroundColor: 'primary.main',
                     fontSize: '2.5rem',
                     fontWeight: 'bold',
                 }}
@@ -31,16 +30,11 @@ const ProfileHeader = ({firstName, lastName, username, userId}: ProfileHeaderPro
                 <Typography variant="h3" component="h2" gutterBottom fontWeight="bold">
                     {firstName} {lastName}
                 </Typography>
-                <Typography variant="h6" color="text.secondary" gutterBottom>
-                    @{username}
-                </Typography>
-                <Chip
-                    label={`User ID: ${userId}`}
-                    color="primary"
-                    variant="outlined"
-                    size="small"
-                    sx={{mt: 1}}
-                />
+                {username && (
+                    <Typography variant="h6" color="text.secondary" gutterBottom>
+                        @{username}
+                    </Typography>
+                )}
             </Box>
         </StyledProfileHeader>
     );

@@ -16,6 +16,7 @@ export const AUTH_ENDPOINTS = {
 export const USER_ENDPOINTS = {
     MY_PROFILE: '/users/me',
     PROFILE: '/users/profile',
+    PUBLIC_PROFILE: (userId: number) => `/users/${userId}/profile`,
     UPLOAD_CV: '/users/cv',
     DOWNLOAD_CV: (cvId: number) => `/users/cv/${cvId}`,
 } as const;

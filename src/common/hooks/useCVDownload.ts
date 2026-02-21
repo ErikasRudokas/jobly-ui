@@ -28,9 +28,9 @@ export const useCVDownload = (): UseCVDownloadReturn => {
             let filename = `cv_${cvId}.pdf`;
 
             if (contentDisposition) {
-                const filenameMatch = contentDisposition.match(/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/);
-                if (filenameMatch && filenameMatch[1]) {
-                    filename = filenameMatch[1].replace(/['"]/g, '');
+                const match = contentDisposition.match(/filename="?([^";\n]+)"?/);
+                if (match?.[1]) {
+                    filename = match[1].trim();
                 }
             }
 

@@ -3,13 +3,11 @@ import {Box, IconButton, Typography} from '@mui/material';
 import type {Skill, SkillProficiency, SkillWithProficiency} from '../../common/types/skill.types';
 import SkillSearchBox from '../SkillSearchBox/SkillSearchBox';
 import {
-    containerStyle,
     emptyStateStyle,
     proficiencyBarContainerStyle,
     proficiencyBarFilledStyle,
     proficiencyBarStyle,
     removeButtonStyle,
-    sectionTitleStyle,
     skillHeaderStyle,
     skillItemStyle,
     skillNameStyle,
@@ -17,12 +15,13 @@ import {
     skillsListContainerStyle,
     skillTypeGroupStyle,
     skillTypeHeaderStyle,
-} from './styles';
+} from '../../common/styles/styles.skills';
 import {
     formatProficiency,
     getProficiencyFromLevel,
     getProficiencyLevel
 } from "../../common/utils/skillProficiencyUtils.ts";
+import {containerStyle, sectionTitleStyle} from "./styles.ts";
 
 interface CreateJobOfferSkillSectionProps {
     selectedSkills: SkillWithProficiency[];

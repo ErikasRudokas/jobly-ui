@@ -98,23 +98,6 @@ export const contactItemStyle: SxProps<Theme> = {
     },
 };
 
-export const applicationCardStyle: SxProps<Theme> = {
-    padding: '1.5rem',
-    marginBottom: '1rem',
-    borderLeft: '4px solid',
-    borderColor: 'primary.main',
-};
-
-export const applicantNameStyle: SxProps<Theme> = {
-    fontWeight: 600,
-    color: 'text.primary',
-};
-
-export const applicationDateStyle: SxProps<Theme> = {
-    color: 'text.secondary',
-    fontSize: '0.9rem',
-};
-
 export const errorAlertStyle: SxProps<Theme> = {
     marginBottom: '2rem',
 };
@@ -126,20 +109,5 @@ export const loadingBoxStyle: SxProps<Theme> = {
     minHeight: '400px',
 };
 
-export const emptyApplicationsStyle: SxProps<Theme> = {
-    textAlign: 'center',
-    padding: '3rem 2rem',
-    color: 'text.secondary',
-    backgroundColor: 'grey.50',
-    borderRadius: '8px',
-};
-
-export const downloadCvButtonStyle: SxProps<Theme> = {
-    textTransform: 'none',
-};
-
-export const dialogActionsStyle: SxProps<Theme> = {
-    padding: '1rem 1.5rem',
-};
 
 

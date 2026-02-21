@@ -2,16 +2,16 @@ import {Box, Typography} from '@mui/material';
 import EmailIcon from '@mui/icons-material/Email';
 import BadgeIcon from '@mui/icons-material/Badge';
 import PersonIcon from '@mui/icons-material/Person';
-import {StyledInfoCard, StyledInfoGrid} from '../../pages/Profile/styles';
+import {StyledInfoCard, StyledInfoGrid} from './styles';
 
-interface AccountInformationProps {
+interface ProfileInfoCardsProps {
     email: string;
-    username: string;
     firstName?: string;
     lastName?: string;
+    username?: string;
 }
 
-const AccountInformation = ({email, username, firstName, lastName}: AccountInformationProps) => {
+const ProfileInfoCards = ({email, firstName, lastName, username}: ProfileInfoCardsProps) => {
     return (
         <>
             <Typography variant="h5" gutterBottom fontWeight="bold" sx={{mb: 3}}>
@@ -31,17 +31,19 @@ const AccountInformation = ({email, username, firstName, lastName}: AccountInfor
                     </Typography>
                 </StyledInfoCard>
 
-                <StyledInfoCard>
-                    <Box sx={{display: 'flex', alignItems: 'center', gap: 1, mb: 1}}>
-                        <BadgeIcon color="primary"/>
-                        <Typography variant="subtitle2" color="text.secondary">
-                            Username
+                {username && (
+                    <StyledInfoCard>
+                        <Box sx={{display: 'flex', alignItems: 'center', gap: 1, mb: 1}}>
+                            <BadgeIcon color="primary"/>
+                            <Typography variant="subtitle2" color="text.secondary">
+                                Username
+                            </Typography>
+                        </Box>
+                        <Typography variant="body1" fontWeight="medium">
+                            {username}
                         </Typography>
-                    </Box>
-                    <Typography variant="body1" fontWeight="medium">
-                        {username}
-                    </Typography>
-                </StyledInfoCard>
+                    </StyledInfoCard>
+                )}
 
                 <StyledInfoCard>
                     <Box sx={{display: 'flex', alignItems: 'center', gap: 1, mb: 1}}>
@@ -59,5 +61,5 @@ const AccountInformation = ({email, username, firstName, lastName}: AccountInfor
     );
 };
 
-export default AccountInformation;
+export default ProfileInfoCards;
 

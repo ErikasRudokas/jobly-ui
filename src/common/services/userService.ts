@@ -17,6 +17,13 @@ export const userService = {
         return response.data;
     },
 
+    getPublicUserProfile: async (userId: number): Promise<GetUserProfileResponse> => {
+        const response = await axiosInstance.get<GetUserProfileResponse>(
+            buildApiUrl(USER_ENDPOINTS.PUBLIC_PROFILE(userId))
+        );
+        return response.data;
+    },
+
     saveUserProfile: async (data: SaveUserProfileRequest): Promise<GetUserProfileResponse> => {
         const response = await axiosInstance.post<GetUserProfileResponse>(
             buildApiUrl(USER_ENDPOINTS.PROFILE),

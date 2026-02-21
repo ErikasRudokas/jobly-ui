@@ -2,25 +2,13 @@ import {useEffect, useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
 import {useForm} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
-import {
-    Alert,
-    Box,
-    Button,
-    CircularProgress,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogContentText,
-    DialogTitle,
-    Paper,
-    TextField,
-    Typography,
-} from '@mui/material';
+import {Alert, Box, Button, CircularProgress, Paper, TextField, Typography,} from '@mui/material';
 import {ArrowBack as ArrowBackIcon, Delete as DeleteIcon, Edit as EditIcon} from '@mui/icons-material';
 import {useCategories} from '../../common/hooks/useCategories';
 import type {Category} from '../../common/types/category.types';
 import {ROUTES} from '../../common/constants/routes';
 import {type CategoryFormData, categorySchema} from '../Categories/categorySchema';
+import ConfirmDialog from '../../components/ConfirmDialog/ConfirmDialog';
 import {
     actionButtonsStyle,
     backButtonStyle,
@@ -30,7 +18,6 @@ import {
     detailRowStyle,
     detailsCardStyle,
     detailValueStyle,
-    dialogActionsStyle,
     editButtonStyle,
     errorAlertStyle,
     headerSectionStyle,
@@ -310,21 +297,14 @@ const CategoryDetails = () => {
                 )}
             </Paper>
 
-            <Dialog open={isDeleteDialogOpen} onClose={handleDeleteCancel}>
-                <DialogTitle>Delete Category</DialogTitle>
-                <DialogContent>
-                    <DialogContentText>
-                        Are you sure you want to delete the category "{category?.name}"? This
-                        action cannot be undone.
-                    </DialogContentText>
-                </DialogContent>
-                <DialogActions sx={dialogActionsStyle}>
-                    <Button onClick={handleDeleteCancel}>Cancel</Button>
-                    <Button onClick={handleDeleteConfirm} color="error" variant="contained">
-                        Delete
-                    </Button>
-                </DialogActions>
-            </Dialog>
+            <ConfirmDialog
+                open={isDeleteDialogOpen}
+                title="Delete Category"
+                description={`Are you sure you want to delete the category "${category?.name}"? This action cannot be undone.`}
+                confirmLabel="Delete"
+                onConfirm={handleDeleteConfirm}
+                onCancel={handleDeleteCancel}
+            />
         </Box>
     );
 };
