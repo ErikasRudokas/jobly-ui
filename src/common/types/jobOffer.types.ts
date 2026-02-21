@@ -115,7 +115,7 @@ export interface Application {
     updatedAt: string;
     applicant: Applicant;
     applicationStatus: ApplicationStatus;
-    cvId: number;
+    cvId?: number;
 }
 
 export interface Applicant {

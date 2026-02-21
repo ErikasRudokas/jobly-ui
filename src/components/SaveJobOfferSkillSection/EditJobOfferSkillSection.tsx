@@ -6,7 +6,6 @@ import type {UpdateJobOfferSkill} from '../../common/types/jobOffer.types.ts';
 import {useSkills} from '../../common/hooks/useSkills.ts';
 import SkillSearchBox from '../SkillSearchBox/SkillSearchBox.tsx';
 import {
-    containerStyle,
     deleteCheckboxStyle,
     deletedSkillItemStyle,
     emptyStateStyle,
@@ -14,7 +13,6 @@ import {
     proficiencyBarFilledStyle,
     proficiencyBarStyle,
     removeButtonStyle,
-    sectionTitleStyle,
     skillHeaderStyle,
     skillItemStyle,
     skillNameStyle,
@@ -23,12 +21,13 @@ import {
     skillTypeGroupStyle,
     skillTypeHeaderStyle,
     statusTextStyle,
-} from './styles.ts';
+} from '../../common/styles/styles.skills.ts';
 import {
     formatProficiency,
     getProficiencyFromLevel,
     getProficiencyLevel
 } from "../../common/utils/skillProficiencyUtils.ts";
+import {containerStyle, sectionTitleStyle} from "./styles.ts";
 
 interface SkillWithMetadata extends UpdateJobOfferSkill {
     name: string;

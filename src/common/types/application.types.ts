@@ -56,5 +56,5 @@ export interface ManageApplicationRequest {
     action: 'APPROVE' | 'REJECT';
 }
 
-export type ApplicationStatus = 'PENDING' | 'ACCEPTED' | 'REJECTED' | 'WITHDRAWN';
+export type ApplicationStatus = 'PENDING' | 'APPROVED' | 'REJECTED' | 'WITHDRAWN';
 

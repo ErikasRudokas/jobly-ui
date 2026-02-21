@@ -5,11 +5,7 @@ import {
     Box,
     Button,
     CircularProgress,
-    Dialog,
-    DialogActions,
-    DialogContent,
     DialogContentText,
-    DialogTitle,
     Paper,
     Snackbar,
     TextField,
@@ -44,6 +40,7 @@ import {
     sectionTitleStyle,
 } from './styles';
 import JobOfferDetailsCard from "../../components/JobOfferDetailsCard/JobOfferDetailsCard.tsx";
+import AppDialog from '../../components/AppDialog/AppDialog';
 
 const JobDetails = () => {
     const navigate = useNavigate();
@@ -230,40 +227,34 @@ const JobDetails = () => {
                 </Box>
             </Paper>
 
-            <Dialog open={openApplyDialog} onClose={handleCloseApplyDialog} maxWidth="sm" fullWidth>
-                <DialogTitle>Apply for {jobOffer.title}</DialogTitle>
-                <DialogContent>
-                    <DialogContentText sx={{ marginBottom: '1rem' }}>
-                        You are about to apply for this position at {jobOffer.companyName}.
-                        You can optionally add a comment to your application.
-                    </DialogContentText>
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        label="Comment (Optional)"
-                        type="text"
-                        fullWidth
-                        multiline
-                        rows={4}
-                        value={applicationComment}
-                        onChange={(e) => setApplicationComment(e.target.value)}
-                        placeholder="Add any additional information you'd like the employer to know..."
-                    />
-                </DialogContent>
-                <DialogActions sx={{ padding: '1rem 1.5rem' }}>
-                    <Button onClick={handleCloseApplyDialog} color="inherit">
-                        Cancel
-                    </Button>
-                    <Button
-                        onClick={handleApply}
-                        variant="contained"
-                        color="primary"
-                        disabled={applyLoading}
-                    >
-                        {applyLoading ? 'Submitting...' : 'Submit Application'}
-                    </Button>
-                </DialogActions>
-            </Dialog>
+            <AppDialog
+                open={openApplyDialog}
+                title={`Apply for ${jobOffer.title}`}
+                onClose={handleCloseApplyDialog}
+                maxWidth="sm"
+                fullWidth
+                actions={[
+                    {label: 'Cancel', onClick: handleCloseApplyDialog, color: 'inherit'},
+                    {label: applyLoading ? 'Submitting...' : 'Submit Application', onClick: handleApply, variant: 'contained', color: 'primary', disabled: applyLoading},
+                ]}
+            >
+                <DialogContentText sx={{marginBottom: '1rem'}}>
+                    You are about to apply for this position at {jobOffer.companyName}.
+                    You can optionally add a comment to your application.
+                </DialogContentText>
+                <TextField
+                    autoFocus
+                    margin="dense"
+                    label="Comment (Optional)"
+                    type="text"
+                    fullWidth
+                    multiline
+                    rows={4}
+                    value={applicationComment}
+                    onChange={(e) => setApplicationComment(e.target.value)}
+                    placeholder="Add any additional information you'd like the employer to know..."
+                />
+            </AppDialog>
 
             <Snackbar
                 open={successSnackbar}

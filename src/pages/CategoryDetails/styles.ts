@@ -77,7 +77,4 @@ export const errorAlertStyle: SxProps<Theme> = {
     marginBottom: '2rem',
 };
 
-export const dialogActionsStyle: SxProps<Theme> = {
-    padding: '1rem 1.5rem',
-};
 

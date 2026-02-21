@@ -16,7 +16,7 @@ import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Cancel';
 import ErrorIcon from '@mui/icons-material/Error';
 import {useUserProfile} from "../../common/hooks/useUserProfile";
-import {StyledProfilePaper, StyledTab, StyledTabs, tabPanelStyle,} from "./styles";
+import {StyledProfilePaper, StyledTab, StyledTabs, tabPanelStyle} from "./styles";
 import {CVSection} from "../../components/CVSection/CVSection";
 import {authService} from "../../common/services/authService";
 import {ROLES} from "../../common/constants/roleConstants";
@@ -33,8 +33,8 @@ import EducationForm from "../../components/ProfileForms/EducationForm";
 import EducationView from "../../components/ProfileViews/EducationView";
 import EditProfileSkillSection from "../../components/ProfileSkillSection/EditProfileSkillSection";
 import ProfileSkillSection from "../../components/ProfileSkillSection/ProfileSkillSection";
-import ProfileHeader from '../../components/Profile/ProfileHeader';
-import AccountInformation from '../../components/Profile/AccountInformation';
+import ProfileHeader from '../../components/ProfileHeader/ProfileHeader';
+import ProfileInfoCards from '../../components/ProfileInfoCards/ProfileInfoCards';
 import {createEmptyValidationErrors, validateProfileData, type ValidationErrors,} from './profileValidation';
 import {loadProfileData, transformProfileResponse} from './profileDataUtils';
 
@@ -57,25 +57,25 @@ const Profile = () => {
 
     const [validationErrors, setValidationErrors] = useState<ValidationErrors>(createEmptyValidationErrors());
 
+    const reloadProfileData = async () => {
+        try {
+            const data = await loadProfileData();
+
+            setWorkExperience(data.workExperience);
+            setEducation(data.education);
+            setSkills(data.skills);
+
+            setOriginalWorkExperience(JSON.parse(JSON.stringify(data.workExperience)));
+            setOriginalEducation(JSON.parse(JSON.stringify(data.education)));
+            setOriginalSkills(JSON.parse(JSON.stringify(data.skills)));
+        } catch (err) {
+            console.error('Failed to load profile data:', err);
+        }
+    };
+
     useEffect(() => {
-        const loadProfile = async () => {
-            try {
-                const data = await loadProfileData();
-
-                setWorkExperience(data.workExperience);
-                setEducation(data.education);
-                setSkills(data.skills);
-
-                setOriginalWorkExperience(JSON.parse(JSON.stringify(data.workExperience)));
-                setOriginalEducation(JSON.parse(JSON.stringify(data.education)));
-                setOriginalSkills(JSON.parse(JSON.stringify(data.skills)));
-            } catch (err) {
-                console.error('Failed to load profile data:', err);
-            }
-        };
-
         if (isUser) {
-            loadProfile();
+            reloadProfileData();
         }
     }, [isUser]);
 
@@ -90,15 +90,7 @@ const Profile = () => {
     };
 
     const handleCancel = () => {
-        loadProfileData().then(data => {
-            setWorkExperience(data.workExperience);
-            setEducation(data.education);
-            setSkills(data.skills);
-
-            setOriginalWorkExperience(JSON.parse(JSON.stringify(data.workExperience)));
-            setOriginalEducation(JSON.parse(JSON.stringify(data.education)));
-            setOriginalSkills(JSON.parse(JSON.stringify(data.skills)));
-
+        reloadProfileData().then(() => {
             setIsEditMode(false);
             setValidationErrors(createEmptyValidationErrors());
             setSaveError(null);
@@ -154,7 +146,7 @@ const Profile = () => {
             setIsEditMode(false);
             setValidationErrors(createEmptyValidationErrors());
         } catch (err) {
-            const error = err as {response?: {data?: {message?: string}}};
+            const error = err as { response?: { data?: { message?: string } } };
             setSaveError(error?.response?.data?.message || 'Failed to save profile');
         } finally {
             setIsSaving(false);
@@ -218,12 +210,11 @@ const Profile = () => {
                     firstName={profile.firstName}
                     lastName={profile.lastName}
                     username={profile.username}
-                    userId={profile.id}
                 />
 
                 <Divider sx={{my: 4}}/>
 
-                <AccountInformation
+                <ProfileInfoCards
                     email={profile.email}
                     username={profile.username}
                     firstName={profile.firstName}
@@ -234,7 +225,10 @@ const Profile = () => {
                     <>
                         <CVSection
                             cvId={profile.cvId}
-                            onUploadSuccess={refetch}
+                            onUploadSuccess={() => {
+                                refetch();
+                                reloadProfileData();
+                            }}
                         />
 
                         <Divider sx={{my: 4}}/>
@@ -246,7 +240,7 @@ const Profile = () => {
                             {!isEditMode ? (
                                 <Button
                                     variant="contained"
-                                    startIcon={<EditIcon />}
+                                    startIcon={<EditIcon/>}
                                     onClick={handleEdit}
                                 >
                                     Edit Profile
@@ -255,7 +249,7 @@ const Profile = () => {
                                 <Box sx={{display: 'flex', gap: 2}}>
                                     <Button
                                         variant="outlined"
-                                        startIcon={<CancelIcon />}
+                                        startIcon={<CancelIcon/>}
                                         onClick={handleCancel}
                                         disabled={isSaving}
                                     >
@@ -263,7 +257,7 @@ const Profile = () => {
                                     </Button>
                                     <Button
                                         variant="contained"
-                                        startIcon={<SaveIcon />}
+                                        startIcon={<SaveIcon/>}
                                         onClick={handleSave}
                                         disabled={isSaving}
                                     >
@@ -284,7 +278,7 @@ const Profile = () => {
                                 label={
                                     <Box sx={{display: 'flex', alignItems: 'center', gap: 1}}>
                                         Skills
-                                        {isEditMode && hasSkillsErrors && <ErrorIcon color="error" fontSize="small" />}
+                                        {isEditMode && hasSkillsErrors && <ErrorIcon color="error" fontSize="small"/>}
                                     </Box>
                                 }
                             />
@@ -292,7 +286,8 @@ const Profile = () => {
                                 label={
                                     <Box sx={{display: 'flex', alignItems: 'center', gap: 1}}>
                                         Education
-                                        {isEditMode && hasEducationErrors && <ErrorIcon color="error" fontSize="small" />}
+                                        {isEditMode && hasEducationErrors &&
+                                            <ErrorIcon color="error" fontSize="small"/>}
                                     </Box>
                                 }
                             />
@@ -300,7 +295,8 @@ const Profile = () => {
                                 label={
                                     <Box sx={{display: 'flex', alignItems: 'center', gap: 1}}>
                                         Work Experience
-                                        {isEditMode && hasWorkExperienceErrors && <ErrorIcon color="error" fontSize="small" />}
+                                        {isEditMode && hasWorkExperienceErrors &&
+                                            <ErrorIcon color="error" fontSize="small"/>}
                                     </Box>
                                 }
                             />
@@ -316,7 +312,7 @@ const Profile = () => {
                                         originalSkills={originalSkills}
                                     />
                                 ) : (
-                                    <ProfileSkillSection skills={skills} />
+                                    <ProfileSkillSection skills={skills}/>
                                 )
                             )}
                             {activeTab === 1 && (
@@ -329,7 +325,7 @@ const Profile = () => {
                                         originalEducation={originalEducation}
                                     />
                                 ) : (
-                                    <EducationView education={education} />
+                                    <EducationView education={education}/>
                                 )
                             )}
                             {activeTab === 2 && (
@@ -342,7 +338,7 @@ const Profile = () => {
                                         originalWorkExperience={originalWorkExperience}
                                     />
                                 ) : (
-                                    <WorkExperienceView workExperience={workExperience} />
+                                    <WorkExperienceView workExperience={workExperience}/>
                                 )
                             )}
                         </Box>
