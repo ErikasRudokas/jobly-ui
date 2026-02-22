@@ -1,20 +1,14 @@
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { useNavigate, Link } from 'react-router-dom';
-import {
-  Box,
-  Button,
-  TextField,
-  Typography,
-  Container,
-  Alert,
-} from '@mui/material';
-import { useState } from 'react';
-import { authService } from '../../common/services/authService';
-import { ROUTES } from '../../common/constants/routes';
-import { StyledLoginContainer, StyledFormBox } from './styles';
+import {useForm} from 'react-hook-form';
+import {zodResolver} from '@hookform/resolvers/zod';
+import {z} from 'zod';
+import {Link, useNavigate} from 'react-router-dom';
+import {Alert, Box, Container, TextField, Typography,} from '@mui/material';
+import {useState} from 'react';
+import {authService} from '../../common/services/authService';
+import {ROUTES} from '../../common/constants/routes';
+import {StyledFormBox, StyledLoginContainer} from './styles';
 import {lightTheme} from "../../common/themes/light-theme.ts";
+import AppButton from '../../components/AppButton/AppButton';
 
 const loginSchema = z.object({
   email: z.email('Invalid email address'),
@@ -90,16 +84,9 @@ const Login = () => {
               autoComplete="current-password"
             />
 
-            <Button
-              type="submit"
-              variant="contained"
-              fullWidth
-              size="large"
-              disabled={isLoading}
-              sx={{ mt: 3, mb: 2 }}
-            >
-              {isLoading ? 'Logging in...' : 'Login'}
-            </Button>
+            <AppButton type="submit" fullWidth size="large" loading={isLoading} sx={{ mt: 3, mb: 2 }}>
+              Login
+            </AppButton>
 
             <Typography variant="body2" align="center">
               Don't have an account?{' '}

@@ -2,12 +2,13 @@ import {useEffect, useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
 import {useForm} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
-import {Alert, Box, Button, CircularProgress, Paper, TextField, Typography,} from '@mui/material';
+import {Alert, Box, CircularProgress, Paper, TextField, Typography,} from '@mui/material';
 import {useApplications} from '../../common/hooks/useApplications';
 import type {MyApplication} from '../../common/types/application.types';
 import {ROUTES} from '../../common/constants/routes';
 import {type ApplicationUpdateFormData, applicationUpdateSchema} from './applicationSchema';
 import BackButton from '../../components/BackButton/BackButton';
+import AppButton from '../../components/AppButton/AppButton';
 import {
     containerStyle,
     errorAlertStyle,
@@ -17,7 +18,6 @@ import {
     jobTitleStyle,
     loadingBoxStyle,
     paperStyle,
-    submitButtonStyle,
 } from './styles';
 
 function EditApplication() {
@@ -126,14 +126,7 @@ function EditApplication() {
                         placeholder="Add any additional information or update your application message..."
                     />
 
-                    <Button
-                        type="submit"
-                        variant="contained"
-                        disabled={loading}
-                        sx={submitButtonStyle}
-                    >
-                        {loading ? <CircularProgress size={24} /> : 'Update Application'}
-                    </Button>
+                    <AppButton type="submit" loading={loading}>Update Application</AppButton>
                 </Box>
             </Paper>
         </Box>

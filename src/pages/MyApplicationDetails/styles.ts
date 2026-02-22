@@ -29,14 +29,6 @@ export const sectionStyle: SxProps<Theme> = {
     marginBottom: '2.5rem',
 };
 
-export const editButtonStyle: SxProps<Theme> = {
-    textTransform: 'none',
-};
-
-export const cancelButtonStyle: SxProps<Theme> = {
-    textTransform: 'none',
-};
-
 export const errorAlertStyle: SxProps<Theme> = {
     marginBottom: '2rem',
 };
@@ -47,4 +39,3 @@ export const loadingBoxStyle: SxProps<Theme> = {
     alignItems: 'center',
     minHeight: '400px',
 };
-

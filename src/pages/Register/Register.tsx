@@ -2,12 +2,13 @@ import {useForm} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {z} from 'zod';
 import {Link, useNavigate} from 'react-router-dom';
-import {Alert, Box, Button, Container, TextField, Typography,} from '@mui/material';
+import {Alert, Box, Container, TextField, Typography,} from '@mui/material';
 import {useState} from 'react';
 import {authService} from '../../common/services/authService';
 import {ROUTES} from '../../common/constants/routes';
 import {StyledFormBox, StyledRegisterContainer} from './styles';
 import {lightTheme} from "../../common/themes/light-theme.ts";
+import AppButton from '../../components/AppButton/AppButton';
 
 const registerSchema = z.object({
     firstName: z.string().min(1, 'First name is required').max(20, 'First name too long'),
@@ -159,16 +160,9 @@ const Register = () => {
                             autoComplete="new-password"
                         />
 
-                        <Button
-                            type="submit"
-                            variant="contained"
-                            fullWidth
-                            size="large"
-                            disabled={isLoading}
-                            sx={{mt: 3, mb: 2}}
-                        >
-                            {isLoading ? 'Registering...' : 'Register'}
-                        </Button>
+                        <AppButton type="submit" fullWidth size="large" loading={isLoading} sx={{mt: 3, mb: 2}}>
+                            Register
+                        </AppButton>
 
                         <Typography variant="body2" align="center">
                             Already have an account?{' '}

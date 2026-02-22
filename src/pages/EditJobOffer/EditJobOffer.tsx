@@ -2,7 +2,7 @@ import {useEffect, useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
 import {useForm} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
-import {Alert, Box, Button, CircularProgress, Paper,} from '@mui/material';
+import {Alert, Box, CircularProgress, Paper,} from '@mui/material';
 import {useJobOffers} from '../../common/hooks/useJobOffers';
 import {useCategories} from '../../common/hooks/useCategories';
 import {ROUTES} from '../../common/constants/routes';
@@ -13,15 +13,10 @@ import JobOfferFormHeader from '../../components/JobOfferForm/JobOfferFormHeader
 import JobOfferFormDescription from '../../components/JobOfferForm/JobOfferFormDescription';
 import JobOfferFormDetails from '../../components/JobOfferForm/JobOfferFormDetails';
 import JobOfferFormContact from '../../components/JobOfferForm/JobOfferFormContact';
-import {
-    containerStyle,
-    errorAlertStyle,
-    loadingBoxStyle,
-    paperStyle,
-    submitButtonStyle,
-} from '../CreateJobOffer/styles';
+import {containerStyle, errorAlertStyle, loadingBoxStyle, paperStyle,} from '../CreateJobOffer/styles';
 import EditJobOfferSkillSection from "../../components/SaveJobOfferSkillSection/EditJobOfferSkillSection.tsx";
 import BackButton from '../../components/BackButton/BackButton';
+import AppButton from '../../components/AppButton/AppButton';
 
 const EditJobOffer = () => {
     const navigate = useNavigate();
@@ -191,27 +186,8 @@ const EditJobOffer = () => {
                     />
 
                     <Box sx={{marginTop: '2.5rem', display: 'flex', justifyContent: 'flex-end', gap: '1rem'}}>
-                        <Button
-                            variant="outlined"
-                            onClick={handleBack}
-                            disabled={submitting}
-                            sx={{
-                                textTransform: 'none',
-                                fontWeight: 600,
-                                padding: '0.75rem 2rem',
-                                borderRadius: '8px',
-                            }}
-                        >
-                            Cancel
-                        </Button>
-                        <Button
-                            type="submit"
-                            variant="contained"
-                            disabled={submitting}
-                            sx={submitButtonStyle}
-                        >
-                            {submitting ? <CircularProgress size={24} /> : 'Update Job Offer'}
-                        </Button>
+                        <AppButton variant="outlined" onClick={handleBack} disabled={submitting}>Cancel</AppButton>
+                        <AppButton type="submit" loading={submitting}>Update Job Offer</AppButton>
                     </Box>
                 </Box>
             </Paper>

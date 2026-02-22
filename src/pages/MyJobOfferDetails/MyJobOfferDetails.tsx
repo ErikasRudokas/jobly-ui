@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
-import {Alert, Box, Button, CircularProgress, Paper, Typography,} from '@mui/material';
+import {Alert, Box, CircularProgress, Paper, Typography,} from '@mui/material';
 import {Delete as DeleteIcon, Edit as EditIcon, Email as EmailIcon, Phone as PhoneIcon,} from '@mui/icons-material';
 import {useJobOffers} from '../../common/hooks/useJobOffers';
 import type {Application, JobOffer} from '../../common/types/jobOffer.types';
@@ -11,13 +11,12 @@ import JobOfferDetailsCard from '../../components/JobOfferDetailsCard/JobOfferDe
 import ApplicationList from '../../components/ApplicationList/ApplicationList';
 import ConfirmDialog from '../../components/ConfirmDialog/ConfirmDialog';
 import BackButton from '../../components/BackButton/BackButton';
+import AppButton from '../../components/AppButton/AppButton';
 import {
     contactBoxStyle,
     contactItemStyle,
     containerStyle,
-    deleteButtonStyle,
     descriptionTextStyle,
-    editButtonStyle,
     errorAlertStyle,
     loadingBoxStyle,
     paperStyle,
@@ -88,12 +87,8 @@ const MyJobOfferDetails = () => {
             <Box sx={topActionsRowStyle}>
                 <BackButton label="Back to My Job Offers" onClick={handleBack} />
                 <Box sx={{display: 'flex', gap: '1rem'}}>
-                    <Button variant="contained" startIcon={<EditIcon />} onClick={handleEdit} sx={editButtonStyle}>
-                        Edit
-                    </Button>
-                    <Button variant="outlined" color="error" startIcon={<DeleteIcon />} onClick={handleDeleteClick} sx={deleteButtonStyle}>
-                        Delete
-                    </Button>
+                    <AppButton startIcon={<EditIcon />} onClick={handleEdit}>Edit</AppButton>
+                    <AppButton variant="outlined" color="error" startIcon={<DeleteIcon />} onClick={handleDeleteClick}>Delete</AppButton>
                 </Box>
             </Box>
 

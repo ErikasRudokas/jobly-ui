@@ -3,7 +3,6 @@ import {useNavigate, useParams} from 'react-router-dom';
 import {
     Alert,
     Box,
-    Button,
     CircularProgress,
     DialogContentText,
     Paper,
@@ -22,8 +21,8 @@ import {ROLES} from '../../common/constants/roleConstants';
 import SkillsSection from '../../components/SkillsSection/SkillsSection';
 import JobDetailsHeader from '../../components/JobDetailsHeader/JobDetailsHeader';
 import BackButton from '../../components/BackButton/BackButton';
+import AppButton from '../../components/AppButton/AppButton';
 import {
-    applyButtonStyle,
     contactBoxStyle,
     contactItemStyle,
     containerStyle,
@@ -154,16 +153,13 @@ const JobDetails = () => {
                                 placement="top"
                             >
                                 <span>
-                                    <Button
-                                        variant="contained"
-                                        color="primary"
+                                    <AppButton
                                         startIcon={<WorkIcon />}
                                         onClick={handleOpenApplyDialog}
                                         disabled={checkingCanApply || !canApply}
-                                        sx={applyButtonStyle}
                                     >
                                         {checkingCanApply ? 'Checking...' : 'Apply Now'}
-                                    </Button>
+                                    </AppButton>
                                 </span>
                             </Tooltip>
                         </Box>

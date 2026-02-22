@@ -1,10 +1,11 @@
 import {useRef, useState} from 'react';
-import {Alert, Box, Button, CircularProgress, Divider, Typography} from '@mui/material';
+import {Alert, Box, Divider, Typography} from '@mui/material';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import DownloadIcon from '@mui/icons-material/Download';
 import InsertDriveFileOutlinedIcon from '@mui/icons-material/InsertDriveFileOutlined';
 import {useCVUpload} from '../../common/hooks/useCVUpload';
 import {useCVDownload} from '../../common/hooks/useCVDownload';
+import AppButton from '../AppButton/AppButton';
 import {StyledCVCard, StyledFilePreview} from './styles';
 
 interface CVSectionProps {
@@ -81,15 +82,15 @@ export const CVSection = ({ cvId, onUploadSuccess }: CVSectionProps) => {
 
                     {cvId && (
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                            <Button
+                            <AppButton
                                 variant="outlined"
                                 size="small"
-                                startIcon={downloading ? <CircularProgress size={16} /> : <DownloadIcon />}
+                                startIcon={<DownloadIcon />}
                                 onClick={handleDownload}
-                                disabled={downloading}
+                                loading={downloading}
                             >
                                 {downloading ? 'Downloading...' : 'Download'}
-                            </Button>
+                            </AppButton>
                         </Box>
                     )}
                 </Box>
@@ -105,14 +106,14 @@ export const CVSection = ({ cvId, onUploadSuccess }: CVSectionProps) => {
                 />
 
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, flexWrap: 'wrap' }}>
-                    <Button
+                    <AppButton
                         variant={cvId ? 'outlined' : 'contained'}
                         startIcon={<UploadFileIcon />}
                         onClick={() => fileInputRef.current?.click()}
                         disabled={uploading}
                     >
                         {cvId ? 'Replace CV' : 'Select CV File'}
-                    </Button>
+                    </AppButton>
 
                     {selectedFile && (
                         <>
@@ -128,14 +129,13 @@ export const CVSection = ({ cvId, onUploadSuccess }: CVSectionProps) => {
                                 </Box>
                             </StyledFilePreview>
 
-                            <Button
-                                variant="contained"
-                                startIcon={uploading ? <CircularProgress size={18} color="inherit" /> : <UploadFileIcon />}
+                            <AppButton
+                                startIcon={<UploadFileIcon />}
                                 onClick={handleUpload}
-                                disabled={uploading}
+                                loading={uploading}
                             >
                                 {uploading ? 'Uploading...' : 'Upload'}
-                            </Button>
+                            </AppButton>
                         </>
                     )}
                 </Box>

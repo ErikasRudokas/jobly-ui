@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
-import {Alert, Box, Button, CircularProgress, Paper,} from '@mui/material';
+import {Alert, Box, CircularProgress, Paper,} from '@mui/material';
 import {Cancel as CancelIcon, Edit as EditIcon,} from '@mui/icons-material';
 import {useApplications} from '../../common/hooks/useApplications';
 import type {MyApplication} from '../../common/types/application.types';
@@ -10,10 +10,9 @@ import ApplicationJobDetails from '../../components/ApplicationJobDetails/Applic
 import ApplicationComment from '../../components/ApplicationComment/ApplicationComment';
 import ConfirmDialog from '../../components/ConfirmDialog/ConfirmDialog';
 import BackButton from '../../components/BackButton/BackButton';
+import AppButton from '../../components/AppButton/AppButton';
 import {
-    cancelButtonStyle,
     containerStyle,
-    editButtonStyle,
     errorAlertStyle,
     loadingBoxStyle,
     paperStyle,
@@ -76,25 +75,8 @@ function MyApplicationDetails() {
             <Box sx={topActionsRowStyle}>
                 <BackButton label="Back to My Applications" onClick={handleBack} />
                 <Box sx={{display: 'flex', gap: '1rem'}}>
-                    <Button
-                        variant="contained"
-                        startIcon={<EditIcon />}
-                        onClick={handleEdit}
-                        sx={editButtonStyle}
-                        disabled={!canEditOrCancel}
-                    >
-                        Edit
-                    </Button>
-                    <Button
-                        variant="outlined"
-                        color="error"
-                        startIcon={<CancelIcon />}
-                        onClick={handleCancelClick}
-                        sx={cancelButtonStyle}
-                        disabled={!canEditOrCancel}
-                    >
-                        Cancel Application
-                    </Button>
+                    <AppButton startIcon={<EditIcon />} onClick={handleEdit} disabled={!canEditOrCancel}>Edit</AppButton>
+                    <AppButton variant="outlined" color="error" startIcon={<CancelIcon />} onClick={handleCancelClick} disabled={!canEditOrCancel}>Cancel Application</AppButton>
                 </Box>
             </Box>
 

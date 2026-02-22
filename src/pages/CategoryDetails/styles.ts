@@ -26,22 +26,6 @@ export const actionButtonsStyle: SxProps<Theme> = {
     gap: '1rem',
 };
 
-export const editButtonStyle: SxProps<Theme> = {
-    textTransform: 'none',
-    fontWeight: 600,
-};
-
-export const deleteButtonStyle: SxProps<Theme> = {
-    textTransform: 'none',
-    fontWeight: 600,
-    color: 'error.main',
-    borderColor: 'error.main',
-    '&:hover': {
-        borderColor: 'error.dark',
-        backgroundColor: 'error.light',
-    },
-};
-
 export const detailsCardStyle: SxProps<Theme> = {
     padding: '2rem',
     boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
