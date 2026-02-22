@@ -8,7 +8,7 @@ export const itemsListStyle: SxProps<Theme> = {
   display: 'flex',
   flexDirection: 'column',
   gap: '1.5rem',
-  marginTop: '1rem',
+  marginBottom: '1rem',
 };
 
 export const itemCardStyle: SxProps<Theme> = {
@@ -86,5 +86,5 @@ export const emptyStateStyle: SxProps<Theme> = {
   backgroundColor: 'rgba(0, 0, 0, 0.02)',
   borderRadius: '8px',
   border: '1px dashed rgba(0, 0, 0, 0.12)',
-  marginTop: '1rem',
+  marginBottom: '1rem',
 };
