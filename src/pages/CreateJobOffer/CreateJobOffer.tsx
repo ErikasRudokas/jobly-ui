@@ -2,8 +2,7 @@ import {useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {useForm} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
-import {Alert, Box, Button, CircularProgress, Paper, Typography,} from '@mui/material';
-import {ArrowBack as ArrowBackIcon} from '@mui/icons-material';
+import {Alert, Box, Button, CircularProgress, Paper,} from '@mui/material';
 import {useJobOffers} from '../../common/hooks/useJobOffers';
 import {useCategories} from '../../common/hooks/useCategories';
 import {ROUTES} from '../../common/constants/routes';
@@ -15,15 +14,8 @@ import JobOfferFormDescription from '../../components/JobOfferForm/JobOfferFormD
 import JobOfferFormDetails from '../../components/JobOfferForm/JobOfferFormDetails';
 import JobOfferFormContact from '../../components/JobOfferForm/JobOfferFormContact';
 import CreateJobOfferSkillSection from '../../components/SaveJobOfferSkillSection/CreateJobOfferSkillSection';
-import {
-    backButtonStyle,
-    containerStyle,
-    errorAlertStyle,
-    loadingBoxStyle,
-    paperStyle,
-    submitButtonStyle,
-    titleStyle,
-} from './styles';
+import BackButton from '../../components/BackButton/BackButton';
+import {containerStyle, errorAlertStyle, loadingBoxStyle, paperStyle, submitButtonStyle,} from './styles';
 
 const CreateJobOffer = () => {
     const navigate = useNavigate();
@@ -101,18 +93,8 @@ const CreateJobOffer = () => {
 
     return (
         <Box sx={containerStyle}>
-            <Button
-                startIcon={<ArrowBackIcon />}
-                onClick={handleBack}
-                sx={backButtonStyle}
-            >
-                Back to My Job Offers
-            </Button>
-
-            <Typography variant="h4" sx={titleStyle}>
-                Create Job Offer
-            </Typography>
-
+            <BackButton label="Back to My Job Offers" onClick={handleBack} />
+            
             {(error || apiError) && (
                 <Alert severity="error" sx={errorAlertStyle}>
                     {error || apiError}

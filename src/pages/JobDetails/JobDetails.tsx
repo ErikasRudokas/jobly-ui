@@ -12,12 +12,7 @@ import {
     Tooltip,
     Typography,
 } from '@mui/material';
-import {
-    ArrowBack as ArrowBackIcon,
-    Email as EmailIcon,
-    Phone as PhoneIcon,
-    Work as WorkIcon,
-} from '@mui/icons-material';
+import {Email as EmailIcon, Phone as PhoneIcon, Work as WorkIcon,} from '@mui/icons-material';
 import {useJobOffers} from '../../common/hooks/useJobOffers';
 import {useApplications} from '../../common/hooks/useApplications';
 import type {JobOffer} from '../../common/types/jobOffer.types';
@@ -26,9 +21,9 @@ import {authService} from '../../common/services/authService';
 import {ROLES} from '../../common/constants/roleConstants';
 import SkillsSection from '../../components/SkillsSection/SkillsSection';
 import JobDetailsHeader from '../../components/JobDetailsHeader/JobDetailsHeader';
+import BackButton from '../../components/BackButton/BackButton';
 import {
     applyButtonStyle,
-    backButtonStyle,
     contactBoxStyle,
     contactItemStyle,
     containerStyle,
@@ -132,13 +127,7 @@ const JobDetails = () => {
     if (error || !jobOffer) {
         return (
             <Box sx={containerStyle}>
-                <Button
-                    startIcon={<ArrowBackIcon />}
-                    onClick={handleBack}
-                    sx={backButtonStyle}
-                >
-                    Back to Jobs
-                </Button>
+                <BackButton label="Back to Jobs" onClick={handleBack} />
                 <Alert severity="error" sx={errorAlertStyle}>
                     {error || 'Job offer not found'}
                 </Alert>
@@ -148,14 +137,7 @@ const JobDetails = () => {
 
     return (
         <Box sx={containerStyle}>
-            <Button
-                startIcon={<ArrowBackIcon />}
-                onClick={handleBack}
-                sx={backButtonStyle}
-            >
-                Back to Jobs
-            </Button>
-
+            <BackButton label="Back to Jobs" onClick={handleBack} />
             <Paper sx={paperStyle}>
                 <Box sx={{ position: 'relative' }}>
                     <JobDetailsHeader jobOffer={jobOffer} />

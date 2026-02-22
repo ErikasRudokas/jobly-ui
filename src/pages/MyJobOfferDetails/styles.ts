@@ -16,15 +16,6 @@ export const topActionsRowStyle: SxProps<Theme> = {
     gap: '1rem',
 };
 
-export const backButtonStyle: SxProps<Theme> = {
-    textTransform: 'none',
-    color: 'text.secondary',
-    fontWeight: 500,
-    '&:hover': {
-        backgroundColor: 'rgba(0, 0, 0, 0.04)',
-    },
-};
-
 export const paperStyle: SxProps<Theme> = {
     padding: { xs: '2rem', md: '3rem' },
     boxShadow: '0 1px 3px rgba(0,0,0,0.08)',

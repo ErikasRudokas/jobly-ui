@@ -7,16 +7,6 @@ export const containerStyle: SxProps<Theme> = {
     marginTop: {xs: '3rem', md: '4rem'},
 };
 
-export const backButtonStyle: SxProps<Theme> = {
-    marginBottom: '2rem',
-    textTransform: 'none',
-    color: 'text.secondary',
-    fontWeight: 500,
-    '&:hover': {
-        backgroundColor: 'rgba(0, 0, 0, 0.04)',
-    },
-};
-
 export const topActionsRowStyle: SxProps<Theme> = {
     display: 'flex',
     justifyContent: 'space-between',

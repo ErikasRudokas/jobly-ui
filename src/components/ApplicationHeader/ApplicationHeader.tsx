@@ -2,6 +2,7 @@ import {Box, Typography} from '@mui/material';
 import {Category as CategoryIcon, Update as UpdateIcon} from '@mui/icons-material';
 import type {ApplicationStatus} from '../../common/types/application.types';
 import {formatDate} from '../../common/utils/genericUtils';
+import StatusBadge from '../StatusBadge/StatusBadge';
 import {
     bulletStyle,
     companyNameStyle,
@@ -9,7 +10,6 @@ import {
     headerSectionStyle,
     jobTitleStyle,
     metaTextStyle,
-    statusTextStyle,
 } from './styles';
 
 interface ApplicationHeaderProps {
@@ -42,9 +42,7 @@ const ApplicationHeader = ({title, companyName, categoryName, applicationStatus,
                         {categoryName}
                     </Typography>
                 </Box>
-                <Typography sx={statusTextStyle(applicationStatus)}>
-                    {applicationStatus}
-                </Typography>
+                <StatusBadge status={applicationStatus} />
             </Box>
         </Box>
     );

@@ -3,15 +3,15 @@ import {useNavigate, useParams} from 'react-router-dom';
 import {useForm} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {Alert, Box, Button, CircularProgress, Paper, TextField, Typography,} from '@mui/material';
-import {ArrowBack as ArrowBackIcon, Delete as DeleteIcon, Edit as EditIcon} from '@mui/icons-material';
+import {Delete as DeleteIcon, Edit as EditIcon} from '@mui/icons-material';
 import {useCategories} from '../../common/hooks/useCategories';
 import type {Category} from '../../common/types/category.types';
 import {ROUTES} from '../../common/constants/routes';
 import {type CategoryFormData, categorySchema} from '../Categories/categorySchema';
 import ConfirmDialog from '../../components/ConfirmDialog/ConfirmDialog';
+import BackButton from '../../components/BackButton/BackButton';
 import {
     actionButtonsStyle,
-    backButtonStyle,
     containerStyle,
     deleteButtonStyle,
     detailLabelStyle,
@@ -127,14 +127,8 @@ const CategoryDetails = () => {
 
     return (
         <Box sx={containerStyle}>
-            <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem'}}>
-                <Button
-                    startIcon={<ArrowBackIcon />}
-                    onClick={handleBack}
-                    sx={backButtonStyle}
-                >
-                    Back to Categories
-                </Button>
+            <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem'}}>
+                <BackButton label="Back to Categories" onClick={handleBack} />
                 {!isEditMode && (
                     <Box sx={actionButtonsStyle}>
                         <Button

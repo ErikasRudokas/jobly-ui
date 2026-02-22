@@ -7,10 +7,6 @@ export const containerStyle: SxProps<Theme> = {
     marginTop: { xs: '5rem', md: '6rem' },
 };
 
-export const backButtonStyle: SxProps<Theme> = {
-    textTransform: 'none',
-};
-
 export const headerSectionStyle: SxProps<Theme> = {
     display: 'flex',
     justifyContent: 'space-between',

@@ -1,7 +1,7 @@
 import {useEffect, useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
 import {Alert, Box, Button, CircularProgress, Paper,} from '@mui/material';
-import {ArrowBack as ArrowBackIcon, Cancel as CancelIcon, Edit as EditIcon,} from '@mui/icons-material';
+import {Cancel as CancelIcon, Edit as EditIcon,} from '@mui/icons-material';
 import {useApplications} from '../../common/hooks/useApplications';
 import type {MyApplication} from '../../common/types/application.types';
 import {ROUTES} from '../../common/constants/routes';
@@ -9,8 +9,8 @@ import ApplicationHeader from '../../components/ApplicationHeader/ApplicationHea
 import ApplicationJobDetails from '../../components/ApplicationJobDetails/ApplicationJobDetails';
 import ApplicationComment from '../../components/ApplicationComment/ApplicationComment';
 import ConfirmDialog from '../../components/ConfirmDialog/ConfirmDialog';
+import BackButton from '../../components/BackButton/BackButton';
 import {
-    backButtonStyle,
     cancelButtonStyle,
     containerStyle,
     editButtonStyle,
@@ -61,9 +61,7 @@ function MyApplicationDetails() {
     if (error || !application) {
         return (
             <Box sx={containerStyle}>
-                <Button startIcon={<ArrowBackIcon />} onClick={handleBack} sx={backButtonStyle}>
-                    Back to My Applications
-                </Button>
+                <BackButton label="Back to My Applications" onClick={handleBack} />
                 <Alert severity="error" sx={errorAlertStyle}>
                     {error || 'Application not found'}
                 </Alert>
@@ -76,9 +74,7 @@ function MyApplicationDetails() {
     return (
         <Box sx={containerStyle}>
             <Box sx={topActionsRowStyle}>
-                <Button startIcon={<ArrowBackIcon />} onClick={handleBack} sx={backButtonStyle}>
-                    Back to My Applications
-                </Button>
+                <BackButton label="Back to My Applications" onClick={handleBack} />
                 <Box sx={{display: 'flex', gap: '1rem'}}>
                     <Button
                         variant="contained"

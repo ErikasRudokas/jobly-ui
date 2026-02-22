@@ -1,13 +1,7 @@
 import {useEffect, useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
 import {Alert, Box, Button, CircularProgress, Paper, Typography,} from '@mui/material';
-import {
-    ArrowBack as ArrowBackIcon,
-    Delete as DeleteIcon,
-    Edit as EditIcon,
-    Email as EmailIcon,
-    Phone as PhoneIcon,
-} from '@mui/icons-material';
+import {Delete as DeleteIcon, Edit as EditIcon, Email as EmailIcon, Phone as PhoneIcon,} from '@mui/icons-material';
 import {useJobOffers} from '../../common/hooks/useJobOffers';
 import type {Application, JobOffer} from '../../common/types/jobOffer.types';
 import {ROUTES} from '../../common/constants/routes';
@@ -16,8 +10,8 @@ import JobDetailsHeader from '../../components/JobDetailsHeader/JobDetailsHeader
 import JobOfferDetailsCard from '../../components/JobOfferDetailsCard/JobOfferDetailsCard';
 import ApplicationList from '../../components/ApplicationList/ApplicationList';
 import ConfirmDialog from '../../components/ConfirmDialog/ConfirmDialog';
+import BackButton from '../../components/BackButton/BackButton';
 import {
-    backButtonStyle,
     contactBoxStyle,
     contactItemStyle,
     containerStyle,
@@ -81,9 +75,7 @@ const MyJobOfferDetails = () => {
     if (error || !jobOffer) {
         return (
             <Box sx={containerStyle}>
-                <Button startIcon={<ArrowBackIcon />} onClick={handleBack} sx={backButtonStyle}>
-                    Back to My Job Offers
-                </Button>
+                <BackButton label="Back to My Job Offers" onClick={handleBack} />
                 <Alert severity="error" sx={errorAlertStyle}>
                     {error || 'Job offer not found'}
                 </Alert>
@@ -94,9 +86,7 @@ const MyJobOfferDetails = () => {
     return (
         <Box sx={containerStyle}>
             <Box sx={topActionsRowStyle}>
-                <Button startIcon={<ArrowBackIcon />} onClick={handleBack} sx={backButtonStyle}>
-                    Back to My Job Offers
-                </Button>
+                <BackButton label="Back to My Job Offers" onClick={handleBack} />
                 <Box sx={{display: 'flex', gap: '1rem'}}>
                     <Button variant="contained" startIcon={<EditIcon />} onClick={handleEdit} sx={editButtonStyle}>
                         Edit

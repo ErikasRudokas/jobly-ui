@@ -7,16 +7,6 @@ export const containerStyle: SxProps<Theme> = {
     marginTop: { xs: '5rem', md: '6rem' },
 };
 
-export const backButtonStyle: SxProps<Theme> = {
-    marginBottom: '2rem',
-    textTransform: 'none',
-};
-
-export const titleStyle: SxProps<Theme> = {
-    fontWeight: 700,
-    color: 'text.primary',
-    marginBottom: '2rem',
-};
 
 export const formCardStyle: SxProps<Theme> = {
     padding: { xs: '1.5rem', md: '2rem' },
