@@ -3,7 +3,6 @@ import {useNavigate} from 'react-router-dom';
 import {
     Alert,
     Box,
-    Button,
     CircularProgress,
     IconButton,
     Paper,
@@ -19,10 +18,10 @@ import {Add as AddIcon, Visibility as ViewIcon} from '@mui/icons-material';
 import {useCategories} from '../../common/hooks/useCategories';
 import type {Category} from '../../common/types/category.types';
 import {ROUTES} from '../../common/constants/routes';
+import AppButton from '../../components/AppButton/AppButton';
 import {
     actionButtonStyle,
     containerStyle,
-    createButtonStyle,
     emptyStateStyle,
     errorAlertStyle,
     headerSectionStyle,
@@ -75,14 +74,9 @@ const Categories = () => {
                 <Typography variant="h4" sx={titleStyle}>
                     Category Management
                 </Typography>
-                <Button
-                    variant="contained"
-                    startIcon={<AddIcon />}
-                    onClick={handleCreateCategory}
-                    sx={createButtonStyle}
-                >
+                <AppButton startIcon={<AddIcon />} onClick={handleCreateCategory}>
                     Create Category
-                </Button>
+                </AppButton>
             </Box>
 
             {categories.length === 0 ? (

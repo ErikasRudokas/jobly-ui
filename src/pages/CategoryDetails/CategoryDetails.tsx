@@ -2,7 +2,7 @@ import {useEffect, useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
 import {useForm} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
-import {Alert, Box, Button, CircularProgress, Paper, TextField, Typography,} from '@mui/material';
+import {Alert, Box, CircularProgress, Paper, TextField, Typography,} from '@mui/material';
 import {Delete as DeleteIcon, Edit as EditIcon} from '@mui/icons-material';
 import {useCategories} from '../../common/hooks/useCategories';
 import type {Category} from '../../common/types/category.types';
@@ -10,15 +10,14 @@ import {ROUTES} from '../../common/constants/routes';
 import {type CategoryFormData, categorySchema} from '../Categories/categorySchema';
 import ConfirmDialog from '../../components/ConfirmDialog/ConfirmDialog';
 import BackButton from '../../components/BackButton/BackButton';
+import AppButton from '../../components/AppButton/AppButton';
 import {
     actionButtonsStyle,
     containerStyle,
-    deleteButtonStyle,
     detailLabelStyle,
     detailRowStyle,
     detailsCardStyle,
     detailValueStyle,
-    editButtonStyle,
     errorAlertStyle,
     headerSectionStyle,
     loadingBoxStyle,
@@ -131,22 +130,8 @@ const CategoryDetails = () => {
                 <BackButton label="Back to Categories" onClick={handleBack} />
                 {!isEditMode && (
                     <Box sx={actionButtonsStyle}>
-                        <Button
-                            variant="contained"
-                            startIcon={<EditIcon />}
-                            onClick={handleEdit}
-                            sx={editButtonStyle}
-                        >
-                            Edit
-                        </Button>
-                        <Button
-                            variant="outlined"
-                            startIcon={<DeleteIcon />}
-                            onClick={handleDeleteClick}
-                            sx={deleteButtonStyle}
-                        >
-                            Delete
-                        </Button>
+                        <AppButton startIcon={<EditIcon />} onClick={handleEdit}>Edit</AppButton>
+                        <AppButton variant="outlined" color="error" startIcon={<DeleteIcon />} onClick={handleDeleteClick}>Delete</AppButton>
                     </Box>
                 )}
             </Box>
@@ -227,16 +212,8 @@ const CategoryDetails = () => {
                         </Box>
 
                         <Box sx={{ display: 'flex', gap: '1rem', marginTop: '2rem' }}>
-                            <Button
-                                type="submit"
-                                variant="contained"
-                                disabled={loading}
-                            >
-                                Save
-                            </Button>
-                            <Button variant="outlined" onClick={handleCancelEdit} type="button">
-                                Cancel
-                            </Button>
+                            <AppButton type="submit" loading={loading}>Save</AppButton>
+                            <AppButton variant="outlined" onClick={handleCancelEdit} type="button">Cancel</AppButton>
                         </Box>
                     </form>
                 ) : (

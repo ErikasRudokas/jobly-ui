@@ -48,14 +48,6 @@ export const applicationStatusBadgeStyle = (status: string): SxProps<Theme> => (
         'rgba(0, 0, 0, 0.12)',
 });
 
-export const editButtonStyle: SxProps<Theme> = {
-    textTransform: 'none',
-};
-
-export const deleteButtonStyle: SxProps<Theme> = {
-    textTransform: 'none',
-};
-
 export const sectionStyle: SxProps<Theme> = {
     marginBottom: '2rem',
 };
@@ -99,6 +91,3 @@ export const loadingBoxStyle: SxProps<Theme> = {
     alignItems: 'center',
     minHeight: '400px',
 };
-
-
-

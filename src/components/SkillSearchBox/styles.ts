@@ -1,13 +1,5 @@
 import type {SxProps, Theme} from '@mui/material';
 
-export const addButtonStyle: SxProps<Theme> = {
-    textTransform: 'none',
-    fontWeight: 600,
-    padding: '0.75rem 1.5rem',
-    borderRadius: '8px',
-    height: '56px',
-};
-
 export const searchDropdownStyle: SxProps<Theme> = {
     marginTop: '0.5rem',
     border: '1px solid',

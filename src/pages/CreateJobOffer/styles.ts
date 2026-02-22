@@ -17,18 +17,6 @@ export const paperStyle: SxProps<Theme> = {
     backgroundColor: '#ffffff',
 };
 
-export const submitButtonStyle: SxProps<Theme> = {
-    textTransform: 'none',
-    fontWeight: 600,
-    padding: '0.75rem 2rem',
-    fontSize: '1rem',
-    borderRadius: '8px',
-    boxShadow: 'none',
-    '&:hover': {
-        boxShadow: '0 4px 12px rgba(25, 118, 210, 0.3)',
-    },
-};
-
 export const errorAlertStyle: SxProps<Theme> = {
     marginBottom: '2rem',
 };

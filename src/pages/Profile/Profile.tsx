@@ -1,15 +1,5 @@
 import {useEffect, useMemo, useState} from 'react';
-import {
-    Alert,
-    Box,
-    Button,
-    CircularProgress,
-    Container,
-    Divider,
-    IconButton,
-    Tooltip,
-    Typography,
-} from "@mui/material";
+import {Alert, Box, CircularProgress, Container, Divider, IconButton, Tooltip, Typography,} from "@mui/material";
 import RefreshIcon from '@mui/icons-material/Refresh';
 import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
@@ -37,6 +27,7 @@ import ProfileHeader from '../../components/ProfileHeader/ProfileHeader';
 import ProfileInfoCards from '../../components/ProfileInfoCards/ProfileInfoCards';
 import {createEmptyValidationErrors, validateProfileData, type ValidationErrors,} from './profileValidation';
 import {loadProfileData, transformProfileResponse} from './profileDataUtils';
+import AppButton from '../../components/AppButton/AppButton';
 
 const Profile = () => {
     const {profile, loading, error, refetch} = useUserProfile();
@@ -238,31 +229,17 @@ const Profile = () => {
                                 Professional Profile
                             </Typography>
                             {!isEditMode ? (
-                                <Button
-                                    variant="contained"
-                                    startIcon={<EditIcon/>}
-                                    onClick={handleEdit}
-                                >
+                                <AppButton startIcon={<EditIcon/>} onClick={handleEdit}>
                                     Edit Profile
-                                </Button>
+                                </AppButton>
                             ) : (
                                 <Box sx={{display: 'flex', gap: 2}}>
-                                    <Button
-                                        variant="outlined"
-                                        startIcon={<CancelIcon/>}
-                                        onClick={handleCancel}
-                                        disabled={isSaving}
-                                    >
+                                    <AppButton variant="outlined" startIcon={<CancelIcon/>} onClick={handleCancel} disabled={isSaving}>
                                         Cancel
-                                    </Button>
-                                    <Button
-                                        variant="contained"
-                                        startIcon={<SaveIcon/>}
-                                        onClick={handleSave}
-                                        disabled={isSaving}
-                                    >
-                                        {isSaving ? 'Saving...' : 'Save Changes'}
-                                    </Button>
+                                    </AppButton>
+                                    <AppButton startIcon={<SaveIcon/>} onClick={handleSave} loading={isSaving}>
+                                        Save Changes
+                                    </AppButton>
                                 </Box>
                             )}
                         </Box>

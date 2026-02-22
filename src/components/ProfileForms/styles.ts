@@ -39,9 +39,6 @@ export const statusBadgeStyle: SxProps<Theme> = {
     color: 'text.secondary',
 };
 
-export const addButtonStyle: SxProps<Theme> = {
-    marginTop: '1rem',
-};
 
 export const deleteCheckboxStyle: SxProps<Theme> = {
     marginLeft: 0,

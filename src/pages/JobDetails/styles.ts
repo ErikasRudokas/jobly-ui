@@ -64,16 +64,3 @@ export const loadingBoxStyle: SxProps<Theme> = {
     alignItems: 'center',
     minHeight: '400px',
 };
-
-export const applyButtonStyle: SxProps<Theme> = {
-    textTransform: 'none',
-    fontWeight: 600,
-    padding: '0.75rem 1.75rem',
-    fontSize: '0.95rem',
-    borderRadius: '8px',
-    boxShadow: 'none',
-    whiteSpace: 'nowrap',
-    '&:hover': {
-        boxShadow: '0 4px 12px rgba(25, 118, 210, 0.3)',
-    },
-};

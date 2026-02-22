@@ -1,4 +1,5 @@
 import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle,} from '@mui/material';
+import AppButton from '../AppButton/AppButton';
 import {dialogActionsStyle} from './styles';
 
 interface ConfirmDialogProps {
@@ -30,9 +31,7 @@ const ConfirmDialog = ({
             </DialogContent>
             <DialogActions sx={dialogActionsStyle}>
                 <Button onClick={onCancel}>{cancelLabel}</Button>
-                <Button onClick={onConfirm} color={confirmColor} variant="contained">
-                    {confirmLabel}
-                </Button>
+                <AppButton onClick={onConfirm} color={confirmColor}>{confirmLabel}</AppButton>
             </DialogActions>
         </Dialog>
     );

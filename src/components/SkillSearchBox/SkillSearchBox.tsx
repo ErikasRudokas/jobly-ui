@@ -1,10 +1,10 @@
 import {useEffect, useRef, useState} from 'react';
 import {Add as AddIcon} from '@mui/icons-material';
-import {Box, Button, CircularProgress, TextField, Typography} from '@mui/material';
+import {Box, CircularProgress, TextField, Typography} from '@mui/material';
 import type {Skill} from '../../common/types/skill.types';
 import {useSkills} from '../../common/hooks/useSkills';
+import AppButton from '../AppButton/AppButton';
 import {
-    addButtonStyle,
     noResultsStyle,
     searchDropdownStyle,
     searchFooterStyle,
@@ -215,15 +215,13 @@ const SkillSearchBox = ({
                 )}
             </Box>
 
-            <Button
-                variant="contained"
+            <AppButton
                 startIcon={<AddIcon />}
                 onClick={handleAddSkill}
                 disabled={disabled || !selectedSkill || loading}
-                sx={addButtonStyle}
             >
                 Add Skill
-            </Button>
+            </AppButton>
         </Box>
     );
 };

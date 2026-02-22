@@ -21,12 +21,6 @@ export const titleStyle: SxProps<Theme> = {
     color: 'text.primary',
 };
 
-export const createButtonStyle: SxProps<Theme> = {
-    textTransform: 'none',
-    fontWeight: 600,
-    padding: '0.75rem 1.5rem',
-};
-
 export const tableContainerStyle: SxProps<Theme> = {
     boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
     borderRadius: '8px',

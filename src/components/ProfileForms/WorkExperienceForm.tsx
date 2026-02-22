@@ -1,11 +1,11 @@
 import {Add as AddIcon, Work as WorkIcon} from '@mui/icons-material';
-import {Box, Button, TextField, Typography} from '@mui/material';
+import {Box, TextField, Typography} from '@mui/material';
 import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider';
 import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs, {Dayjs} from 'dayjs';
 import type {UpdateUserWorkExperience} from '../../common/types/profile.types';
+import AppButton from '../AppButton/AppButton';
 import {
-    addButtonStyle,
     deletedItemCardStyle,
     emptyStateStyle,
     fieldLabelStyle,
@@ -102,15 +102,9 @@ const WorkExperienceForm = ({
                     <Box sx={emptyStateStyle}>
                         <Typography>No work experience added yet.</Typography>
                     </Box>
-                    <Button
-                        variant="outlined"
-                        startIcon={<AddIcon/>}
-                        onClick={handleAdd}
-                        disabled={disabled}
-                        sx={addButtonStyle}
-                    >
+                    <AppButton variant="outlined" startIcon={<AddIcon/>} onClick={handleAdd} disabled={disabled}>
                         Add Work Experience
-                    </Button>
+                    </AppButton>
                 </Box>
             </LocalizationProvider>
         );
@@ -191,15 +185,9 @@ const WorkExperienceForm = ({
                         );
                     })}
                 </Box>
-                <Button
-                    variant="outlined"
-                    startIcon={<AddIcon/>}
-                    onClick={handleAdd}
-                    disabled={disabled}
-                    sx={addButtonStyle}
-                >
+                <AppButton variant="outlined" startIcon={<AddIcon/>} onClick={handleAdd} disabled={disabled}>
                     Add Work Experience
-                </Button>
+                </AppButton>
             </Box>
         </LocalizationProvider>
     );

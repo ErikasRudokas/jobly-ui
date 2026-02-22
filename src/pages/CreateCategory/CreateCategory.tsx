@@ -2,20 +2,13 @@ import {useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {useForm} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
-import {Alert, Box, Button, Paper, TextField} from '@mui/material';
+import {Alert, Box, Paper, TextField} from '@mui/material';
 import {useCategories} from '../../common/hooks/useCategories';
 import {ROUTES} from '../../common/constants/routes';
 import {type CategoryFormData, categorySchema} from '../Categories/categorySchema';
 import BackButton from '../../components/BackButton/BackButton';
-import {
-    buttonGroupStyle,
-    cancelButtonStyle,
-    containerStyle,
-    errorAlertStyle,
-    formCardStyle,
-    formFieldStyle,
-    submitButtonStyle,
-} from './styles';
+import AppButton from '../../components/AppButton/AppButton';
+import {buttonGroupStyle, containerStyle, errorAlertStyle, formCardStyle, formFieldStyle,} from './styles';
 
 const CreateCategory = () => {
     const navigate = useNavigate();
@@ -93,22 +86,12 @@ const CreateCategory = () => {
                     </Box>
 
                     <Box sx={buttonGroupStyle}>
-                        <Button
-                            type="submit"
-                            variant="contained"
-                            sx={submitButtonStyle}
-                            disabled={loading}
-                        >
+                        <AppButton type="submit" loading={loading}>
                             {loading ? 'Creating...' : 'Create Category'}
-                        </Button>
-                        <Button
-                            variant="outlined"
-                            onClick={handleCancel}
-                            sx={cancelButtonStyle}
-                            disabled={loading}
-                        >
+                        </AppButton>
+                        <AppButton variant="outlined" onClick={handleCancel} disabled={loading}>
                             Cancel
-                        </Button>
+                        </AppButton>
                     </Box>
                 </form>
             </Paper>

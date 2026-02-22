@@ -24,13 +24,6 @@ export const errorAlertStyle: SxProps<Theme> = {
     marginBottom: '1.5rem',
 };
 
-export const submitButtonStyle: SxProps<Theme> = {
-    marginTop: '1rem',
-    padding: '0.75rem 2rem',
-    textTransform: 'none',
-    fontWeight: 600,
-};
-
 export const loadingBoxStyle: SxProps<Theme> = {
     display: 'flex',
     justifyContent: 'center',

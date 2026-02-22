@@ -21,12 +21,6 @@ export const titleStyle: SxProps<Theme> = {
     color: 'text.primary',
 };
 
-export const createButtonStyle: SxProps<Theme> = {
-    textTransform: 'none',
-    fontWeight: 600,
-    padding: '0.75rem 1.5rem',
-};
-
 export const errorAlertStyle: SxProps<Theme> = {
     marginBottom: '2rem',
 };
