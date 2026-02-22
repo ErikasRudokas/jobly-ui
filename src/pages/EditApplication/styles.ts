@@ -7,19 +7,9 @@ export const containerStyle: SxProps<Theme> = {
     marginTop: { xs: '5rem', md: '6rem' },
 };
 
-export const backButtonStyle: SxProps<Theme> = {
-    marginBottom: '2rem',
-    textTransform: 'none',
-};
-
-export const titleStyle: SxProps<Theme> = {
-    fontWeight: 700,
-    marginBottom: '1.5rem',
-    color: 'text.primary',
-};
-
 export const paperStyle: SxProps<Theme> = {
     padding: { xs: '1.5rem', md: '2.5rem' },
+    marginTop: '1rem',
     boxShadow: '0 2px 12px rgba(0,0,0,0.1)',
     borderRadius: '8px',
 };

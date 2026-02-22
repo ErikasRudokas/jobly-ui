@@ -1,32 +1,22 @@
 import {useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
-import {Alert, Box, Chip, CircularProgress, Paper, Typography,} from '@mui/material';
-import {Category as CategoryIcon, LocationOn as LocationIcon, Work as WorkIcon,} from '@mui/icons-material';
+import {Alert, Box, CircularProgress, Typography} from '@mui/material';
 import {useJobOffers} from '../../common/hooks/useJobOffers';
-import type {JobOfferListObject, WorkType} from '../../common/types/jobOffer.types';
+import type {JobOfferListObject} from '../../common/types/jobOffer.types';
 import {ROUTES} from '../../common/constants/routes';
+import JobOfferList from '../../components/JobOfferList/JobOfferList';
 import {
-    categoryChipStyle,
-    companyNameStyle,
     containerStyle,
-    emptyStateStyle,
     errorAlertStyle,
     headerSectionStyle,
-    jobCardHeaderStyle,
-    jobCardStyle,
-    jobDetailItemStyle,
-    jobDetailsRowStyle,
-    jobTitleStyle,
     loadingBoxStyle,
-    salaryChipStyle,
     subtitleStyle,
     titleStyle,
 } from './styles';
-import {formatSalary} from "../../common/utils/genericUtils.ts";
 
 const Jobs = () => {
     const navigate = useNavigate();
-    const { getAllJobOffers, loading, error } = useJobOffers();
+    const {getAllJobOffers, loading, error} = useJobOffers();
     const [jobOffers, setJobOffers] = useState<JobOfferListObject[]>([]);
 
     useEffect(() => {
@@ -40,13 +30,8 @@ const Jobs = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const handleViewJob = (id: number) => {
+    const handleJobOfferClick = (id: number) => {
         navigate(ROUTES.JOB_DETAILS(id));
-    };
-
-
-    const formatWorkType = (workType: WorkType) => {
-        return workType.replace('_', ' ');
     };
 
     if (loading) {
@@ -74,64 +59,12 @@ const Jobs = () => {
                 </Typography>
             </Box>
 
-            {jobOffers.length === 0 ? (
-                <Box sx={emptyStateStyle}>
-                    <Typography variant="h6">No job offers available</Typography>
-                    <Typography variant="body2" sx={{ mt: 1 }}>
-                        Check back later for new opportunities
-                    </Typography>
-                </Box>
-            ) : (
-                <Box>
-                    {jobOffers.map((job) => (
-                        <Paper
-                            key={job.id}
-                            sx={jobCardStyle}
-                            onClick={() => handleViewJob(job.id)}
-                        >
-                            <Box sx={jobCardHeaderStyle}>
-                                <Box>
-                                    <Typography variant="h6" sx={jobTitleStyle}>
-                                        {job.title}
-                                    </Typography>
-                                    <Typography variant="body2" sx={companyNameStyle}>
-                                        {job.companyName}
-                                    </Typography>
-                                </Box>
-                                <Chip
-                                    label={formatSalary(job.salary)}
-                                    color="primary"
-                                    sx={salaryChipStyle}
-                                />
-                            </Box>
-
-                            <Box sx={jobDetailsRowStyle}>
-                                <Box sx={jobDetailItemStyle}>
-                                    <WorkIcon fontSize="small" />
-                                    <Typography variant="body2">
-                                        {formatWorkType(job.workType)}
-                                    </Typography>
-                                </Box>
-                                <Box sx={jobDetailItemStyle}>
-                                    <LocationIcon fontSize="small" />
-                                    <Typography variant="body2">
-                                        {job.location}
-                                    </Typography>
-                                </Box>
-                                <Box sx={jobDetailItemStyle}>
-                                    <CategoryIcon fontSize="small" />
-                                    <Chip
-                                        label={job.category.name}
-                                        size="small"
-                                        variant="outlined"
-                                        sx={categoryChipStyle}
-                                    />
-                                </Box>
-                            </Box>
-                        </Paper>
-                    ))}
-                </Box>
-            )}
+            <JobOfferList
+                jobOffers={jobOffers}
+                onJobOfferClick={handleJobOfferClick}
+                emptyMessage="No job offers available"
+                emptySubMessage="Check back later for new opportunities"
+            />
         </Box>
     );
 };

@@ -3,13 +3,12 @@ import {useNavigate, useParams} from 'react-router-dom';
 import {useForm} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {Alert, Box, Button, CircularProgress, Paper, TextField, Typography,} from '@mui/material';
-import {ArrowBack as ArrowBackIcon} from '@mui/icons-material';
 import {useApplications} from '../../common/hooks/useApplications';
 import type {MyApplication} from '../../common/types/application.types';
 import {ROUTES} from '../../common/constants/routes';
 import {type ApplicationUpdateFormData, applicationUpdateSchema} from './applicationSchema';
+import BackButton from '../../components/BackButton/BackButton';
 import {
-    backButtonStyle,
     containerStyle,
     errorAlertStyle,
     formStyle,
@@ -19,7 +18,6 @@ import {
     loadingBoxStyle,
     paperStyle,
     submitButtonStyle,
-    titleStyle,
 } from './styles';
 
 function EditApplication() {
@@ -87,13 +85,7 @@ function EditApplication() {
     if (!application) {
         return (
             <Box sx={containerStyle}>
-                <Button
-                    startIcon={<ArrowBackIcon />}
-                    onClick={handleBack}
-                    sx={backButtonStyle}
-                >
-                    Back
-                </Button>
+                <BackButton label="Back" onClick={handleBack} />
                 <Alert severity="error" sx={errorAlertStyle}>
                     Application not found
                 </Alert>
@@ -103,19 +95,9 @@ function EditApplication() {
 
     return (
         <Box sx={containerStyle}>
-            <Button
-                startIcon={<ArrowBackIcon />}
-                onClick={handleBack}
-                sx={backButtonStyle}
-            >
-                Back to Application Details
-            </Button>
+            <BackButton label="Back to Application Details" onClick={handleBack} />
 
             <Paper sx={paperStyle}>
-                <Typography variant="h4" sx={titleStyle}>
-                    Edit Application
-                </Typography>
-
                 <Box sx={jobInfoBoxStyle}>
                     <Typography variant="h6" sx={jobTitleStyle}>
                         {application.jobOffer.title}

@@ -2,13 +2,12 @@ import {useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {useForm} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
-import {Alert, Box, Button, Paper, TextField, Typography} from '@mui/material';
-import {ArrowBack as ArrowBackIcon} from '@mui/icons-material';
+import {Alert, Box, Button, Paper, TextField} from '@mui/material';
 import {useCategories} from '../../common/hooks/useCategories';
 import {ROUTES} from '../../common/constants/routes';
 import {type CategoryFormData, categorySchema} from '../Categories/categorySchema';
+import BackButton from '../../components/BackButton/BackButton';
 import {
-    backButtonStyle,
     buttonGroupStyle,
     cancelButtonStyle,
     containerStyle,
@@ -16,7 +15,6 @@ import {
     formCardStyle,
     formFieldStyle,
     submitButtonStyle,
-    titleStyle,
 } from './styles';
 
 const CreateCategory = () => {
@@ -57,17 +55,8 @@ const CreateCategory = () => {
 
     return (
         <Box sx={containerStyle}>
-            <Button
-                startIcon={<ArrowBackIcon />}
-                onClick={handleBack}
-                sx={backButtonStyle}
-            >
-                Back to Categories
-            </Button>
+            <BackButton label="Back to Categories" onClick={handleBack} />
 
-            <Typography variant="h4" sx={titleStyle}>
-                Create New Category
-            </Typography>
 
             {(error || apiError) && (
                 <Alert severity="error" sx={errorAlertStyle}>

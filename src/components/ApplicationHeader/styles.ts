@@ -40,13 +40,4 @@ export const metaTextStyle: SxProps<Theme> = {
     gap: '0.4rem',
 };
 
-export const statusTextStyle = (status: string): SxProps<Theme> => ({
-    fontSize: '0.875rem',
-    fontWeight: 600,
-    color:
-        status === 'APPROVED' ? '#2e7d32' :
-        status === 'REJECTED' ? '#d32f2f' :
-        status === 'WITHDRAWN' ? 'text.secondary' :
-        '#0288d1',
-});
 

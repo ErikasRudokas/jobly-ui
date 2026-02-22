@@ -7,16 +7,6 @@ export const containerStyle: SxProps<Theme> = {
     marginTop: { xs: '3rem', md: '4rem' },
 };
 
-export const backButtonStyle: SxProps<Theme> = {
-    marginBottom: '2rem',
-    textTransform: 'none',
-    color: 'text.secondary',
-    fontWeight: 500,
-    '&:hover': {
-        backgroundColor: 'rgba(0, 0, 0, 0.04)',
-    },
-};
-
 export const paperStyle: SxProps<Theme> = {
     padding: { xs: '2rem', md: '3rem' },
     boxShadow: '0 1px 3px rgba(0,0,0,0.08)',
@@ -24,6 +14,7 @@ export const paperStyle: SxProps<Theme> = {
     border: '1px solid',
     borderColor: 'divider',
     backgroundColor: '#ffffff',
+    marginTop: '1rem',
 };
 
 export const sectionStyle: SxProps<Theme> = {
