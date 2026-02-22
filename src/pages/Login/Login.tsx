@@ -1,13 +1,13 @@
-import {useForm} from 'react-hook-form';
-import {zodResolver} from '@hookform/resolvers/zod';
-import {z} from 'zod';
-import {Link, useNavigate} from 'react-router-dom';
-import {Alert, Box, Container, TextField, Typography,} from '@mui/material';
-import {useState} from 'react';
-import {authService} from '../../common/services/authService';
-import {ROUTES} from '../../common/constants/routes';
-import {StyledFormBox, StyledLoginContainer} from './styles';
-import {lightTheme} from "../../common/themes/light-theme.ts";
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { Link, useNavigate } from 'react-router-dom';
+import { Alert, Box, Container, TextField, Typography } from '@mui/material';
+import { useState } from 'react';
+import { authService } from '../../common/services/authService';
+import { ROUTES } from '../../common/constants/routes';
+import { StyledFormBox, StyledLoginContainer } from './styles';
+import { lightTheme } from '../../common/themes/light-theme.ts';
 import AppButton from '../../components/AppButton/AppButton';
 
 const loginSchema = z.object({
@@ -38,9 +38,11 @@ const Login = () => {
       await authService.login(data);
       navigate(ROUTES.JOBS);
     } catch (err) {
-      const errorMessage = err instanceof Error && 'response' in err 
-        ? (err as { response?: { data?: { message?: string } } }).response?.data?.message || 'Login failed. Please check your credentials.'
-        : 'Login failed. Please check your credentials.';
+      const errorMessage =
+        err instanceof Error && 'response' in err
+          ? (err as { response?: { data?: { message?: string } } }).response?.data?.message ||
+            'Login failed. Please check your credentials.'
+          : 'Login failed. Please check your credentials.';
       setError(errorMessage);
     } finally {
       setIsLoading(false);
@@ -102,4 +104,3 @@ const Login = () => {
 };
 
 export default Login;
-

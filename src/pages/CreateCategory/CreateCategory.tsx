@@ -1,103 +1,101 @@
-import {useState} from 'react';
-import {useNavigate} from 'react-router-dom';
-import {useForm} from 'react-hook-form';
-import {zodResolver} from '@hookform/resolvers/zod';
-import {Alert, Box, Paper, TextField} from '@mui/material';
-import {useCategories} from '../../common/hooks/useCategories';
-import {ROUTES} from '../../common/constants/routes';
-import {type CategoryFormData, categorySchema} from '../Categories/categorySchema';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Alert, Box, Paper, TextField } from '@mui/material';
+import { useCategories } from '../../common/hooks/useCategories';
+import { ROUTES } from '../../common/constants/routes';
+import { type CategoryFormData, categorySchema } from '../Categories/categorySchema';
 import BackButton from '../../components/BackButton/BackButton';
 import AppButton from '../../components/AppButton/AppButton';
-import {buttonGroupStyle, containerStyle, errorAlertStyle, formCardStyle, formFieldStyle,} from './styles';
+import { buttonGroupStyle, containerStyle, errorAlertStyle, formCardStyle, formFieldStyle } from './styles';
 
 const CreateCategory = () => {
-    const navigate = useNavigate();
-    const { createCategory, loading, error } = useCategories();
-    const [apiError, setApiError] = useState<string | null>(null);
+  const navigate = useNavigate();
+  const { createCategory, loading, error } = useCategories();
+  const [apiError, setApiError] = useState<string | null>(null);
 
-    const {
-        register,
-        handleSubmit,
-        formState: { errors },
-    } = useForm<CategoryFormData>({
-        resolver: zodResolver(categorySchema),
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<CategoryFormData>({
+    resolver: zodResolver(categorySchema),
+  });
+
+  const handleBack = () => {
+    navigate(ROUTES.CATEGORIES);
+  };
+
+  const onSubmit = async (data: CategoryFormData) => {
+    setApiError(null);
+
+    const result = await createCategory({
+      name: data.name.trim(),
+      description: data.description.trim(),
     });
 
-    const handleBack = () => {
-        navigate(ROUTES.CATEGORIES);
-    };
+    if (result) {
+      navigate(ROUTES.CATEGORIES);
+    } else if (error) {
+      setApiError(error);
+    }
+  };
 
-    const onSubmit = async (data: CategoryFormData) => {
-        setApiError(null);
+  const handleCancel = () => {
+    navigate(ROUTES.CATEGORIES);
+  };
 
-        const result = await createCategory({
-            name: data.name.trim(),
-            description: data.description.trim(),
-        });
+  return (
+    <Box sx={containerStyle}>
+      <BackButton label="Back to Categories" onClick={handleBack} />
 
-        if (result) {
-            navigate(ROUTES.CATEGORIES);
-        } else if (error) {
-            setApiError(error);
-        }
-    };
+      {(error || apiError) && (
+        <Alert severity="error" sx={errorAlertStyle}>
+          {error || apiError}
+        </Alert>
+      )}
 
-    const handleCancel = () => {
-        navigate(ROUTES.CATEGORIES);
-    };
+      <Paper sx={formCardStyle}>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <Box sx={formFieldStyle}>
+            <TextField
+              fullWidth
+              label="Category Name"
+              {...register('name')}
+              error={!!errors.name}
+              helperText={errors.name?.message}
+              variant="outlined"
+              disabled={loading}
+            />
+          </Box>
 
-    return (
-        <Box sx={containerStyle}>
-            <BackButton label="Back to Categories" onClick={handleBack} />
+          <Box sx={formFieldStyle}>
+            <TextField
+              fullWidth
+              label="Description"
+              {...register('description')}
+              error={!!errors.description}
+              helperText={errors.description?.message}
+              variant="outlined"
+              multiline
+              rows={4}
+              disabled={loading}
+            />
+          </Box>
 
-
-            {(error || apiError) && (
-                <Alert severity="error" sx={errorAlertStyle}>
-                    {error || apiError}
-                </Alert>
-            )}
-
-            <Paper sx={formCardStyle}>
-                <form onSubmit={handleSubmit(onSubmit)}>
-                    <Box sx={formFieldStyle}>
-                        <TextField
-                            fullWidth
-                            label="Category Name"
-                            {...register('name')}
-                            error={!!errors.name}
-                            helperText={errors.name?.message}
-                            variant="outlined"
-                            disabled={loading}
-                        />
-                    </Box>
-
-                    <Box sx={formFieldStyle}>
-                        <TextField
-                            fullWidth
-                            label="Description"
-                            {...register('description')}
-                            error={!!errors.description}
-                            helperText={errors.description?.message}
-                            variant="outlined"
-                            multiline
-                            rows={4}
-                            disabled={loading}
-                        />
-                    </Box>
-
-                    <Box sx={buttonGroupStyle}>
-                        <AppButton type="submit" loading={loading}>
-                            {loading ? 'Creating...' : 'Create Category'}
-                        </AppButton>
-                        <AppButton variant="outlined" onClick={handleCancel} disabled={loading}>
-                            Cancel
-                        </AppButton>
-                    </Box>
-                </form>
-            </Paper>
-        </Box>
-    );
+          <Box sx={buttonGroupStyle}>
+            <AppButton type="submit" loading={loading}>
+              {loading ? 'Creating...' : 'Create Category'}
+            </AppButton>
+            <AppButton variant="outlined" onClick={handleCancel} disabled={loading}>
+              Cancel
+            </AppButton>
+          </Box>
+        </form>
+      </Paper>
+    </Box>
+  );
 };
 
 export default CreateCategory;
-

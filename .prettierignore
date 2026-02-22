@@ -1,0 +1,19 @@
+node_modules
+.next
+build
+dist
+
+# Don't format these files
+package-lock.json
+yarn.lock
+.env
+.env.local
+
+# Don't format images and icons
+public/**/*.svg
+public/**/*.png
+public/**/*.jpg
+
+src/assets/**/*.svg
+src/assets/**/*.png
+src/assets/**/*.jpg
