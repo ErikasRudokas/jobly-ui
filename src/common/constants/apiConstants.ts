@@ -34,6 +34,7 @@ export const JOB_OFFER_ENDPOINTS = {
   GET_BY_ID: (id: number) => `/job-offers/${id}`,
   GET_MINE: '/job-offers/mine',
   GET_MINE_DETAILS: (id: number) => `/job-offers/mine/${id}`,
+  GET_MINE_APPLICATIONS: (id: number) => `/job-offers/mine/${id}/applications`,
   CREATE: '/job-offers/create',
   UPDATE: (id: number) => `/job-offers/${id}`,
   DELETE: (id: number) => `/job-offers/${id}`,

@@ -1,7 +1,8 @@
 import { Box, Paper, Typography } from '@mui/material';
 import { Category as CategoryIcon, LocationOn as LocationIcon, Work as WorkIcon } from '@mui/icons-material';
-import type { JobOfferListObject } from '../../common/types/jobOffer.types';
+import type { JobOfferWithSkillMatchListObject } from '../../common/types/jobOffer.types';
 import { formatSalary, formatWorkType } from '../../common/utils/genericUtils';
+import SkillMatchBadge from '../SkillMatchBadge/SkillMatchBadge';
 import {
   cardStyle,
   companyStyle,
@@ -14,7 +15,7 @@ import {
 } from './styles';
 
 interface JobOfferCardProps {
-  jobOffer: JobOfferListObject;
+  jobOffer: JobOfferWithSkillMatchListObject;
   onClick: (id: number) => void;
 }
 
@@ -28,7 +29,10 @@ const JobOfferCard = ({ jobOffer, onClick }: JobOfferCardProps) => {
           </Typography>
           <Typography sx={companyStyle}>{jobOffer.companyName}</Typography>
         </Box>
-        <Typography sx={salaryStyle}>{formatSalary(jobOffer.salary)}</Typography>
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '0.375rem', flexShrink: 0 }}>
+          <Typography sx={salaryStyle}>{formatSalary(jobOffer.salary)}</Typography>
+          <SkillMatchBadge value={jobOffer.userSkillsMatch} />
+        </Box>
       </Box>
 
       <Box sx={metaRowStyle}>

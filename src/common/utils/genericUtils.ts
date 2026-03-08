@@ -1,5 +1,21 @@
 import type { WorkType } from '../types/jobOffer.types.ts';
+import type { ApplicationStatus } from '../types/application.types.ts';
 import dayjs from 'dayjs';
+
+export const formatApplicationStatus = (status: ApplicationStatus): string => {
+  switch (status) {
+    case 'PENDING':
+      return 'Pending';
+    case 'ACCEPTED':
+      return 'Accepted';
+    case 'REJECTED':
+      return 'Rejected';
+    case 'WITHDRAWN':
+      return 'Withdrawn';
+    default:
+      return status;
+  }
+};
 
 export const formatDate = (dateString: string) => {
   return new Date(dateString).toLocaleDateString('en-US', {

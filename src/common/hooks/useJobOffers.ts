@@ -7,6 +7,7 @@ import type {
   GetAllJobOffersResponse,
   GetMineJobOffersResponse,
   JobOffer,
+  JobOfferApplicationsResponse,
   JobOfferDetailsResponse,
   JobOfferWithApplicationsResponse,
   UpdateJobOfferRequest,
@@ -71,6 +72,23 @@ export const useJobOffers = () => {
       return response.data;
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Failed to fetch job offer details';
+      setError(message);
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getMineJobOfferApplications = async (id: number): Promise<JobOfferApplicationsResponse | null> => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await axiosInstance.get<JobOfferApplicationsResponse>(
+        buildApiUrl(JOB_OFFER_ENDPOINTS.GET_MINE_APPLICATIONS(id))
+      );
+      return response.data;
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Failed to fetch applications';
       setError(message);
       return null;
     } finally {
@@ -145,6 +163,7 @@ export const useJobOffers = () => {
     getJobOfferById,
     getMineJobOffers,
     getMineJobOfferDetails,
+    getMineJobOfferApplications,
     createJobOffer,
     updateJobOffer,
     deleteJobOffer,

@@ -11,7 +11,7 @@ export const statusBadgeStyle = (status: ApplicationStatus): SxProps<Theme> => (
   whiteSpace: 'nowrap',
   flexShrink: 0,
   backgroundColor:
-    status === 'APPROVED'
+    status === 'ACCEPTED'
       ? 'rgba(46, 125, 50, 0.08)'
       : status === 'REJECTED'
         ? 'rgba(211, 47, 47, 0.08)'
@@ -19,7 +19,7 @@ export const statusBadgeStyle = (status: ApplicationStatus): SxProps<Theme> => (
           ? 'rgba(0, 0, 0, 0.06)'
           : 'rgba(2, 136, 209, 0.08)',
   color:
-    status === 'APPROVED'
+    status === 'ACCEPTED'
       ? '#2e7d32'
       : status === 'REJECTED'
         ? '#d32f2f'
@@ -28,7 +28,7 @@ export const statusBadgeStyle = (status: ApplicationStatus): SxProps<Theme> => (
           : '#0288d1',
   border: '1px solid',
   borderColor:
-    status === 'APPROVED'
+    status === 'ACCEPTED'
       ? 'rgba(46, 125, 50, 0.2)'
       : status === 'REJECTED'
         ? 'rgba(211, 47, 47, 0.2)'

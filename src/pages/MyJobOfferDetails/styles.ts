@@ -29,20 +29,20 @@ export const paperStyle: SxProps<Theme> = {
 export const applicationStatusBadgeStyle = (status: string): SxProps<Theme> => ({
   display: 'inline-flex',
   alignItems: 'center',
-  padding: '0.35rem 0.75rem',
-  borderRadius: '6px',
+  padding: '0.2rem 0.5rem',
+  borderRadius: '999px',
   fontSize: '0.75rem',
-  fontWeight: 600,
+  fontWeight: 700,
   backgroundColor:
-    status === 'APPROVED'
+    status === 'ACCEPTED'
       ? 'rgba(46, 125, 50, 0.08)'
       : status === 'REJECTED'
         ? 'rgba(211, 47, 47, 0.08)'
         : 'rgba(0, 0, 0, 0.06)',
-  color: status === 'APPROVED' ? '#2e7d32' : status === 'REJECTED' ? '#d32f2f' : 'text.secondary',
+  color: status === 'ACCEPTED' ? '#2e7d32' : status === 'REJECTED' ? '#d32f2f' : 'text.secondary',
   border: '1px solid',
   borderColor:
-    status === 'APPROVED'
+    status === 'ACCEPTED'
       ? 'rgba(46, 125, 50, 0.2)'
       : status === 'REJECTED'
         ? 'rgba(211, 47, 47, 0.2)'

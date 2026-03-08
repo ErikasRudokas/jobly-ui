@@ -1,10 +1,10 @@
 import { Box, Typography } from '@mui/material';
-import type { JobOfferListObject } from '../../common/types/jobOffer.types';
+import type { JobOfferWithSkillMatchListObject } from '../../common/types/jobOffer.types';
 import JobOfferCard from '../JobOfferCard/JobOfferCard';
 import { emptyStateStyle } from './styles';
 
 interface JobOfferListProps {
-  jobOffers: JobOfferListObject[];
+  jobOffers: JobOfferWithSkillMatchListObject[];
   onJobOfferClick: (id: number) => void;
   emptyMessage?: string;
   emptySubMessage?: string;

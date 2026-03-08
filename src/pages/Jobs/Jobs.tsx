@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Alert, Box, CircularProgress, Typography } from '@mui/material';
 import { useJobOffers } from '../../common/hooks/useJobOffers';
-import type { JobOfferListObject } from '../../common/types/jobOffer.types';
+import type { JobOfferWithSkillMatchListObject } from '../../common/types/jobOffer.types';
 import { ROUTES } from '../../common/constants/routes';
 import JobOfferList from '../../components/JobOfferList/JobOfferList';
 import {
@@ -17,7 +17,7 @@ import {
 const Jobs = () => {
   const navigate = useNavigate();
   const { getAllJobOffers, loading, error } = useJobOffers();
-  const [jobOffers, setJobOffers] = useState<JobOfferListObject[]>([]);
+  const [jobOffers, setJobOffers] = useState<JobOfferWithSkillMatchListObject[]>([]);
 
   useEffect(() => {
     const loadJobOffers = async () => {
