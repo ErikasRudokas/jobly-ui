@@ -23,3 +23,23 @@ export const loadingBoxStyle: SxProps<Theme> = {
   alignItems: 'center',
   minHeight: '400px',
 };
+
+export const controlsRowStyle: SxProps<Theme> = {
+  marginBottom: '1.5rem',
+};
+
+export const paginationRowStyle: SxProps<Theme> = {
+  position: 'relative',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  marginTop: '1.5rem',
+};
+
+export const resultsInfoStyle: SxProps<Theme> = {
+  position: 'absolute',
+  right: 0,
+  fontSize: '0.875rem',
+  color: 'text.secondary',
+  whiteSpace: 'nowrap',
+};
