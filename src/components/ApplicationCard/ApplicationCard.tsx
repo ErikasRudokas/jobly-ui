@@ -1,14 +1,27 @@
 import { Box, Button, Paper, Tooltip, Typography } from '@mui/material';
 import { Check as CheckIcon, Close as CloseIcon, Download as DownloadIcon } from '@mui/icons-material';
-import type { Application } from '../../common/types/jobOffer.types';
+import type { ApplicationWithSkillMatch } from '../../common/types/jobOffer.types';
 import { applicationStatusBadgeStyle } from '../../pages/MyJobOfferDetails/styles';
-import { formatDate } from '../../common/utils/genericUtils';
-import { applicantNameStyle, cardStyle, dateStyle, downloadCvButtonStyle, rejectButtonStyle } from './styles';
+import { formatApplicationStatus, formatDate } from '../../common/utils/genericUtils';
+import SkillMatchBadge from '../SkillMatchBadge/SkillMatchBadge';
+import {
+  actionsRowStyle,
+  applicantNameStyle,
+  approveButtonStyle,
+  cardStyle,
+  commentBoxStyle,
+  dateStyle,
+  downloadCvButtonStyle,
+  emailStyle,
+  footerRowStyle,
+  headerRowStyle,
+  rejectButtonStyle,
+} from './styles';
 
 interface ApplicationCardProps {
-  application: Application;
+  application: ApplicationWithSkillMatch;
   manageLoading: boolean;
-  onCardClick: (application: Application) => void;
+  onCardClick: (application: ApplicationWithSkillMatch) => void;
   onDownloadCV: (cvId: number) => void;
   onApprove: (applicationId: number) => void;
   onReject: (applicationId: number) => void;
@@ -23,55 +36,49 @@ const ApplicationCard = ({
   onReject,
 }: ApplicationCardProps) => {
   return (
-    <Paper sx={cardStyle} elevation={2} onClick={() => onCardClick(application)}>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem' }}>
-        <Box>
+    <Paper sx={cardStyle} elevation={0} onClick={() => onCardClick(application)}>
+      <Box sx={headerRowStyle}>
+        <Box sx={{ flex: 1, minWidth: 0 }}>
           <Typography sx={applicantNameStyle}>
             {application.applicant.firstName} {application.applicant.lastName}
           </Typography>
-          <Typography sx={dateStyle}>{application.applicant.email}</Typography>
+          <Typography sx={emailStyle}>{application.applicant.email}</Typography>
         </Box>
-        <Box sx={applicationStatusBadgeStyle(application.applicationStatus)}>
-          <Typography sx={{ fontSize: '0.75rem', fontWeight: 600 }}>{application.applicationStatus}</Typography>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexShrink: 0 }}>
+          <SkillMatchBadge value={application.userSkillsMatch} tooltip="Skills match based on applicant profile" />
+          <Box sx={applicationStatusBadgeStyle(application.applicationStatus)}>
+            <Typography sx={{ fontSize: '0.75rem', fontWeight: 600 }}>
+              {formatApplicationStatus(application.applicationStatus)}
+            </Typography>
+          </Box>
         </Box>
       </Box>
 
       {application.comment && (
-        <Box sx={{ marginBottom: '1rem' }}>
-          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-            <strong>Comment:</strong> {application.comment}
+        <Box sx={commentBoxStyle}>
+          <Typography variant="body2" sx={{ color: 'text.secondary', fontSize: '0.85rem' }}>
+            {application.comment}
           </Typography>
         </Box>
       )}
 
-      <Box
-        sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}
-      >
-        <Typography sx={dateStyle}>Applied: {formatDate(application.createdAt)}</Typography>
-        <Box sx={{ display: 'flex', gap: '1rem', alignItems: 'center' }} onClick={(e) => e.stopPropagation()}>
+      <Box sx={footerRowStyle}>
+        <Typography sx={dateStyle}>Applied {formatDate(application.createdAt)}</Typography>
+        <Box sx={actionsRowStyle} onClick={(e) => e.stopPropagation()}>
           {application.cvId && (
             <Button
               variant="outlined"
               size="small"
-              startIcon={<DownloadIcon />}
+              startIcon={<DownloadIcon sx={{ fontSize: '0.9rem' }} />}
               onClick={() => onDownloadCV(application.cvId!)}
               sx={downloadCvButtonStyle}
             >
-              Download CV
+              CV
             </Button>
           )}
           {application.applicationStatus === 'PENDING' && (
-            <Box
-              sx={{
-                display: 'flex',
-                gap: '0.5rem',
-                alignItems: 'center',
-                borderLeft: '1px solid',
-                borderColor: 'divider',
-                paddingLeft: '1rem',
-              }}
-            >
-              <Tooltip title="Approve Application" arrow>
+            <>
+              <Tooltip title="Accept" arrow>
                 <span>
                   <Button
                     variant="contained"
@@ -79,27 +86,29 @@ const ApplicationCard = ({
                     size="small"
                     onClick={() => onApprove(application.id)}
                     disabled={manageLoading}
-                    sx={{ minWidth: 'auto', padding: '6px 12px' }}
+                    sx={approveButtonStyle}
+                    startIcon={<CheckIcon sx={{ fontSize: '0.9rem' }} />}
                   >
-                    <CheckIcon fontSize="small" />
+                    Accept
                   </Button>
                 </span>
               </Tooltip>
-              <Tooltip title="Reject Application" arrow>
+              <Tooltip title="Reject" arrow>
                 <span>
                   <Button
-                    variant="contained"
+                    variant="outlined"
                     color="error"
                     size="small"
                     onClick={() => onReject(application.id)}
                     disabled={manageLoading}
                     sx={rejectButtonStyle}
+                    startIcon={<CloseIcon sx={{ fontSize: '0.9rem' }} />}
                   >
-                    <CloseIcon fontSize="small" />
+                    Reject
                   </Button>
                 </span>
               </Tooltip>
-            </Box>
+            </>
           )}
         </Box>
       </Box>

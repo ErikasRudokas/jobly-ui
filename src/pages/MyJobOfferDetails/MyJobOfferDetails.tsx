@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Alert, Box, CircularProgress, Paper, Typography } from '@mui/material';
 import { Delete as DeleteIcon, Edit as EditIcon, Email as EmailIcon, Phone as PhoneIcon } from '@mui/icons-material';
 import { useJobOffers } from '../../common/hooks/useJobOffers';
-import type { Application, JobOffer } from '../../common/types/jobOffer.types';
+import type { ApplicationWithSkillMatch, JobOffer } from '../../common/types/jobOffer.types';
 import { ROUTES } from '../../common/constants/routes';
 import SkillsSection from '../../components/SkillsSection/SkillsSection';
 import JobDetailsHeader from '../../components/JobDetailsHeader/JobDetailsHeader';
@@ -28,22 +28,24 @@ import {
 const MyJobOfferDetails = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
-  const { getMineJobOfferDetails, deleteJobOffer, loading, error } = useJobOffers();
+  const { getMineJobOfferDetails, getMineJobOfferApplications, deleteJobOffer, loading, error } = useJobOffers();
 
   const [jobOffer, setJobOffer] = useState<JobOffer | null>(null);
-  const [applications, setApplications] = useState<Application[]>([]);
+  const [applications, setApplications] = useState<ApplicationWithSkillMatch[]>([]);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
   useEffect(() => {
-    const loadJobOffer = async () => {
+    const load = async () => {
       if (!id) return;
-      const response = await getMineJobOfferDetails(parseInt(id));
-      if (response) {
-        setJobOffer(response.jobOffer);
-        setApplications(response.applications);
-      }
+      const numericId = parseInt(id);
+      const [detailsResponse, applicationsResponse] = await Promise.all([
+        getMineJobOfferDetails(numericId),
+        getMineJobOfferApplications(numericId),
+      ]);
+      if (detailsResponse) setJobOffer(detailsResponse.jobOffer);
+      if (applicationsResponse) setApplications(applicationsResponse.applications);
     };
-    loadJobOffer();
+    load();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 

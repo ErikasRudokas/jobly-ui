@@ -32,6 +32,10 @@ export interface JobOfferListObject {
   category: JobOfferCategory;
 }
 
+export interface JobOfferWithSkillMatchListObject extends JobOfferListObject {
+  userSkillsMatch: number | null;
+}
+
 export interface JobOffer {
   id: number;
   title: string;
@@ -53,7 +57,7 @@ export interface JobOffer {
 
 export interface GetAllJobOffersResponse {
   total: number;
-  jobOffers: JobOfferListObject[];
+  jobOffers: JobOfferWithSkillMatchListObject[];
 }
 
 export interface JobOfferDetailsResponse {
@@ -105,7 +109,17 @@ export interface GetMineJobOffersResponse {
 
 export interface JobOfferWithApplicationsResponse {
   jobOffer: JobOffer;
-  applications: Application[];
+  totalApplications: number;
+  unprocessedApplications: number;
+}
+
+export interface ApplicationWithSkillMatch extends Application {
+  userSkillsMatch: number | null;
+}
+
+export interface JobOfferApplicationsResponse {
+  totalApplications: number;
+  applications: ApplicationWithSkillMatch[];
 }
 
 export interface Application {

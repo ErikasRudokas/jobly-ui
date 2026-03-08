@@ -2,14 +2,14 @@ import { useState } from 'react';
 import { Alert, Box, Paper, Snackbar, Typography } from '@mui/material';
 import { useApplications } from '../../common/hooks/useApplications';
 import { useCVDownload } from '../../common/hooks/useCVDownload';
-import type { Applicant, Application } from '../../common/types/jobOffer.types';
+import type { Applicant, ApplicationWithSkillMatch } from '../../common/types/jobOffer.types';
 import ApplicationCard from '../ApplicationCard/ApplicationCard';
 import ApplicantProfileModal from '../ApplicantProfileModal/ApplicantProfileModal';
 import { emptyStateStyle, panelStyle, titleStyle } from './styles';
 
 interface ApplicationListProps {
-  applications: Application[];
-  onApplicationsChange: (applications: Application[]) => void;
+  applications: ApplicationWithSkillMatch[];
+  onApplicationsChange: (applications: ApplicationWithSkillMatch[]) => void;
 }
 
 const ApplicationList = ({ applications, onApplicationsChange }: ApplicationListProps) => {
@@ -31,7 +31,7 @@ const ApplicationList = ({ applications, onApplicationsChange }: ApplicationList
       setSnackbarMessage('Application approved successfully');
       setSuccessSnackbar(true);
       onApplicationsChange(
-        applications.map((a): Application => (a.id === applicationId ? { ...a, applicationStatus: 'APPROVED' } : a))
+        applications.map((a) => (a.id === applicationId ? { ...a, applicationStatus: 'ACCEPTED' as const } : a))
       );
     } else {
       setSnackbarMessage(result.error || 'Failed to approve application');
@@ -45,7 +45,7 @@ const ApplicationList = ({ applications, onApplicationsChange }: ApplicationList
       setSnackbarMessage('Application rejected');
       setSuccessSnackbar(true);
       onApplicationsChange(
-        applications.map((a): Application => (a.id === applicationId ? { ...a, applicationStatus: 'REJECTED' } : a))
+        applications.map((a) => (a.id === applicationId ? { ...a, applicationStatus: 'REJECTED' as const } : a))
       );
     } else {
       setSnackbarMessage(result.error || 'Failed to reject application');

@@ -10,16 +10,17 @@ export const panelStyle: SxProps<Theme> = {
   marginBottom: '2rem',
 };
 
+export const titleStyle: SxProps<Theme> = {
+  fontWeight: 600,
+  fontSize: '1.1rem',
+  marginBottom: '1.25rem',
+  color: 'text.primary',
+};
+
 export const emptyStateStyle: SxProps<Theme> = {
   textAlign: 'center',
   padding: '3rem 2rem',
   color: 'text.secondary',
   backgroundColor: 'grey.50',
   borderRadius: '8px',
-};
-
-export const titleStyle: SxProps<Theme> = {
-  fontWeight: 600,
-  marginBottom: '1rem',
-  color: 'text.primary',
 };

@@ -54,17 +54,12 @@ const Header = () => {
 
   return (
     <Box component="header" sx={HeaderContainerStyle}>
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-        <Box
-          component="img"
-          src={JobIcon}
-          alt="Jobly"
-          sx={{
-            height: '32px',
-            width: '32px',
-            display: 'block',
-          }}
-        />
+      <Box
+        component={RouterLink}
+        to={ROUTES.HOME}
+        sx={{ display: 'flex', alignItems: 'center', gap: 1.5, textDecoration: 'none' }}
+      >
+        <Box component="img" src={JobIcon} alt="Jobly" sx={{ height: '32px', width: '32px', display: 'block' }} />
         <Typography
           variant="h6"
           component="div"
@@ -81,31 +76,11 @@ const Header = () => {
         </Typography>
       </Box>
 
-      <IconButton
-        sx={{
-          display: { xs: 'flex', md: 'none' },
-          color: 'text.primary',
-        }}
-        onClick={toggleMobileMenu}
-      >
+      <IconButton sx={{ display: { xs: 'flex', md: 'none' }, color: 'text.primary' }} onClick={toggleMobileMenu}>
         <MenuIcon />
       </IconButton>
 
-      <Box
-        sx={{
-          ...HeaderNavLinksStyle,
-          display: { xs: 'none', md: 'flex' },
-        }}
-      >
-        <Button
-          component={RouterLink}
-          to={ROUTES.HOME}
-          className={isActive(ROUTES.HOME) ? 'active' : ''}
-          sx={HeaderNavButtonStyle}
-          disableRipple
-        >
-          Home
-        </Button>
+      <Box sx={{ ...HeaderNavLinksStyle, display: { xs: 'none', md: 'flex' } }}>
         <Button
           component={RouterLink}
           to={ROUTES.JOBS}
@@ -205,17 +180,12 @@ const Header = () => {
             borderColor: 'divider',
           }}
         >
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-            <Box
-              component="img"
-              src={JobIcon}
-              alt="Jobly"
-              sx={{
-                height: '32px',
-                width: '32px',
-                display: 'block',
-              }}
-            />
+          <Box
+            component={RouterLink}
+            to={ROUTES.HOME}
+            sx={{ display: 'flex', alignItems: 'center', gap: 1.5, textDecoration: 'none' }}
+          >
+            <Box component="img" src={JobIcon} alt="Jobly" sx={{ height: '32px', width: '32px', display: 'block' }} />
             <Typography
               variant="h6"
               sx={{
@@ -235,11 +205,6 @@ const Header = () => {
           </IconButton>
         </Box>
         <List>
-          <ListItem disablePadding>
-            <ListItemButton onClick={() => handleMobileNavigation(ROUTES.HOME)}>
-              <ListItemText primary="Home" />
-            </ListItemButton>
-          </ListItem>
           <ListItem disablePadding>
             <ListItemButton onClick={() => handleMobileNavigation(ROUTES.JOBS)}>
               <ListItemText primary="Jobs" />
