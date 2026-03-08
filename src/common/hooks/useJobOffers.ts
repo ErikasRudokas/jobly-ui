@@ -17,11 +17,17 @@ export const useJobOffers = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const getAllJobOffers = async (): Promise<GetAllJobOffersResponse | null> => {
+  const getAllJobOffers = async (params?: {
+    search?: string;
+    offset?: number;
+    limit?: number;
+  }): Promise<GetAllJobOffersResponse | null> => {
     setLoading(true);
     setError(null);
     try {
-      const response = await axiosInstance.get<GetAllJobOffersResponse>(buildApiUrl(JOB_OFFER_ENDPOINTS.GET_ALL));
+      const response = await axiosInstance.get<GetAllJobOffersResponse>(buildApiUrl(JOB_OFFER_ENDPOINTS.GET_ALL), {
+        params,
+      });
       return response.data;
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Failed to fetch job offers';
