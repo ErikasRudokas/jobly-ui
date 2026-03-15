@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import {
   Alert,
   Box,
@@ -38,6 +38,7 @@ import AppDialog from '../../components/AppDialog/AppDialog';
 
 const JobDetails = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { id } = useParams<{ id: string }>();
   const { getJobOfferById, checkCanApply, loading, error } = useJobOffers();
   const { createApplication, loading: applyLoading } = useApplications();
@@ -77,7 +78,7 @@ const JobDetails = () => {
   }, [id]);
 
   const handleBack = () => {
-    navigate(ROUTES.JOBS);
+    navigate(`${ROUTES.JOBS}${location.search}`);
   };
 
   const handleOpenApplyDialog = () => {

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { Alert, Box, CircularProgress, Paper } from '@mui/material';
 import { Cancel as CancelIcon, Edit as EditIcon } from '@mui/icons-material';
 import { useApplications } from '../../common/hooks/useApplications';
@@ -22,7 +22,9 @@ import {
 
 function MyApplicationDetails() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { id } = useParams<{ id: string }>();
+  const returnTo = (location.state as { returnTo?: string } | null)?.returnTo;
   const { getMyApplicationDetails, cancelApplication, loading, error } = useApplications();
   const [application, setApplication] = useState<MyApplication | null>(null);
   const [isCancelDialogOpen, setIsCancelDialogOpen] = useState(false);
@@ -37,7 +39,7 @@ function MyApplicationDetails() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
-  const handleBack = () => navigate(ROUTES.MY_APPLICATIONS);
+  const handleBack = () => navigate(`${ROUTES.MY_APPLICATIONS}${location.search || ''}`);
   const handleEdit = () => {
     if (id) navigate(ROUTES.MY_APPLICATION_EDIT(parseInt(id)));
   };
@@ -47,7 +49,7 @@ function MyApplicationDetails() {
   const handleCancelConfirm = async () => {
     if (!id) return;
     const success = await cancelApplication(parseInt(id));
-    if (success) navigate(ROUTES.MY_APPLICATIONS);
+    if (success) navigate(`${ROUTES.MY_APPLICATIONS}${location.search || ''}`);
     setIsCancelDialogOpen(false);
   };
 
