@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Alert, Box, CircularProgress, InputAdornment, TextField, Typography } from '@mui/material';
-import { Search as SearchIcon } from '@mui/icons-material';
+import { Alert, Box, CircularProgress, Typography } from '@mui/material';
 import { useJobOffers } from '../../common/hooks/useJobOffers';
 import type { JobOfferWithSkillMatchListObject } from '../../common/types/jobOffer.types';
 import { ROUTES } from '../../common/constants/routes';
 import JobOfferList from '../../components/JobOfferList/JobOfferList';
 import PageNavigation from '../../components/PageNavigation/PageNavigation';
+import SearchBar from '../../components/SearchBar/SearchBar';
 import {
   containerStyle,
   controlsRowStyle,
@@ -15,7 +15,6 @@ import {
   loadingBoxStyle,
   paginationRowStyle,
   resultsInfoStyle,
-  searchFieldStyle,
   subtitleStyle,
   titleStyle,
 } from './styles';
@@ -119,21 +118,10 @@ const Jobs = () => {
       </Box>
 
       <Box sx={controlsRowStyle}>
-        <TextField
-          sx={searchFieldStyle}
-          size="medium"
-          placeholder="Search by job title or company name..."
+        <SearchBar
           value={searchInput}
-          onChange={(e) => handleSearchChange(e.target.value)}
-          slotProps={{
-            input: {
-              startAdornment: (
-                <InputAdornment position="start">
-                  <SearchIcon />
-                </InputAdornment>
-              ),
-            },
-          }}
+          onChange={handleSearchChange}
+          placeholder="Search by job title or company name..."
         />
       </Box>
 

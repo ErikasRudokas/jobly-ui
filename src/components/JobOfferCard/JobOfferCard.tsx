@@ -1,6 +1,6 @@
 import { Box, Paper, Typography } from '@mui/material';
 import { Category as CategoryIcon, LocationOn as LocationIcon, Work as WorkIcon } from '@mui/icons-material';
-import type { JobOfferWithSkillMatchListObject } from '../../common/types/jobOffer.types';
+import type { JobOfferListObject } from '../../common/types/jobOffer.types';
 import { formatSalary, formatWorkType } from '../../common/utils/genericUtils';
 import SkillMatchBadge from '../SkillMatchBadge/SkillMatchBadge';
 import {
@@ -15,7 +15,7 @@ import {
 } from './styles';
 
 interface JobOfferCardProps {
-  jobOffer: JobOfferWithSkillMatchListObject;
+  jobOffer: JobOfferListObject & { userSkillsMatch?: number | null };
   onClick: (id: number) => void;
 }
 

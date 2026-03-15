@@ -92,3 +92,4 @@ export const loadingBoxStyle: SxProps<Theme> = {
   alignItems: 'center',
   minHeight: '400px',
 };
+};
