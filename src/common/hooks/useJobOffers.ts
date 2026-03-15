@@ -12,16 +12,23 @@ import type {
   JobOfferWithApplicationsResponse,
   UpdateJobOfferRequest,
 } from '../types/jobOffer.types';
+import type { ApplicationStatus } from '../types/application.types';
 
 export const useJobOffers = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const getAllJobOffers = async (): Promise<GetAllJobOffersResponse | null> => {
+  const getAllJobOffers = async (params?: {
+    search?: string;
+    offset?: number;
+    limit?: number;
+  }): Promise<GetAllJobOffersResponse | null> => {
     setLoading(true);
     setError(null);
     try {
-      const response = await axiosInstance.get<GetAllJobOffersResponse>(buildApiUrl(JOB_OFFER_ENDPOINTS.GET_ALL));
+      const response = await axiosInstance.get<GetAllJobOffersResponse>(buildApiUrl(JOB_OFFER_ENDPOINTS.GET_ALL), {
+        params,
+      });
       return response.data;
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Failed to fetch job offers';
@@ -47,11 +54,22 @@ export const useJobOffers = () => {
     }
   };
 
-  const getMineJobOffers = async (): Promise<GetMineJobOffersResponse | null> => {
+  const getMineJobOffers = async (params?: {
+    search?: string;
+    offset?: number;
+    limit?: number;
+  }): Promise<GetMineJobOffersResponse | null> => {
     setLoading(true);
     setError(null);
     try {
-      const response = await axiosInstance.get<GetMineJobOffersResponse>(buildApiUrl(JOB_OFFER_ENDPOINTS.GET_MINE));
+      const queryParams: Record<string, string | number> = {};
+      if (params?.offset !== undefined) queryParams.offset = params.offset;
+      if (params?.limit !== undefined) queryParams.limit = params.limit;
+      if (params?.search && params.search.length >= 2) queryParams.search = params.search;
+
+      const response = await axiosInstance.get<GetMineJobOffersResponse>(buildApiUrl(JOB_OFFER_ENDPOINTS.GET_MINE), {
+        params: queryParams,
+      });
       return response.data;
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Failed to fetch your job offers';
@@ -79,12 +97,27 @@ export const useJobOffers = () => {
     }
   };
 
-  const getMineJobOfferApplications = async (id: number): Promise<JobOfferApplicationsResponse | null> => {
+  const getMineJobOfferApplications = async (
+    id: number,
+    params?: {
+      status?: ApplicationStatus | null;
+      offset?: number;
+      limit?: number;
+    }
+  ): Promise<JobOfferApplicationsResponse | null> => {
     setLoading(true);
     setError(null);
     try {
+      const queryParams: Record<string, string | number> = {};
+      if (params?.offset !== undefined) queryParams.offset = params.offset;
+      if (params?.limit !== undefined) queryParams.limit = params.limit;
+      if (params?.status) queryParams.status = params.status;
+
       const response = await axiosInstance.get<JobOfferApplicationsResponse>(
-        buildApiUrl(JOB_OFFER_ENDPOINTS.GET_MINE_APPLICATIONS(id))
+        buildApiUrl(JOB_OFFER_ENDPOINTS.GET_MINE_APPLICATIONS(id)),
+        {
+          params: queryParams,
+        }
       );
       return response.data;
     } catch (err) {

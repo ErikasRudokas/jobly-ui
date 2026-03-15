@@ -14,11 +14,22 @@ export const useApplications = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const getMyApplications = async (): Promise<GetMyApplicationsResponse | null> => {
+  const getMyApplications = async (params?: {
+    offset?: number;
+    limit?: number;
+    status?: string | null;
+  }): Promise<GetMyApplicationsResponse | null> => {
     setLoading(true);
     setError(null);
     try {
-      const response = await axiosInstance.get<GetMyApplicationsResponse>(buildApiUrl(APPLICATION_ENDPOINTS.GET_MINE));
+      const queryParams: Record<string, string | number> = {};
+      if (params?.offset !== undefined) queryParams.offset = params.offset;
+      if (params?.limit !== undefined) queryParams.limit = params.limit;
+      if (params?.status) queryParams.status = params.status;
+
+      const response = await axiosInstance.get<GetMyApplicationsResponse>(buildApiUrl(APPLICATION_ENDPOINTS.GET_MINE), {
+        params: queryParams,
+      });
       return response.data;
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Failed to fetch applications';

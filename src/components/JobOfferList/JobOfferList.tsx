@@ -1,13 +1,14 @@
 import { Box, Typography } from '@mui/material';
-import type { JobOfferWithSkillMatchListObject } from '../../common/types/jobOffer.types';
+import type { ReactNode } from 'react';
+import type { JobOfferListObject } from '../../common/types/jobOffer.types';
 import JobOfferCard from '../JobOfferCard/JobOfferCard';
 import { emptyStateStyle } from './styles';
 
 interface JobOfferListProps {
-  jobOffers: JobOfferWithSkillMatchListObject[];
+  jobOffers: JobOfferListObject[];
   onJobOfferClick: (id: number) => void;
   emptyMessage?: string;
-  emptySubMessage?: string;
+  emptySubMessage?: ReactNode;
 }
 
 const JobOfferList = ({

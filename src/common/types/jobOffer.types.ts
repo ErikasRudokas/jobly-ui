@@ -141,4 +141,7 @@ export interface Applicant {
 
 export interface CanApplyResponse {
   canApply: boolean;
+  reason?: ApplicationRestrictionReason;
 }
+
+export type ApplicationRestrictionReason = 'ALREADY_APPLIED' | 'SKILL_OR_CV_MISSING' | 'SKILLS_NOT_VERIFIED' | 'OTHER';

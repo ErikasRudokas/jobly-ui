@@ -14,7 +14,7 @@ import {
 import { Email as EmailIcon, Phone as PhoneIcon, Work as WorkIcon } from '@mui/icons-material';
 import { useJobOffers } from '../../common/hooks/useJobOffers';
 import { useApplications } from '../../common/hooks/useApplications';
-import type { JobOffer } from '../../common/types/jobOffer.types';
+import type { ApplicationRestrictionReason, JobOffer } from '../../common/types/jobOffer.types';
 import { ROUTES } from '../../common/constants/routes';
 import { authService } from '../../common/services/authService';
 import { ROLES } from '../../common/constants/roleConstants';
@@ -44,6 +44,7 @@ const JobDetails = () => {
   const [jobOffer, setJobOffer] = useState<JobOffer | null>(null);
   const [canApply, setCanApply] = useState<boolean>(false);
   const [checkingCanApply, setCheckingCanApply] = useState<boolean>(false);
+  const [canApplyReason, setCanApplyReason] = useState<ApplicationRestrictionReason | null>(null);
   const [openApplyDialog, setOpenApplyDialog] = useState(false);
   const [applicationComment, setApplicationComment] = useState('');
   const [successSnackbar, setSuccessSnackbar] = useState(false);
@@ -66,6 +67,7 @@ const JobDetails = () => {
 
           if (canApplyResult) {
             setCanApply(canApplyResult.canApply);
+            setCanApplyReason(canApplyResult.canApply ? null : (canApplyResult.reason ?? 'OTHER'));
           }
         }
       }
@@ -103,6 +105,7 @@ const JobDetails = () => {
       const canApplyResult = await checkCanApply(parseInt(id));
       if (canApplyResult) {
         setCanApply(canApplyResult.canApply);
+        setCanApplyReason(canApplyResult.canApply ? null : (canApplyResult.reason ?? 'OTHER'));
       }
     } else {
       setSnackbarMessage(result.error || 'Failed to submit application');
@@ -114,6 +117,19 @@ const JobDetails = () => {
     setSuccessSnackbar(false);
     setErrorSnackbar(false);
   };
+
+  const getRestrictionMessage = (reason: ApplicationRestrictionReason | null) => {
+    if (!reason) return '';
+    const messages: Record<ApplicationRestrictionReason, string> = {
+      ALREADY_APPLIED: 'You have already applied to this job.',
+      SKILL_OR_CV_MISSING: 'Fill out your profile or upload a CV to apply for this job.',
+      SKILLS_NOT_VERIFIED: 'Verify your AI parsed CV to apply for this job.',
+      OTHER: 'You cannot apply to this job right now.',
+    };
+    return messages[reason];
+  };
+
+  const tooltipTitle = !canApply && !checkingCanApply ? getRestrictionMessage(canApplyReason) : '';
 
   if (loading) {
     return (
@@ -149,11 +165,7 @@ const JobDetails = () => {
                 right: 0,
               }}
             >
-              <Tooltip
-                title={!canApply && !checkingCanApply ? 'You have already applied to this job' : ''}
-                arrow
-                placement="top"
-              >
+              <Tooltip title={tooltipTitle} arrow placement="top">
                 <span>
                   <AppButton
                     startIcon={<WorkIcon />}

@@ -86,6 +86,22 @@ export const errorAlertStyle: SxProps<Theme> = {
   marginBottom: '2rem',
 };
 
+export const paginationRowStyle: SxProps<Theme> = {
+  position: 'relative',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  marginTop: '1.5rem',
+};
+
+export const resultsInfoStyle: SxProps<Theme> = {
+  position: 'absolute',
+  right: 0,
+  fontSize: '0.875rem',
+  color: 'text.secondary',
+  whiteSpace: 'nowrap',
+};
+
 export const loadingBoxStyle: SxProps<Theme> = {
   display: 'flex',
   justifyContent: 'center',

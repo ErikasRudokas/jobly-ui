@@ -10,9 +10,18 @@ import { emptyStateStyle, panelStyle, titleStyle } from './styles';
 interface ApplicationListProps {
   applications: ApplicationWithSkillMatch[];
   onApplicationsChange: (applications: ApplicationWithSkillMatch[]) => void;
+  totalApplications?: number;
+  emptyTitle?: string;
+  emptySubtitle?: string;
 }
 
-const ApplicationList = ({ applications, onApplicationsChange }: ApplicationListProps) => {
+const ApplicationList = ({
+  applications,
+  onApplicationsChange,
+  totalApplications,
+  emptyTitle = 'No applications yet',
+  emptySubtitle = 'Applications will appear here when candidates apply',
+}: ApplicationListProps) => {
   const { manageApplication, loading: manageLoading } = useApplications();
   const { downloadCV } = useCVDownload();
 
@@ -62,14 +71,14 @@ const ApplicationList = ({ applications, onApplicationsChange }: ApplicationList
     <>
       <Paper sx={panelStyle}>
         <Typography variant="h5" sx={titleStyle}>
-          Applications ({applications.length})
+          Applications ({totalApplications ?? applications.length})
         </Typography>
 
         {applications.length === 0 ? (
           <Box sx={emptyStateStyle}>
-            <Typography variant="h6">No applications yet</Typography>
+            <Typography variant="h6">{emptyTitle}</Typography>
             <Typography variant="body2" sx={{ mt: 1 }}>
-              Applications will appear here when candidates apply
+              {emptySubtitle}
             </Typography>
           </Box>
         ) : (
