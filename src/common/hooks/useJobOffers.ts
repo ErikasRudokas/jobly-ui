@@ -12,6 +12,7 @@ import type {
   JobOfferWithApplicationsResponse,
   UpdateJobOfferRequest,
 } from '../types/jobOffer.types';
+import type { ApplicationStatus } from '../types/application.types';
 
 export const useJobOffers = () => {
   const [loading, setLoading] = useState(false);
@@ -96,12 +97,27 @@ export const useJobOffers = () => {
     }
   };
 
-  const getMineJobOfferApplications = async (id: number): Promise<JobOfferApplicationsResponse | null> => {
+  const getMineJobOfferApplications = async (
+    id: number,
+    params?: {
+      status?: ApplicationStatus | null;
+      offset?: number;
+      limit?: number;
+    }
+  ): Promise<JobOfferApplicationsResponse | null> => {
     setLoading(true);
     setError(null);
     try {
+      const queryParams: Record<string, string | number> = {};
+      if (params?.offset !== undefined) queryParams.offset = params.offset;
+      if (params?.limit !== undefined) queryParams.limit = params.limit;
+      if (params?.status) queryParams.status = params.status;
+
       const response = await axiosInstance.get<JobOfferApplicationsResponse>(
-        buildApiUrl(JOB_OFFER_ENDPOINTS.GET_MINE_APPLICATIONS(id))
+        buildApiUrl(JOB_OFFER_ENDPOINTS.GET_MINE_APPLICATIONS(id)),
+        {
+          params: queryParams,
+        }
       );
       return response.data;
     } catch (err) {
