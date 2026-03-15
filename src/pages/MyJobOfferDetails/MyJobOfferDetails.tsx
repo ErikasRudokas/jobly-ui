@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { Alert, Box, CircularProgress, Paper, Typography } from '@mui/material';
 import { Delete as DeleteIcon, Edit as EditIcon, Email as EmailIcon, Phone as PhoneIcon } from '@mui/icons-material';
 import { useJobOffers } from '../../common/hooks/useJobOffers';
@@ -34,6 +34,7 @@ const PAGE_SIZE = 10;
 
 const MyJobOfferDetails = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { id } = useParams<{ id: string }>();
   const { getMineJobOfferDetails, getMineJobOfferApplications, deleteJobOffer, loading, error } = useJobOffers();
 
@@ -91,7 +92,7 @@ const MyJobOfferDetails = () => {
     }
   }, [applications]);
 
-  const handleBack = () => navigate(ROUTES.MY_JOB_OFFERS);
+  const handleBack = () => navigate(`${ROUTES.MY_JOB_OFFERS}${location.search || ''}`);
 
   const handleEdit = () => {
     if (id) navigate(ROUTES.JOB_OFFER_EDIT(parseInt(id)));
@@ -103,7 +104,7 @@ const MyJobOfferDetails = () => {
   const handleDeleteConfirm = async () => {
     if (!id) return;
     const success = await deleteJobOffer(parseInt(id));
-    if (success) navigate(ROUTES.MY_JOB_OFFERS);
+    if (success) navigate(`${ROUTES.MY_JOB_OFFERS}${location.search || ''}`);
     setIsDeleteDialogOpen(false);
   };
 

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { Alert, Box, CircularProgress, Typography } from '@mui/material';
 import { Add as AddIcon } from '@mui/icons-material';
 import { useJobOffers } from '../../common/hooks/useJobOffers';
@@ -21,16 +21,31 @@ import {
 import SearchBar from '../../components/SearchBar/SearchBar.tsx';
 
 const PAGE_SIZE = 10;
+const QUERY_PAGE = 'page';
+const QUERY_SEARCH = 'search';
+
+const getPageFromParams = (params: URLSearchParams) => {
+  const raw = Number(params.get(QUERY_PAGE));
+  if (!Number.isFinite(raw) || raw < 1) return 1;
+  return Math.floor(raw);
+};
+
+const getSearchFromParams = (params: URLSearchParams) => params.get(QUERY_SEARCH)?.trim() ?? '';
 
 const MyJobOffers = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const [searchParams, setSearchParams] = useSearchParams();
   const { getMineJobOffers, loading, error } = useJobOffers();
+
+  const initialPage = getPageFromParams(searchParams);
+  const initialSearch = getSearchFromParams(searchParams);
 
   const [jobOffers, setJobOffers] = useState<JobOfferListObject[]>([]);
   const [total, setTotal] = useState(0);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [searchInput, setSearchInput] = useState('');
-  const [activeSearch, setActiveSearch] = useState('');
+  const [currentPage, setCurrentPage] = useState(initialPage);
+  const [searchInput, setSearchInput] = useState(initialSearch);
+  const [activeSearch, setActiveSearch] = useState(initialSearch);
 
   const searchTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const shouldScrollRef = useRef(false);
@@ -84,7 +99,9 @@ const MyJobOffers = () => {
   };
 
   const handleJobOfferClick = (id: number) => {
-    navigate(ROUTES.MY_JOB_OFFER_DETAILS(id));
+    navigate(`${ROUTES.MY_JOB_OFFER_DETAILS(id)}${location.search}`, {
+      state: { returnTo: `${location.pathname}${location.search}` },
+    });
   };
 
   const handleCreateJobOffer = () => {
@@ -93,6 +110,36 @@ const MyJobOffers = () => {
 
   const startItem = total === 0 ? 0 : (currentPage - 1) * PAGE_SIZE + 1;
   const endItem = Math.min(currentPage * PAGE_SIZE, total);
+
+  useEffect(() => {
+    const urlPage = getPageFromParams(searchParams);
+    const urlSearch = getSearchFromParams(searchParams);
+
+    setCurrentPage((prev) => (prev !== urlPage ? urlPage : prev));
+    setSearchInput((prev) => (prev !== urlSearch ? urlSearch : prev));
+    setActiveSearch((prev) => (prev !== urlSearch ? urlSearch : prev));
+  }, [searchParams]);
+
+  useEffect(() => {
+    const nextParams = new URLSearchParams(searchParams);
+    const normalizedPage = Math.max(1, Math.floor(currentPage));
+
+    if (normalizedPage === 1) {
+      nextParams.delete(QUERY_PAGE);
+    } else {
+      nextParams.set(QUERY_PAGE, String(normalizedPage));
+    }
+
+    if (activeSearch.length >= 2) {
+      nextParams.set(QUERY_SEARCH, activeSearch);
+    } else {
+      nextParams.delete(QUERY_SEARCH);
+    }
+
+    if (nextParams.toString() !== searchParams.toString()) {
+      setSearchParams(nextParams, { replace: true });
+    }
+  }, [activeSearch, currentPage, searchParams, setSearchParams]);
 
   if (loading && jobOffers.length === 0) {
     return (
