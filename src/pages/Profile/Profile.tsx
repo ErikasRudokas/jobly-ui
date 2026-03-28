@@ -25,6 +25,7 @@ import EditProfileSkillSection from '../../components/ProfileSkillSection/EditPr
 import ProfileSkillSection from '../../components/ProfileSkillSection/ProfileSkillSection';
 import ProfileHeader from '../../components/ProfileHeader/ProfileHeader';
 import ProfileInfoCards from '../../components/ProfileInfoCards/ProfileInfoCards';
+import ProfileInfoForm, { type ProfileInfoFormValues } from '../../components/ProfileInfoCards/ProfileInfoForm';
 import { createEmptyValidationErrors, validateProfileData, type ValidationErrors } from './profileValidation';
 import { loadProfileData, transformProfileResponse } from './profileDataUtils';
 import AppButton from '../../components/AppButton/AppButton';
@@ -37,6 +38,10 @@ const Profile = () => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
+
+  const [isAccountEditMode, setIsAccountEditMode] = useState(false);
+  const [isAccountSaving, setIsAccountSaving] = useState(false);
+  const [accountSaveError, setAccountSaveError] = useState<string | null>(null);
 
   const [workExperience, setWorkExperience] = useState<UpdateUserWorkExperience[]>([]);
   const [education, setEducation] = useState<UpdateUserEducation[]>([]);
@@ -143,6 +148,32 @@ const Profile = () => {
     }
   };
 
+  const handleAccountEdit = () => {
+    setIsAccountEditMode(true);
+    setAccountSaveError(null);
+  };
+
+  const handleAccountCancel = () => {
+    setIsAccountEditMode(false);
+    setAccountSaveError(null);
+  };
+
+  const handleAccountSubmit = async (values: ProfileInfoFormValues) => {
+    setAccountSaveError(null);
+
+    try {
+      setIsAccountSaving(true);
+      await userService.updateUserDetails(values);
+      await refetch();
+      setIsAccountEditMode(false);
+    } catch (err) {
+      const error = err as { response?: { data?: { message?: string } } };
+      setAccountSaveError(error?.response?.data?.message || 'Failed to update account information');
+    } finally {
+      setIsAccountSaving(false);
+    }
+  };
+
   const hasWorkExperienceErrors = useMemo(
     () => Object.keys(validationErrors.workExperience).length > 0,
     [validationErrors.workExperience]
@@ -152,6 +183,15 @@ const Profile = () => {
     [validationErrors.education]
   );
   const hasSkillsErrors = useMemo(() => Object.keys(validationErrors.skills).length > 0, [validationErrors.skills]);
+
+  const accountDefaults = useMemo<ProfileInfoFormValues>(
+    () => ({
+      firstName: profile?.firstName || '',
+      lastName: profile?.lastName || '',
+      username: profile?.username || '',
+    }),
+    [profile]
+  );
 
   if (loading) {
     return (
@@ -197,12 +237,32 @@ const Profile = () => {
 
         <Divider sx={{ my: 4 }} />
 
-        <ProfileInfoCards
-          email={profile.email}
-          username={profile.username}
-          firstName={profile.firstName}
-          lastName={profile.lastName}
-        />
+        {isAccountEditMode ? (
+          <ProfileInfoForm
+            defaultValues={accountDefaults}
+            onSubmit={handleAccountSubmit}
+            onCancel={handleAccountCancel}
+            isSubmitting={isAccountSaving}
+          />
+        ) : (
+          <ProfileInfoCards
+            email={profile.email}
+            username={profile.username}
+            firstName={profile.firstName}
+            lastName={profile.lastName}
+            actions={
+              <AppButton startIcon={<EditIcon />} onClick={handleAccountEdit}>
+                Edit Account
+              </AppButton>
+            }
+          />
+        )}
+
+        {accountSaveError && (
+          <Alert severity="error" sx={{ mt: 2 }} onClose={() => setAccountSaveError(null)}>
+            {accountSaveError}
+          </Alert>
+        )}
 
         {isUser && (
           <>

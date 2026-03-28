@@ -1,6 +1,11 @@
 import axiosInstance from './axiosInstance';
 import { buildApiUrl, USER_ENDPOINTS } from '../constants/apiConstants';
-import type { GetUserProfileResponse, SaveUserProfileRequest, UserProfile } from '../types/profile.types';
+import type {
+  GetUserProfileResponse,
+  ModifyUserDetailsRequest,
+  SaveUserProfileRequest,
+  UserProfile,
+} from '../types/profile.types';
 
 export const userService = {
   getMyProfile: async (): Promise<UserProfile> => {
@@ -22,6 +27,11 @@ export const userService = {
 
   saveUserProfile: async (data: SaveUserProfileRequest): Promise<GetUserProfileResponse> => {
     const response = await axiosInstance.post<GetUserProfileResponse>(buildApiUrl(USER_ENDPOINTS.PROFILE), data);
+    return response.data;
+  },
+
+  updateUserDetails: async (data: ModifyUserDetailsRequest): Promise<UserProfile> => {
+    const response = await axiosInstance.patch<UserProfile>(buildApiUrl(USER_ENDPOINTS.MY_PROFILE), data);
     return response.data;
   },
 };

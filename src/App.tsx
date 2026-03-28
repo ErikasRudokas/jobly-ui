@@ -17,6 +17,8 @@ import Register from './pages/Register/Register';
 import Categories from './pages/Categories/Categories';
 import CategoryDetails from './pages/CategoryDetails/CategoryDetails';
 import CreateCategory from './pages/CreateCategory/CreateCategory';
+import AdminUsers from './pages/AdminUsers/AdminUsers';
+import AdminUserDetails from './pages/AdminUserDetails/AdminUserDetails';
 import Footer from './components/Footer/Footer';
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
 import { lightTheme } from './common/themes/light-theme';
@@ -129,6 +131,22 @@ function AppContent() {
             element={
               <ProtectedRoute requiredRole={ROLES.ADMINISTRATOR}>
                 <CategoryDetails />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path={ROUTES.ADMIN_USERS}
+            element={
+              <ProtectedRoute requiredRole={ROLES.ADMINISTRATOR}>
+                <AdminUsers />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path={ROUTES.ADMIN_USER_DETAILS_PATTERN}
+            element={
+              <ProtectedRoute requiredRole={ROLES.ADMINISTRATOR}>
+                <AdminUserDetails />
               </ProtectedRoute>
             }
           />

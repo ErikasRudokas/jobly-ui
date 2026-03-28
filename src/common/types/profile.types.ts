@@ -95,3 +95,20 @@ export interface SaveUserProfileRequest {
   education: SaveUserEducationRequest[];
   skills: SaveUserSkillRequest[];
 }
+
+export interface GetUserDetailsResponse {
+  id: number;
+  firstName: string;
+  lastName: string;
+  username: string;
+  email: string;
+  cvId?: number;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface ModifyUserDetailsRequest {
+  firstName?: string;
+  lastName?: string;
+  username?: string;
+}

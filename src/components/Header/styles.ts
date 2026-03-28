@@ -1,5 +1,6 @@
 import type { SxProps } from '@mui/material';
 import { lightTheme } from '../../common/themes/light-theme';
+import { HEADER_HEIGHT_PX } from '../../common/constants/localConstants';
 
 export const HeaderContainerStyle: SxProps = {
   position: 'fixed',
@@ -10,7 +11,7 @@ export const HeaderContainerStyle: SxProps = {
   maxWidth: '100%',
   backgroundColor: '#ffffff',
   boxShadow: '0 2px 4px rgba(0,0,0,0.08)',
-  height: '64px',
+  height: `${HEADER_HEIGHT_PX}px`,
   borderBottom: `1px solid ${lightTheme.palette.border.light}`,
   display: 'flex',
   justifyContent: 'space-between',

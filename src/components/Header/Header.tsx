@@ -123,6 +123,17 @@ const Header = () => {
             Categories
           </Button>
         )}
+        {isAdmin && (
+          <Button
+            component={RouterLink}
+            to={ROUTES.ADMIN_USERS}
+            className={isActive(ROUTES.ADMIN_USERS) ? 'active' : ''}
+            sx={HeaderNavButtonStyle}
+            disableRipple
+          >
+            Users
+          </Button>
+        )}
         {isAuthenticated && (
           <Button
             component={RouterLink}
@@ -228,6 +239,13 @@ const Header = () => {
             <ListItem disablePadding>
               <ListItemButton onClick={() => handleMobileNavigation(ROUTES.CATEGORIES)}>
                 <ListItemText primary="Categories" />
+              </ListItemButton>
+            </ListItem>
+          )}
+          {isAdmin && (
+            <ListItem disablePadding>
+              <ListItemButton onClick={() => handleMobileNavigation(ROUTES.ADMIN_USERS)}>
+                <ListItemText primary="Users" />
               </ListItemButton>
             </ListItem>
           )}

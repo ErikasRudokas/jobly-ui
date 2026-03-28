@@ -4,6 +4,7 @@ import { z } from 'zod';
 import { Link, useNavigate } from 'react-router-dom';
 import { Alert, Box, Container, TextField, Typography } from '@mui/material';
 import { useState } from 'react';
+import AppDialog from '../../components/AppDialog/AppDialog';
 import { authService } from '../../common/services/authService';
 import { ROUTES } from '../../common/constants/routes';
 import { StyledFormBox, StyledLoginContainer } from './styles';
@@ -21,6 +22,7 @@ const Login = () => {
   const navigate = useNavigate();
   const [error, setError] = useState<string>('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isSuspendedDialogOpen, setIsSuspendedDialogOpen] = useState(false);
 
   const {
     register,
@@ -38,6 +40,13 @@ const Login = () => {
       await authService.login(data);
       navigate(ROUTES.JOBS);
     } catch (err) {
+      const response = err as { response?: { status?: number; data?: { message?: string } } };
+
+      if (response?.response?.status === 403) {
+        setIsSuspendedDialogOpen(true);
+        return;
+      }
+
       const errorMessage =
         err instanceof Error && 'response' in err
           ? (err as { response?: { data?: { message?: string } } }).response?.data?.message ||
@@ -99,6 +108,23 @@ const Login = () => {
           </Box>
         </StyledFormBox>
       </Container>
+
+      <AppDialog
+        open={isSuspendedDialogOpen}
+        title="Account Suspended"
+        onClose={() => setIsSuspendedDialogOpen(false)}
+        actions={[
+          {
+            label: 'OK',
+            onClick: () => setIsSuspendedDialogOpen(false),
+            variant: 'contained',
+          },
+        ]}
+        maxWidth="xs"
+        fullWidth
+      >
+        <Typography sx={{ mt: 1 }}>Your account has been suspended. Please contact support for assistance.</Typography>
+      </AppDialog>
     </StyledLoginContainer>
   );
 };

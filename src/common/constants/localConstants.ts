@@ -4,3 +4,5 @@ export const LOCAL_STORAGE_KEYS = {
   ROLES: 'roles',
   USER_ID: 'userId',
 } as const;
+
+export const HEADER_HEIGHT_PX = 64;
