@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { Box, Typography } from '@mui/material';
 import EmailIcon from '@mui/icons-material/Email';
 import BadgeIcon from '@mui/icons-material/Badge';
@@ -9,14 +10,28 @@ interface ProfileInfoCardsProps {
   firstName?: string;
   lastName?: string;
   username?: string;
+  actions?: ReactNode;
+  showTitle?: boolean;
 }
 
-const ProfileInfoCards = ({ email, firstName, lastName, username }: ProfileInfoCardsProps) => {
+const ProfileInfoCards = ({
+  email,
+  firstName,
+  lastName,
+  username,
+  actions,
+  showTitle = true,
+}: ProfileInfoCardsProps) => {
   return (
     <>
-      <Typography variant="h5" gutterBottom fontWeight="bold" sx={{ mb: 3 }}>
-        Account Information
-      </Typography>
+      {showTitle && (
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 2 }}>
+          <Typography variant="h5" gutterBottom fontWeight="bold" sx={{ mb: 3 }}>
+            Account Information
+          </Typography>
+          {actions}
+        </Box>
+      )}
 
       <StyledInfoGrid>
         <StyledInfoCard>

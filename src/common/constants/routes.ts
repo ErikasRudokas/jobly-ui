@@ -21,4 +21,7 @@ export const ROUTES = {
   CATEGORY_CREATE: '/categories/create',
   CATEGORY_DETAILS: (id: number) => `/categories/${id}`,
   CATEGORY_DETAILS_PATTERN: '/categories/:id',
+  ADMIN_USERS: '/admin/users',
+  ADMIN_USER_DETAILS: (id: number) => `/admin/users/${id}`,
+  ADMIN_USER_DETAILS_PATTERN: '/admin/users/:id',
 } as const;

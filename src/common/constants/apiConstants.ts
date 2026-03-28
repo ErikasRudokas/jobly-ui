@@ -53,3 +53,9 @@ export const APPLICATION_ENDPOINTS = {
 export const SKILL_ENDPOINTS = {
   GET_ALL: '/skills',
 } as const;
+
+export const ADMIN_USER_ENDPOINTS = {
+  GET_ALL: '/admin/users',
+  GET_BY_ID: (userId: number) => `/admin/users/${userId}`,
+  MANAGE_STATUS: (userId: number) => `/admin/users/${userId}/status`,
+} as const;
