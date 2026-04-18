@@ -1,3 +1,5 @@
+import { ACCOUNT_ROLES } from '../constants/roleConstants.ts';
+
 export interface DecodedToken {
   roles: string[];
   userId: number;
@@ -6,6 +8,8 @@ export interface DecodedToken {
   iat: number;
   exp: number;
 }
+
+export type AccountRole = (typeof ACCOUNT_ROLES)[keyof typeof ACCOUNT_ROLES];
 
 export interface LoginRequest {
   email: string;
@@ -16,6 +20,7 @@ export interface RegisterRequest {
   firstName: string;
   lastName: string;
   username: string;
+  role: AccountRole;
   email: string;
   password: string;
 }

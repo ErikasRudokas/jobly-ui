@@ -2,10 +2,11 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Link, useNavigate } from 'react-router-dom';
-import { Alert, Box, Container, TextField, Typography } from '@mui/material';
+import { Alert, Box, Container, MenuItem, TextField, Typography } from '@mui/material';
 import { useState } from 'react';
 import { authService } from '../../common/services/authService';
 import { ROUTES } from '../../common/constants/routes';
+import { ACCOUNT_ROLES } from '../../common/constants/roleConstants.ts';
 import { StyledFormBox, StyledRegisterContainer } from './styles';
 import { lightTheme } from '../../common/themes/light-theme.ts';
 import AppButton from '../../components/AppButton/AppButton';
@@ -15,6 +16,7 @@ const registerSchema = z
     firstName: z.string().min(1, 'First name is required').max(20, 'First name too long'),
     lastName: z.string().min(1, 'Last name is required').max(20, 'Last name too long'),
     username: z.string().min(1, 'Username is required').max(32, 'Username too long'),
+    role: z.enum([ACCOUNT_ROLES.USER, ACCOUNT_ROLES.EMPLOYER], { message: 'Account type is required' }),
     email: z.email('Invalid email address'),
     password: z
       .string()
@@ -45,6 +47,9 @@ const Register = () => {
     formState: { errors },
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
+    defaultValues: {
+      role: ACCOUNT_ROLES.USER,
+    },
   });
 
   const onSubmit = async (data: RegisterFormData) => {
@@ -57,6 +62,7 @@ const Register = () => {
         firstName: data.firstName,
         lastName: data.lastName,
         username: data.username,
+        role: data.role,
         email: data.email,
         password: data.password,
       };
@@ -131,6 +137,19 @@ const Register = () => {
               helperText={errors.username?.message}
               autoComplete="username"
             />
+
+            <TextField
+              {...register('role')}
+              label="Account Type"
+              select
+              fullWidth
+              margin="normal"
+              error={!!errors.role}
+              helperText={errors.role?.message}
+            >
+              <MenuItem value={ACCOUNT_ROLES.USER}>User</MenuItem>
+              <MenuItem value={ACCOUNT_ROLES.EMPLOYER}>Employer</MenuItem>
+            </TextField>
 
             <TextField
               {...register('email')}
