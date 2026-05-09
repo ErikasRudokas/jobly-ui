@@ -24,7 +24,6 @@ function MyApplicationDetails() {
   const navigate = useNavigate();
   const location = useLocation();
   const { id } = useParams<{ id: string }>();
-  const returnTo = (location.state as { returnTo?: string } | null)?.returnTo;
   const { getMyApplicationDetails, cancelApplication, loading, error } = useApplications();
   const [application, setApplication] = useState<MyApplication | null>(null);
   const [isCancelDialogOpen, setIsCancelDialogOpen] = useState(false);
