@@ -22,6 +22,11 @@ export const useJobOffers = () => {
     search?: string;
     offset?: number;
     limit?: number;
+    categoryId?: number;
+    workType?: 'ON_SITE' | 'REMOTE' | 'HYBRID';
+    location?: string;
+    salaryFrom?: number;
+    salaryTo?: number;
   }): Promise<GetAllJobOffersResponse | null> => {
     setLoading(true);
     setError(null);
