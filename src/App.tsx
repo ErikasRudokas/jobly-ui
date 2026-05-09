@@ -17,6 +17,10 @@ import Register from './pages/Register/Register';
 import Categories from './pages/Categories/Categories';
 import CategoryDetails from './pages/CategoryDetails/CategoryDetails';
 import CreateCategory from './pages/CreateCategory/CreateCategory';
+import Skills from './pages/Skills/Skills';
+import CreateSkill from './pages/CreateSkill/CreateSkill';
+import SkillDetails from './pages/SkillDetails/SkillDetails';
+import EditSkill from './pages/EditSkill/EditSkill';
 import AdminUsers from './pages/AdminUsers/AdminUsers';
 import AdminUserDetails from './pages/AdminUserDetails/AdminUserDetails';
 import Footer from './components/Footer/Footer';
@@ -131,6 +135,38 @@ function AppContent() {
             element={
               <ProtectedRoute requiredRole={ROLES.ADMINISTRATOR}>
                 <CategoryDetails />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path={ROUTES.SKILLS}
+            element={
+              <ProtectedRoute requiredRole={ROLES.ADMINISTRATOR}>
+                <Skills />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path={ROUTES.SKILL_CREATE}
+            element={
+              <ProtectedRoute requiredRole={ROLES.ADMINISTRATOR}>
+                <CreateSkill />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path={ROUTES.SKILL_DETAILS_PATTERN}
+            element={
+              <ProtectedRoute requiredRole={ROLES.ADMINISTRATOR}>
+                <SkillDetails />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path={ROUTES.SKILL_EDIT_PATTERN}
+            element={
+              <ProtectedRoute requiredRole={ROLES.ADMINISTRATOR}>
+                <EditSkill />
               </ProtectedRoute>
             }
           />

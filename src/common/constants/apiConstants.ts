@@ -52,6 +52,10 @@ export const APPLICATION_ENDPOINTS = {
 
 export const SKILL_ENDPOINTS = {
   GET_ALL: '/skills',
+  GET_BY_ID: (id: number) => `/skills/${id}`,
+  CREATE: '/skills/create',
+  UPDATE: (id: number) => `/skills/${id}`,
+  DELETE: (id: number) => `/skills/${id}`,
 } as const;
 
 export const ADMIN_USER_ENDPOINTS = {
